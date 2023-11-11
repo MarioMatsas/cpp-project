@@ -1,0 +1,6 @@
+Tutorial.sln
+bin/
+Tutorial/x64
+*/*.vcxproj
+*/*.vcxproj.filters
+*/*.vcxproj.user
