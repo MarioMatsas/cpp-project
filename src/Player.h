@@ -5,6 +5,8 @@
 #include "graphics.h"
 #include "vector"
 
+class Game;
+
 class Player : public GameObject {
 	std::vector<Bullet*> bullets;
 	const Game& game;

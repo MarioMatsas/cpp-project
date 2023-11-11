@@ -1,6 +1,11 @@
+CMakeCache.txt
+cmake_install.cmake
+Makefile
+bin/*
 Tutorial.sln
-bin/
+CMakeFiles/*
 Tutorial/x64
+.DS_Store
 */*.vcxproj
 */*.vcxproj.filters
 */*.vcxproj.user
