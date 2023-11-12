@@ -1,12 +1,15 @@
 cmake_minimum_required(VERSION 3.12)
 project(Game)
 
+if (${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
+    set(CMAKE_C_COMPILER "/Library/Developer/CommandLineTools/usr/bin/cc")
+    set(CMAKE_CXX_COMPILER "/Library/Developer/CommandLineTools/usr/bin/c++")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wl,-ld_classic")
+endif()
+
 set(CMAKE_CXX_STANDARD 17)
-
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O3")
-
-set(SOURCE_FILES src/main.cpp src/Player.cpp src/Obstacle.cpp src/Game.cpp src/Bullet.cpp)
-
+set(SOURCE_FILES src/main.cpp src/Player.cpp src/Obstacle.cpp src/Game.cpp src/Bullet.cpp) # regex?
 
 if (${CMAKE_SYSTEM_NAME} MATCHES "Linux")
     include_directories(${CMAKE_SOURCE_DIR}/lib/linux/include)
@@ -14,10 +17,30 @@ if (${CMAKE_SYSTEM_NAME} MATCHES "Linux")
 elseif (${CMAKE_SYSTEM_NAME} MATCHES "Windows")
     include_directories(${CMAKE_SOURCE_DIR}/lib/win32/include)
     link_directories(${CMAKE_SOURCE_DIR}/lib/win32/lib)
+elseif (${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
+    find_package(OpenGL REQUIRED)
+    find_package(GLEW 2.0 REQUIRED)
+    find_package(Freetype REQUIRED)
+    find_file(SDL2_INCLUDE_DIR NAME SDL.h HINTS SDL2)
+    find_library(SDL2_LIBRARY NAME SDL2)
+    find_package(SDL2 REQUIRED)
+    find_package(SDL2_mixer REQUIRED)
+    include_directories(${CMAKE_SOURCE_DIR}/lib/macosx/include)
+    include_directories(${OPENGL_INCLUDE_DIR})
+    include_directories(${SDL2_INCLUDE_DIRS})
+    include_directories(${FREETYPE_INCLUDE_DIRS})
+    link_directories(${CMAKE_SOURCE_DIR}/lib/macosx/lib)
+    link_directories("/opt/homebrew/Cellar/sdl2_mixer/2.6.3_1/lib/") # too hacky.
 endif()
 
 add_executable(game ${SOURCE_FILES})
 
-target_link_libraries(game sgg GL GLEW SDL2 SDL2_mixer freetype)
+if (${CMAKE_SYSTEM_NAME} MATCHES "Linux")
+    target_link_libraries(game sgg GL GLEW SDL2 SDL2_mixer freetype)
+elseif (${CMAKE_SYSTEM_NAME} MATCHES "Windows")
+    target_link_libraries(game sgg GL GLEW SDL2 SDL2_mixer freetype)
+elseif (${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
+    target_link_libraries(game sgg OpenGL::GL GLEW::GLEW SDL2::SDL2 SDL2::SDL2main SDL2_mixer ${FREETYPE_LIBRARIES})
+endif()
 
 set_target_properties(game PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/bin)

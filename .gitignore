@@ -1,6 +1,12 @@
 CMakeCache.txt
 cmake_install.cmake
 Makefile
+*.xcodeproj
+.ninja_deps
+.ninja_log
+build.ninja
+Game/
+Testing/
 bin/
 sgg/
 build/
