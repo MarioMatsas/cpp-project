@@ -1,12 +1,13 @@
 CMakeCache.txt
 cmake_install.cmake
 Makefile
-bin/*
-build/*
+bin/
+build/
 .cmake/
 *.swp
+.idea/
 Tutorial.sln
-CMakeFiles/*
+CMakeFiles/
 Tutorial/x64
 .DS_Store
 */*.vcxproj
