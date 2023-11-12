@@ -2,6 +2,9 @@ CMakeCache.txt
 cmake_install.cmake
 Makefile
 bin/*
+build/*
+.cmake/
+*.swp
 Tutorial.sln
 CMakeFiles/*
 Tutorial/x64

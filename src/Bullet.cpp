@@ -1,5 +1,6 @@
 #include "Bullet.h"
 #include <iostream>
+#include <cmath>
 
 void Bullet::update()
 {	
