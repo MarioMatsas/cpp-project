@@ -25,14 +25,15 @@ void Bullet::update()
 void Bullet::draw()
 {
 	//std::cout << " drawn " << std::endl;
-	graphics::Brush br_;
-	br_.fill_color[0] = 0.0f;
-	br_.fill_color[1] = 0.5f;
-	br_.fill_color[2] = 1.0f;
-	br_.fill_opacity = 5.0f;
-	br_.gradient = true;
-	br_.outline_opacity = 1;
-	graphics::drawDisk(m_pos_x, m_pos_y, 3.0f, br_);
+	graphics::Brush br;
+	br.fill_color[0] = 1.0f;
+	br.fill_color[1] = 0.5f;
+	br.fill_color[2] = 0.5f;
+	br.fill_opacity = 1.0f;
+	br.gradient = true;
+	br.outline_opacity = 1;
+	br.texture = std::string(ASSET_PATH) + "output-onlinepngtools (17)_left.png";
+	graphics::drawDisk(m_pos_x, m_pos_y, 5.0f, br);
 }
 
 void Bullet::init()

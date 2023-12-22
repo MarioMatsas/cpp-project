@@ -1,10 +1,11 @@
 #pragma once
 // "Game.h"
 #include "GameObject.h"
+#include <string>
 //#include "Bullet.h"
 #include "Config.h"
 #include "box.h"
-#include "graphics.h"
+#include "sgg\graphics.h"
 #include "vector"
 #include "list"
 #include "Obstacle.h"
@@ -12,9 +13,24 @@
 #include "Sword.h"
 
 class Player : public GameObject, public Box{
+public:
+	const float m_accel_horizontal = 20.0f;
+	const float m_max_velocity = 5.0f;
+	float m_vx = 0.0f;
+	bool attacking = false;
+	int same_counter = 0;
+	int previous_sprite = 0;
+	int frameCounter = 0;
+	std::vector<std::string> standing_sprites;
+	std::vector<std::string> jumping_sprites;
+	std::vector<std::string> attack_sprites;
+	std::vector<std::string> sprites;
+	bool looking_right = true;
+	bool looking_left = false;
 	bool sword_selected = false;
 	bool gun_selected = true;
-	Sword* sword;
+	Sword* sword_right;
+	Sword* sword_left;
 	graphics::MouseState mouse;
 	std::vector<Obstacle*>& obstaclesList;
 	double velocityY = 0; // Vertical velocity
@@ -22,7 +38,7 @@ class Player : public GameObject, public Box{
 	std::list<Bullet*> bullets;
 	bool jumping = false;
 	bool falling = false;
-	float speed = 6.0f;
+	float speed = 4.0f;
 	//const Game& game;
 	float length = 0.0;
 	float initialVelocityX = 0.0f;

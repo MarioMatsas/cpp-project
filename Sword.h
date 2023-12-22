@@ -3,7 +3,7 @@
 #include "Obstacle.h"
 #include "box.h"
 #include "Config.h"
-#include "graphics.h"
+#include "sgg\graphics.h"
 
 class Sword : public GameObject, public Box {
 	std::vector<Obstacle*>& obstaclesList;

@@ -1,5 +1,5 @@
 #include "Player.h"
-#include "graphics.h"
+#include "sgg\graphics.h"
 #include <iostream>
 /*
 Player::Player()
@@ -7,13 +7,54 @@ Player::Player()
 
 }
 */
+// MOUSE POSITION WHEN WINDOW SIZE CHANGES NEEDS TO BE FIXED!!!!!!!!!!!
+
 Player::Player(float x, float y, float w, float h, std::vector<Obstacle*>& obstacles): Box(x, y, w, h), obstaclesList(obstacles)
 {
-	sword = new Sword(m_pos_x+30, m_pos_y, 25.0f, 7.0f, obstaclesList);
+	sword_right = new Sword(m_pos_x + 30, m_pos_y, 25.0f, 7.0f, obstaclesList);
+	sword_left = new Sword(m_pos_x - 30, m_pos_y, 25.0f, 7.0f, obstaclesList);
+	// Movement sprites
+	sprites.push_back(std::string(ASSET_PATH) + "output-onlinepngtools (2).png");
+	sprites.push_back(std::string(ASSET_PATH) + "output-onlinepngtools (3).png");
+	sprites.push_back(std::string(ASSET_PATH) + "output-onlinepngtools (4).png");
+	sprites.push_back(std::string(ASSET_PATH) + "output-onlinepngtools (5).png");
+	sprites.push_back(std::string(ASSET_PATH) + "output-onlinepngtools (2)_left.png");
+	sprites.push_back(std::string(ASSET_PATH) + "output-onlinepngtools (3)_left.png");
+	sprites.push_back(std::string(ASSET_PATH) + "output-onlinepngtools (4)_left.png");
+	sprites.push_back(std::string(ASSET_PATH) + "output-onlinepngtools (5)_left.png");
+
+	// Standing sprites
+	standing_sprites.push_back(std::string(ASSET_PATH) + "output-onlinepngtools (6).png");
+	standing_sprites.push_back(std::string(ASSET_PATH) + "output-onlinepngtools (6)_left.png");
+
+	// Attack sprites
+	attack_sprites.push_back(std::string(ASSET_PATH) + "output-onlinepngtools (7).png");
+	attack_sprites.push_back(std::string(ASSET_PATH) + "output-onlinepngtools (8).png");
+	attack_sprites.push_back(std::string(ASSET_PATH) + "output-onlinepngtools (9).png");
+	attack_sprites.push_back(std::string(ASSET_PATH) + "output-onlinepngtools (10).png");
+	attack_sprites.push_back(std::string(ASSET_PATH) + "output-onlinepngtools (11).png");
+	attack_sprites.push_back(std::string(ASSET_PATH) + "output-onlinepngtools (12).png");
+	attack_sprites.push_back(std::string(ASSET_PATH) + "output-onlinepngtools (13).png");
+	attack_sprites.push_back(std::string(ASSET_PATH) + "output-onlinepngtools (14).png");
+	attack_sprites.push_back(std::string(ASSET_PATH) + "output-onlinepngtools (7)_left.png");
+	attack_sprites.push_back(std::string(ASSET_PATH) + "output-onlinepngtools (8)_left.png");
+	attack_sprites.push_back(std::string(ASSET_PATH) + "output-onlinepngtools (9)_left.png");
+	attack_sprites.push_back(std::string(ASSET_PATH) + "output-onlinepngtools (10)_left.png");
+	attack_sprites.push_back(std::string(ASSET_PATH) + "output-onlinepngtools (11)_left.png");
+	attack_sprites.push_back(std::string(ASSET_PATH) + "output-onlinepngtools (12)_left.png");
+	attack_sprites.push_back(std::string(ASSET_PATH) + "output-onlinepngtools (13)_left.png");
+	attack_sprites.push_back(std::string(ASSET_PATH) + "output-onlinepngtools (14)_left.png");
+
+	// Jumping sprites
+	jumping_sprites.push_back(std::string(ASSET_PATH) + "output-onlinepngtools (15).png");
+	jumping_sprites.push_back(std::string(ASSET_PATH) + "output-onlinepngtools (16).png");
+	jumping_sprites.push_back(std::string(ASSET_PATH) + "output-onlinepngtools (15)_left.png");
+	jumping_sprites.push_back(std::string(ASSET_PATH) + "output-onlinepngtools (16)_left.png");
 }
 
 void Player::update()
 {	
+	
 	auto it = bullets.begin();
 	while (it != bullets.end()) {
 		if ((*it)->get_x() > 700 || (*it)->get_x() < 0 || (*it)->get_y() > 450 || (*it)->get_y() < 0 || (*it)->collision_detected() == true) {
@@ -51,11 +92,20 @@ void Player::update()
 		}
 		else {
 			//std::cout << "slash" << std::endl;
-			bool ans = sword->collision_detected();
+			bool ans = sword_right->collision_detected();
 			//std::cout << ans << std::endl;
 		}
+		attacking = true;
 	}
 
+	if (mouse.button_right_pressed && !mouse.button_left_pressed && !attacking) {
+		// Invert the boolean values
+		sword_selected = !sword_selected;
+		gun_selected = !gun_selected;
+		if (sword_selected) std::cout << "sword" << std::endl;
+		else std::cout << "gun" << std::endl;
+	}
+	/*
 	if (graphics::getKeyState(graphics::SCANCODE_Q)) {
 		// Invert the boolean values
 		sword_selected = !sword_selected;
@@ -64,6 +114,7 @@ void Player::update()
 		//else std::cout << "gun" << std::endl;
 
 	}
+	*/
 	
 	for (Bullet* bullet : bullets) {
 		if (bullet->get_shot() == false) {
@@ -74,20 +125,48 @@ void Player::update()
 		bullet->set_shot(true);
 	}
 	
-	if (graphics::getKeyState(graphics::SCANCODE_A)) {
+	float prevPosX = m_pos_x;
+	float move = 0.0f;
+	if (graphics::getKeyState(graphics::SCANCODE_A) && !attacking) {
+		looking_left = true;
+		looking_right = false;
+		move = -1.0f;
+	}
+	if (graphics::getKeyState(graphics::SCANCODE_D) && !attacking) {
+		looking_left = false;
+		looking_right = true;
+		move = 1.0f;
+	}
+	m_vx = std::min<float>(m_max_velocity, m_vx + graphics::getDeltaTime() * move * m_accel_horizontal);
+	m_vx = std::max<float>(-m_max_velocity, m_vx);
+
+	// friction
+	m_vx -= 0.2f * m_vx / (0.1f + fabs(m_vx));
+
+	// apply static friction threshold
+	if (fabs(m_vx) < 0.01f)
+		m_vx = 0.0f;
+
+	m_pos_x += m_vx * graphics::getDeltaTime() / 20.0f;
+	sword_right->m_pos_x += m_vx * graphics::getDeltaTime() / 20.0f;
+	sword_left->m_pos_x += m_vx * graphics::getDeltaTime() / 20.0f;
+		/*
 		m_pos_x -= speed * graphics::getDeltaTime() / 20.0f;
+		if (looking_right) sword->m_pos_x += -2 * 30;
+		looking_left = true;
+		looking_right = false;
 		sword->m_pos_x -= speed * graphics::getDeltaTime() / 20.0f;
-	}
-	if (graphics::getKeyState(graphics::SCANCODE_D)) {
+		*/
+		/*
 		m_pos_x += speed * graphics::getDeltaTime() / 20.0f;
+		if (looking_left) sword->m_pos_x += 2 * 30;
+		looking_left = false;
+		looking_right = true;
 		sword->m_pos_x += speed * graphics::getDeltaTime() / 20.0f;
-	}
-	//if (graphics::getKeyState(graphics::SCANCODE_S)) {
-	//	posy += speed * graphics::getDeltaTime() / 10.0f;
-	//}
+		*/
 	
-	if (graphics::getKeyState(graphics::SCANCODE_W) && jumping == false && falling == false) {
-		velocityY = -6.0;
+	if (graphics::getKeyState(graphics::SCANCODE_W) && jumping == false && falling == false && !attacking) {
+		velocityY = -5.0;
 		jumping = true;
 		//posy_dummy = posy;
 	}
@@ -95,7 +174,8 @@ void Player::update()
 	// Apply gravity until terminal velocity is reached
 	if (velocityY < 3.5) velocityY += gravity;
 	m_pos_y += velocityY * graphics::getDeltaTime() / 10.0f;
-	sword->m_pos_y += velocityY * graphics::getDeltaTime() / 10.0f;
+	sword_right->m_pos_y += velocityY * graphics::getDeltaTime() / 10.0f;
+	sword_left->m_pos_y += velocityY * graphics::getDeltaTime() / 10.0f;
 
 	/*
 	if (jumping) {
@@ -112,29 +192,41 @@ void Player::update()
 		//}
 	}
 	*/
-
+	/*
 	// Check if the player collides with any of the Obstacles and perform needed changes in position
 	for (Obstacle* ob : obstaclesList) {
 		if (intersect(*ob)) {
-			float vertCorrection = intersectDown(*ob);
-			float horizCorrection = intersectSideways(*ob);
-			//std::cout << vertCorrection << std::endl;
-			//std::cout << horizCorrection << std::endl;
-
+			float belowCorrection = intersectDown(*ob);
+			if (belowCorrection != 0 && jumping == true && velocityY <= 0) {
+				//std::cout << "belowCorrection: "<<belowCorrection << std::endl;
+				m_pos_y -= belowCorrection;
+				sword->m_pos_y -= belowCorrection;
+				velocityY = 0;
+			}
+		}
+	}
+	for (Obstacle* ob : obstaclesList) {
+		if (intersect(*ob)) {
+			float vertCorrection = intersectAbove(*ob);
 			if (vertCorrection != 0) {
 				m_pos_y += vertCorrection;
 				sword->m_pos_y += vertCorrection;
 				velocityY = 0;
 				jumping = false;
 			}
-			else if (horizCorrection != 0) {
+
+		}
+	}
+	for (Obstacle* ob : obstaclesList) {
+		if (intersect(*ob)) {
+			float horizCorrection = intersectSideways(*ob);
+			if (horizCorrection != 0 && prevPosX != m_pos_x) {
 				m_pos_x += horizCorrection;
 				sword->m_pos_x += horizCorrection;
 			}
-			 
 		}
 	}
-
+	*/
 
 
 	/*
@@ -159,7 +251,6 @@ void Player::update()
 		posy += gravity * graphics::getDeltaTime() / 3.0f;
 	}
 	*/
-
 }
 
 void Player::draw()
@@ -168,15 +259,167 @@ void Player::draw()
 	graphics::Brush br;
 
 	br.fill_color[0] = 1.0f;
-	br.fill_color[1] = 0.5f;
-	br.fill_color[2] = 0.0f;
+	br.fill_color[1] = 1.0f;
+	br.fill_color[2] = 1.0f;
 	br.fill_opacity = 1.0f;
-	br.gradient = true;
-	br.outline_opacity = 0;  
-	graphics::drawDisk(m_pos_x, m_pos_y, 10.0f, br);
+	br.outline_opacity = 1;
+
+	int sprite = previous_sprite;
+	
+	if (attacking) {
+		if (looking_right) {
+			if (gun_selected) {
+				if (frameCounter < 18) {
+					br.texture = attack_sprites[3];
+				}
+				else if (frameCounter < 36) {
+					br.texture = attack_sprites[4];
+				}
+				else if (frameCounter < 54) {
+					br.texture = attack_sprites[5];
+				}
+				else if (frameCounter < 72) {
+					br.texture = attack_sprites[6];
+				}
+				else if (frameCounter < 90) {
+					br.texture = attack_sprites[7];
+					frameCounter = 0;
+					attacking = false;
+				}
+				frameCounter++;
+			}
+			else if (sword_selected) {
+				if (frameCounter < 25) {
+					br.texture = attack_sprites[0];
+				}
+				else if (frameCounter < 50) {
+					br.texture = attack_sprites[1];
+				}
+				else if (frameCounter < 75) {
+					br.texture = attack_sprites[2];
+					frameCounter = 0;
+					attacking = false;
+				}
+				frameCounter++;
+			}
+		}
+		else {
+			if (gun_selected) {
+				if (frameCounter < 18) {
+					br.texture = attack_sprites[11];
+				}
+				else if (frameCounter < 36) {
+					br.texture = attack_sprites[12];
+				}
+				else if (frameCounter < 54) {
+					br.texture = attack_sprites[13];
+				}
+				else if (frameCounter < 72) {
+					br.texture = attack_sprites[14];
+				}
+				else if (frameCounter < 90) {
+					br.texture = attack_sprites[15];
+					frameCounter = 0;
+					attacking = false;
+				}
+				frameCounter++;
+			}
+			else if (sword_selected) {
+				if (frameCounter < 25) {
+					br.texture = attack_sprites[8];
+				}
+				else if (frameCounter < 50) {
+					br.texture = attack_sprites[9];
+				}
+				else if (frameCounter < 75) {
+					br.texture = attack_sprites[10];
+					frameCounter = 0;
+					attacking = false;
+				}
+				frameCounter++;
+			}
+		}
+		
+	}
+	else if (jumping) {
+		if (looking_right) {
+			if (velocityY < 0) {
+				br.texture = jumping_sprites[0];
+			}
+			else {
+				br.texture = jumping_sprites[1];
+			}
+		}
+		else {
+			if (velocityY < 0) {
+				br.texture = jumping_sprites[2];
+			}
+			else {
+				br.texture = jumping_sprites[3];
+			}
+		}
+	}
+	
+	else {
+		if (looking_right) {
+			if (m_vx == 0) {
+				sprite = 0;
+				br.texture = standing_sprites[sprite];
+			}
+			else {
+				same_counter = 0;
+				if (frameCounter < 12) {
+					br.texture = sprites[previous_sprite];
+					frameCounter++;
+				}
+				else {
+					sprite = ((int)fmod(100.0f - m_pos_x * 9.0f, sprites.size()) + 7) % 4;
+					//std::cout << sprite << std::endl;
+
+					br.texture = sprites[sprite];
+
+					previous_sprite = sprite;
+					frameCounter = 0;
+				}
+			}		
+			
+		}
+
+		else {
+			
+			if (m_vx == 0) {
+				sprite = 1;
+				br.texture = standing_sprites[sprite];
+			}
+			else {
+				same_counter = 0;
+				if (frameCounter < 12) {
+					br.texture = sprites[previous_sprite];
+					frameCounter++;
+				}
+				else {
+					sprite = ((int)fmod(100.0f - m_pos_x * 9.0f, sprites.size()) + 7) % 4 + 4;
+					//std::cout << sprite << std::endl;
+
+					br.texture = sprites[sprite];
+
+					previous_sprite = sprite;
+					frameCounter = 0;
+				}
+			}		 					
+		}	
+	}
+	//int sprite = ((int)fmod(100.0f - m_pos_x * 9.0f, sprites.size()) + 9)%5;
+	//std::cout << sprite << std::endl;
+	
+	// if he is facing to the left
+	//25.0f, 50.0f
+
+	graphics::drawRect(m_pos_x, m_pos_y, 25.0f, 50.0f,br);
 
 	// Draw Sword
-	sword->draw();
+	sword_right->draw();
+	sword_left->draw();
 
 	// Draw Bullets
 	for (Bullet* bullet : bullets) {

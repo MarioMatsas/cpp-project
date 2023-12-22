@@ -3,7 +3,7 @@
 #include "Obstacle.h"
 #include "box.h"
 #include "Config.h"
-#include "graphics.h"
+#include "sgg\graphics.h"
 
 class Bullet : public GameObject, public Box{
 	std::vector<Obstacle*>& obstaclesList;
@@ -17,7 +17,7 @@ class Bullet : public GameObject, public Box{
 	float tangent = 0.0f;
 	float mouse_x = 0.0;
 	float mouse_y = 0.0;
-	float speed = 10.0f;
+	float speed = 8.0f;
 	bool collided = false;
 	bool shot = false;
 

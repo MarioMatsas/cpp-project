@@ -1,5 +1,5 @@
 #include "Sword.h"
-#include "graphics.h"
+#include "sgg\graphics.h"
 #include <iostream>
 
 void Sword::update()
