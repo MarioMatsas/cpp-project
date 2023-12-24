@@ -8,7 +8,7 @@ build.ninja
 Game/
 Testing/
 bin/
-sgg/
+sgg
 build/
 .cmake/
 *.swp

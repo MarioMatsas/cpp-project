@@ -1,16 +1,46 @@
 #pragma once
+#pragma once
+// "Game.h"
 #include "GameObject.h"
-#include "Bullet.h"
+#include <string>
+//#include "Bullet.h"
 #include "Config.h"
+#include "box.h"
 #include "graphics.h"
 #include "vector"
+#include "list"
+#include "Obstacle.h"
+#include "Bullet.h"
+#include "Sword.h"
 
-class Game;
-
-class Player : public GameObject {
-	std::vector<Bullet*> bullets;
-	const Game& game;
-	Bullet* b = nullptr;
+class Player : public GameObject, public Box {
+public:
+	const float m_accel_horizontal = 20.0f;
+	const float m_max_velocity = 5.0f;
+	float m_vx = 0.0f;
+	bool attacking = false;
+	int same_counter = 0;
+	int previous_sprite = 0;
+	int frameCounter = 0;
+	std::vector<std::string> standing_sprites;
+	std::vector<std::string> jumping_sprites;
+	std::vector<std::string> attack_sprites;
+	std::vector<std::string> sprites;
+	bool looking_right = true;
+	bool looking_left = false;
+	bool sword_selected = false;
+	bool gun_selected = true;
+	Sword* sword_right;
+	Sword* sword_left;
+	graphics::MouseState mouse;
+	//std::vector<Obstacle*>& obstaclesList;
+	double velocityY = 0; // Vertical velocity
+	const double gravity = 0.1; // Gravity strength
+	std::list<Bullet*> bullets;
+	bool jumping = false;
+	bool falling = false;
+	float speed = 4.0f;
+	//const Game& game;
 	float length = 0.0;
 	float initialVelocityX = 0.0f;
 	float initialVelocityY = 0.0f;
@@ -21,24 +51,17 @@ class Player : public GameObject {
 	float tangent = 0.0f;
 	float mouse_x = 0.0;
 	float mouse_y = 0.0;
-	graphics::MouseState mouse;
+	//graphics::MouseState mouse;
 	bool collided = false;
 	bool shot = false;
-	float posx_ = WINDOW_WIDTH / 2, posy_ = 550.0f;
-	float width = 200.0f;
-	float height = 50.0f;
-	float speed = 10.0f;
-	float up_velocity = speed;
-	float jump_height = 100.0;
-	float gravity = 0.5f;
-	float posx = WINDOW_WIDTH / 2, posy = WINDOW_HEIGHT / 2;
-	float posy_dummy = 0.0f;
-	bool jumping = false;
-	bool falling = true;
+	//float posx_ = WINDOW_WIDTH / 2, posy_ = 550.0f;
+	//float posx = WINDOW_WIDTH / 2, posy = WINDOW_HEIGHT / 2;
 public:
-	Player(const Game& mygame);
-	void update() override;
+	//Player();
+	Player(float x, float y, float w, float h, std::string name);
+	void update(float dt) override;
 	void draw() override;
 	void init() override;
+	void jump();
 	//void shoot();
 };

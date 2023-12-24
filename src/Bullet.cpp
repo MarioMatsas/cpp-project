@@ -1,56 +1,47 @@
 #include "Bullet.h"
+#include "Level.h"
 #include <iostream>
-#include <cmath>
 
-void Bullet::update()
-{	
+void Bullet::update(float dt)
+{
+	// Depending on the positionof the players mouse, we change the position of the bullet to simulate it's firing
 	if (up_right) {
-		//std::cout << "v" << std::endl;
-		//posy -= speed * (graphics::getDeltaTime() / 60.0f);
-		//posx += speed * (graphics::getDeltaTime() / 60.0f) * (1/tangent);
-		posy_b -= initialVelocityY;
-		posx_b += initialVelocityX;
+		m_pos_y -= initialVelocityY;
+		m_pos_x += initialVelocityX;
 	}
 	else if (up_left) {
-		//std::cout << "e" << std::endl;
-		//posy -= speed * (graphics::getDeltaTime() / 60.0f);
-		//posx += speed * (graphics::getDeltaTime() / 60.0f) * (1/tangent);
-		posy_b -= initialVelocityY;
-		posx_b -= initialVelocityX;
+		m_pos_y -= initialVelocityY;
+		m_pos_x -= initialVelocityX;
 	}
 	else if (down_left) {
-		//std::cout << "d" << std::endl;
-		//posy -= speed * (graphics::getDeltaTime() / 60.0f);
-		//posx += speed * (graphics::getDeltaTime() / 60.0f) * (1/tangent);
-		posy_b += initialVelocityY;
-		posx_b -= initialVelocityX;
+		m_pos_y += initialVelocityY;
+		m_pos_x -= initialVelocityX;
 	}
 	else if (down_right) {
-		//std::cout << "k" << std::endl;
-		//posy -= speed * (graphics::getDeltaTime() / 60.0f);
-		//posx += speed * (graphics::getDeltaTime() / 60.0f) * (1/tangent);
-		posy_b += initialVelocityY;
-		posx_b += initialVelocityX;
+		m_pos_y += initialVelocityY;
+		m_pos_x += initialVelocityX;
 	}
-	
-	
 }
 
 void Bullet::draw()
 {
-	graphics::Brush br_;
-	br_.fill_color[0] = 0.0f;
-	br_.fill_color[1] = 0.5f;
-	br_.fill_color[2] = 1.0f;
-	br_.fill_opacity = 5.0f;
-	br_.gradient = true;
-	br_.outline_opacity = 1;
-	graphics::drawDisk(posx_b, posy_b, 3.0f, br_);
-	std::cout << "Ay";
-
+	//std::cout << " drawn " << std::endl;
+	graphics::Brush br;
+	br.fill_color[0] = 1.0f;
+	br.fill_color[1] = 0.5f;
+	br.fill_color[2] = 0.5f;
+	br.fill_opacity = 1.0f;
+	br.gradient = true;
+	br.outline_opacity = 1;
+	br.texture = std::string(ASSET_PATH) + "output-onlinepngtools (17)_left.png";
+	graphics::drawDisk(m_pos_x, m_pos_y, 5.0f, br);
 }
 
 void Bullet::init()
+{
+}
+
+Bullet::Bullet(float x, float y, float w, float h, std::string name) : Box(x, y, w, h), GameObject(name)
 {
 }
 
@@ -60,17 +51,8 @@ Bullet::~Bullet()
 
 void Bullet::shoot()
 {
-	std::cout << posx_b << std::endl;
-	std::cout << posy_b << std::endl;
-	std::cout << mouse_x << std::endl;
-	std::cout << mouse_y << std::endl;
-
-	jumping = false;
-	falling = false;
-	//mouse_x = mouse.cur_pos_x;
-	//mouse_y = mouse.cur_pos_y;
-	float direction_x = abs(mouse_x - posx_b);
-	float direction_y = abs(mouse_y - posy_b);
+	float direction_x = abs(mouse_x - m_pos_x);
+	float direction_y = abs(mouse_y - m_pos_y);
 	length = std::sqrt(direction_x * direction_x + direction_y * direction_y);
 
 
@@ -85,31 +67,33 @@ void Bullet::shoot()
 	//std::cout << initialVelocityX << std::endl;
 	//std::cout << initialVelocityY << std::endl;
 
-	tangent = abs(mouse_y - posy_b) / abs(mouse_x - posx_b);
-	if (mouse_x > posx_b && mouse_y < posy_b) {
-		up_right = true;
-		up_left = false;
-		down_right = false;
-		down_left = false;
-	}
-	else if (mouse_x < posx_b && mouse_y < posy_b) {
-		up_right = false;
-		up_left = true;
-		down_right = false;
-		down_left = false;
-	}
-	else if (mouse_x > posx_b && mouse_y > posy_b) {
-		up_right = false;
-		up_left = false;
-		down_right = true;
-		down_left = false;
-	}
-	else if (mouse_x < posx_b && mouse_y > posy_b) {
-		up_right = false;
-		up_left = false;
-		down_right = false;
-		down_left = true;
-	}
+	tangent = abs(mouse_y - m_pos_y) / abs(mouse_x - m_pos_x); \
+
+		// We set as true only the quadrant in which the mouse cursor is located
+		if (mouse_x > m_pos_x && mouse_y < m_pos_y) {
+			up_right = true;
+			up_left = false;
+			down_right = false;
+			down_left = false;
+		}
+		else if (mouse_x < m_pos_x && mouse_y < m_pos_y) {
+			up_right = false;
+			up_left = true;
+			down_right = false;
+			down_left = false;
+		}
+		else if (mouse_x > m_pos_x && mouse_y > m_pos_y) {
+			up_right = false;
+			up_left = false;
+			down_right = true;
+			down_left = false;
+		}
+		else if (mouse_x < m_pos_x && mouse_y > m_pos_y) {
+			up_right = false;
+			up_left = false;
+			down_right = false;
+			down_left = true;
+		}
 
 }
 
@@ -125,18 +109,11 @@ void Bullet::setMouse_y(float pos_y)
 
 float Bullet::get_x()
 {
-	return posx_b;
+	return m_pos_x;
 }
 float Bullet::get_y()
 {
-	return posy_b;;
-}
-
-void Bullet::set_x(float pos_x) {
-	posx_b = pos_x;
-}
-void Bullet::set_y(float pos_y) {
-	posy_b = pos_y;
+	return m_pos_y;;
 }
 
 void Bullet::set_shot(bool s)
@@ -149,18 +126,14 @@ bool Bullet::get_shot()
 	return shot;
 }
 
-bool Bullet::collision_detected(int num)
-{	
-	/*
-	std::cout << "Hello" << std::endl;
-	std::cout << game.obstacle->getX()<<std::endl;
-	std::cout << "Hi" << std::endl;
-	// Check if the bullet has hit an obstacle
-	if ((posx_b > game.obstacle->getX() - game.obstacle->getWidth() / 2 && posx_b < game.obstacle->getX() + game.obstacle->getWidth() / 2)
-		&& (posy_b > game.obstacle->getY() - game.obstacle->getHeight() / 2 && posy_b < game.obstacle->getY() + game.obstacle->getHeight() / 2)) {
-		return true;
+bool Bullet::collision_detected(std::vector<Obstacle*>& m_blocks)
+{
+	// Check for any collion with Obstacles
+	for (Obstacle* ob : m_blocks) {
+		if (intersect(*ob)) {
+			return true;
+		}
 	}
-	*/
-	if (num == 1) return true;
 	return false;
 }
+

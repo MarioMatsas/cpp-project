@@ -1,39 +1,29 @@
-#include "graphics.h"
-#include "Game.h"
-#include "Config.h"
+#include <graphics.h>
+#include "gamestate.h"
 
-// The custom callback function that the library calls 
-// to check for and set the current application state.
-void update(float ms)
-{
-    Game* game = reinterpret_cast<Game*>(graphics::getUserData());
-    game->update();
-}
-
-// The window content drawing function.
 void draw()
 {
-    Game* game = reinterpret_cast<Game*>(graphics::getUserData());
-    game->draw();
+    GameState::getInstance()->draw();
 }
 
-int main()
+void update(float dt)
 {
-    Game game;
-    graphics::createWindow(WINDOW_WIDTH, WINDOW_HEIGHT, "MK X");
+    GameState::getInstance()->update(dt);
+}
 
-    graphics::setUserData(&game);
+
+int main(int argc, char** argv)
+{
+    graphics::createWindow(GameState::getInstance()->getCanvasWidth(), GameState::getInstance()->getCanvasHeight(), "Shadow_Wizard_Adventure");
+
+    GameState::getInstance()->init();
 
     graphics::setDrawFunction(draw);
     graphics::setUpdateFunction(update);
 
-    graphics::setCanvasSize(WINDOW_WIDTH, WINDOW_HEIGHT);
+    graphics::setCanvasSize(GameState::getInstance()->getCanvasWidth(), GameState::getInstance()->getCanvasHeight());
     graphics::setCanvasScaleMode(graphics::CANVAS_SCALE_FIT);
 
-    game.init();
     graphics::startMessageLoop();
-
-    draw();
-
     return 0;
 }
