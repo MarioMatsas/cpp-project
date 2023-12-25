@@ -4,7 +4,7 @@ project(Game)
 if (${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
     set(CMAKE_C_COMPILER "/Library/Developer/CommandLineTools/usr/bin/cc")
     set(CMAKE_CXX_COMPILER "/Library/Developer/CommandLineTools/usr/bin/c++")
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wl,-ld_classic")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -w -Wl,-ld_classic")
 endif()
 
 set(CMAKE_CXX_STANDARD 17)

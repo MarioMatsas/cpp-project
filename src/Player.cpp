@@ -9,47 +9,47 @@ Player::Player()
 */
 // MOUSE POSITION WHEN WINDOW SIZE CHANGES NEEDS TO BE FIXED!!!!!!!!!!!
 
-Player::Player(float x, float y, float w, float h, std::string name): Box(x,y,w,h), GameObject(name)
+Player::Player(float x, float y, float w, float h, std::string name): Box(x,y,w,h), GameObject(name, "Player")
 {
 	sword_right = new Sword(m_pos_x + 30, m_pos_y, 25.0f, 7.0f, "right sword");
 	sword_left = new Sword(m_pos_x - 30, m_pos_y, 25.0f, 7.0f, "left sword");
-	// Movement sprites
-	sprites.push_back(std::string(ASSET_PATH) + "output-onlinepngtools (2).png");
-	sprites.push_back(std::string(ASSET_PATH) + "output-onlinepngtools (3).png");
-	sprites.push_back(std::string(ASSET_PATH) + "output-onlinepngtools (4).png");
-	sprites.push_back(std::string(ASSET_PATH) + "output-onlinepngtools (5).png");
-	sprites.push_back(std::string(ASSET_PATH) + "output-onlinepngtools (2)_left.png");
-	sprites.push_back(std::string(ASSET_PATH) + "output-onlinepngtools (3)_left.png");
-	sprites.push_back(std::string(ASSET_PATH) + "output-onlinepngtools (4)_left.png");
-	sprites.push_back(std::string(ASSET_PATH) + "output-onlinepngtools (5)_left.png");
+		// Movement sprites
+	sprites.push_back(std::string(ASSET_PATH) + "/" + name + "/" + "2.png");
+	sprites.push_back(std::string(ASSET_PATH) + "/" + name + "/" + "3.png");
+	sprites.push_back(std::string(ASSET_PATH) + "/" + name + "/" + "4.png");
+	sprites.push_back(std::string(ASSET_PATH) + "/" + name + "/" + "5.png");
+	sprites.push_back(std::string(ASSET_PATH) + "/" + name + "/" + "2_left.png");
+	sprites.push_back(std::string(ASSET_PATH) + "/" + name + "/" + "3_left.png");
+	sprites.push_back(std::string(ASSET_PATH) + "/" + name + "/" + "4_left.png");
+	sprites.push_back(std::string(ASSET_PATH) + "/" + name + "/" + "5_left.png");
 
 	// Standing sprites
-	standing_sprites.push_back(std::string(ASSET_PATH) + "output-onlinepngtools (6).png");
-	standing_sprites.push_back(std::string(ASSET_PATH) + "output-onlinepngtools (6)_left.png");
+	standing_sprites.push_back(std::string(ASSET_PATH) + "/" + name + "/" + "6.png");
+	standing_sprites.push_back(std::string(ASSET_PATH) + "/" + name + "/" + "6_left.png");
 
 	// Attack sprites
-	attack_sprites.push_back(std::string(ASSET_PATH) + "output-onlinepngtools (7).png");
-	attack_sprites.push_back(std::string(ASSET_PATH) + "output-onlinepngtools (8).png");
-	attack_sprites.push_back(std::string(ASSET_PATH) + "output-onlinepngtools (9).png");
-	attack_sprites.push_back(std::string(ASSET_PATH) + "output-onlinepngtools (10).png");
-	attack_sprites.push_back(std::string(ASSET_PATH) + "output-onlinepngtools (11).png");
-	attack_sprites.push_back(std::string(ASSET_PATH) + "output-onlinepngtools (12).png");
-	attack_sprites.push_back(std::string(ASSET_PATH) + "output-onlinepngtools (13).png");
-	attack_sprites.push_back(std::string(ASSET_PATH) + "output-onlinepngtools (14).png");
-	attack_sprites.push_back(std::string(ASSET_PATH) + "output-onlinepngtools (7)_left.png");
-	attack_sprites.push_back(std::string(ASSET_PATH) + "output-onlinepngtools (8)_left.png");
-	attack_sprites.push_back(std::string(ASSET_PATH) + "output-onlinepngtools (9)_left.png");
-	attack_sprites.push_back(std::string(ASSET_PATH) + "output-onlinepngtools (10)_left.png");
-	attack_sprites.push_back(std::string(ASSET_PATH) + "output-onlinepngtools (11)_left.png");
-	attack_sprites.push_back(std::string(ASSET_PATH) + "output-onlinepngtools (12)_left.png");
-	attack_sprites.push_back(std::string(ASSET_PATH) + "output-onlinepngtools (13)_left.png");
-	attack_sprites.push_back(std::string(ASSET_PATH) + "output-onlinepngtools (14)_left.png");
+	attack_sprites.push_back(std::string(ASSET_PATH) + "/" + name + "/" + "7.png");
+	attack_sprites.push_back(std::string(ASSET_PATH) + "/" + name + "/" + "8.png");
+	attack_sprites.push_back(std::string(ASSET_PATH) + "/" + name + "/" + "9.png");
+	attack_sprites.push_back(std::string(ASSET_PATH) + "/" + name + "/" + "10.png");
+	attack_sprites.push_back(std::string(ASSET_PATH) + "/" + name + "/" + "11.png");
+	attack_sprites.push_back(std::string(ASSET_PATH) + "/" + name + "/" + "12.png");
+	attack_sprites.push_back(std::string(ASSET_PATH) + "/" + name + "/" + "13.png");
+	attack_sprites.push_back(std::string(ASSET_PATH) + "/" + name + "/" + "14.png");
+	attack_sprites.push_back(std::string(ASSET_PATH) + "/" + name + "/" + "7_left.png");
+	attack_sprites.push_back(std::string(ASSET_PATH) + "/" + name + "/" + "8_left.png");
+	attack_sprites.push_back(std::string(ASSET_PATH) + "/" + name + "/" + "9_left.png");
+	attack_sprites.push_back(std::string(ASSET_PATH) + "/" + name + "/" + "10_left.png");
+	attack_sprites.push_back(std::string(ASSET_PATH) + "/" + name + "/" + "11_left.png");
+	attack_sprites.push_back(std::string(ASSET_PATH) + "/" + name + "/" + "12_left.png");
+	attack_sprites.push_back(std::string(ASSET_PATH) + "/" + name + "/" + "13_left.png");
+	attack_sprites.push_back(std::string(ASSET_PATH) + "/" + name + "/" + "14_left.png");
 
 	// Jumping sprites
-	jumping_sprites.push_back(std::string(ASSET_PATH) + "output-onlinepngtools (15).png");
-	jumping_sprites.push_back(std::string(ASSET_PATH) + "output-onlinepngtools (16).png");
-	jumping_sprites.push_back(std::string(ASSET_PATH) + "output-onlinepngtools (15)_left.png");
-	jumping_sprites.push_back(std::string(ASSET_PATH) + "output-onlinepngtools (16)_left.png");
+	jumping_sprites.push_back(std::string(ASSET_PATH) + "/" + name + "/" + "15.png");
+	jumping_sprites.push_back(std::string(ASSET_PATH) + "/" + name + "/" + "16.png");
+	jumping_sprites.push_back(std::string(ASSET_PATH) + "/" + name + "/" + "15_left.png");
+	jumping_sprites.push_back(std::string(ASSET_PATH) + "/" + name + "/" + "16_left.png");
 }
 
 void Player::update(float dt)
