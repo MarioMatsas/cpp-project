@@ -1,7 +1,7 @@
 #pragma once
 #include "Config.h"
 #include <string>
-#include "sgg/graphics.h"
+#include "graphics.h"
 
 class GameState
 {
