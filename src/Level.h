@@ -10,6 +10,7 @@
 class Level : public GameObject
 {
 	graphics::Brush m_brush_background;
+	graphics::Brush m_brush_health;
 
 	std::vector<GameObject*> m_static_objects;
 	std::list<GameObject*> m_dynamic_objects;
@@ -26,6 +27,9 @@ class Level : public GameObject
 
 	// dedicated method to draw a block
 	//void drawBlock(int i);
+
+	void game_over();
+
 
 	// detect collisions
 	void checkCollisions();

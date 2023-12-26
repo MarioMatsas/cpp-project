@@ -77,7 +77,8 @@
 		"utility": "cpp",
 		"format": "cpp",
 		"stop_token": "cpp",
-		"cinttypes": "cpp"
+		"cinttypes": "cpp",
+		"list": "cpp"
 	},
 	"editor.tokenColorCustomizations": {
 		"comments": "",

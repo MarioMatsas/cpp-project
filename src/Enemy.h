@@ -18,6 +18,7 @@ public:
 	const float m_accel_horizontal = 20.0f;
 	const float m_max_velocity = 5.0f;
 	float m_vx = 0.0f;
+	int health = 6; // 0 to 6
 	bool attacking = false;
 	int same_counter = 0;
 	int frameCounter = 0;

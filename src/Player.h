@@ -40,6 +40,7 @@ public:
 	bool jumping = false;
 	bool falling = false;
 	float speed = 4.0f;
+	int health = 6; // 0 to 6
 	//const Game& game;
 	float length = 0.0;
 	float initialVelocityX = 0.0f;
@@ -64,4 +65,7 @@ public:
 	void init() override;
 	void jump();
 	//void shoot();
+
+protected:
+	void debugDraw();
 };

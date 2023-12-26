@@ -1,7 +1,7 @@
 #include "Level.h"
 
 #include <graphics.h>
-
+#include "util.h"
 #include "Enemy.h"
 #include "Player.h"
 
@@ -23,28 +23,79 @@ m_block_brush_debug);
 }
 */
 
-void Level::checkCollisions() {
+void Level::checkCollisions()
+{
     // Bullet collisions / Out of bounds check
-    auto it = m_state->getPlayer()->bullets.begin();
-    while (it != m_state->getPlayer()->bullets.end()) {
-        if ((*it)->get_x() > 700 || (*it)->get_x() < 0 ||
-            (*it)->get_y() > 450 || (*it)->get_y() < 0 ||
-            (*it)->collision_detected(m_blocks) == true) {
-            // Remove the bullet from the list
-            delete *it;
-            it = m_state->getPlayer()->bullets.erase(it);
-        } else {
-            ++it;
+
+    for (auto it = m_dynamic_objects.begin(); it != m_dynamic_objects.end();
+         ++it)
+    {
+        if (!((*it)->isActive()))
+            continue;
+        if (!((*it)->m_class == "Enemy"))
+            continue;
+        Enemy *g_ob = dynamic_cast<Enemy *>(*it);
+        auto jt = g_ob->bullets.begin();
+        while (jt != g_ob->bullets.end())
+        {
+            if ((*jt)->get_x() > 700 || (*jt)->get_x() < 0 ||
+                (*jt)->get_y() > 450 || (*jt)->get_y() < 0 ||
+                (*jt)->collision_detected(m_blocks) == true)
+            {
+                // Remove the bullet from the list
+                delete *jt;
+                PLAYER->health--;
+
+                if (PLAYER->health == 0) game_over();
+
+                jt = g_ob->bullets.erase(jt);
+            }
+            else
+            {
+                ++jt;
+            }
         }
     }
-    // Sword collisions
+    
+    for (auto it = m_dynamic_objects.begin(); it != m_dynamic_objects.end();
+         ++it)
+    {
+        if (!((*it)->isActive()))
+            continue;
+        if (!((*it)->m_class == "Enemy"))
+            continue;
+        Enemy *g_ob = dynamic_cast<Enemy *>(*it);
+
+        auto jt = m_state->getPlayer()->bullets.begin();
+        while (jt != m_state->getPlayer()->bullets.end())
+        {
+            if ((*jt)->get_x() > 700 || (*jt)->get_x() < 0 || //TODO: replace hardcoded values with util.h defs
+                (*jt)->get_y() > 450 || (*jt)->get_y() < 0 ||
+                (*jt)->collision_detected(m_blocks) == true)
+            {
+                // Remove the bullet from the list
+                delete *jt;
+                g_ob->health--;
+                if (g_ob->health==0) delete g_ob; // TODO: fix segfault
+                jt = m_state->getPlayer()->bullets.erase(jt);
+            }
+            else
+            {
+                ++jt;
+            }
+        }
+    }
+        // Sword collisions
 
     // Player, Enemy obstacle collisions
-    for (Obstacle* ob : m_blocks) {
-        if (m_state->getPlayer()->intersect(*ob)) {
+    for (Obstacle *ob : m_blocks)
+    {
+        if (m_state->getPlayer()->intersect(*ob))
+        {
             float belowCorrection = m_state->getPlayer()->intersectDown(*ob);
             if (belowCorrection != 0 && m_state->getPlayer()->jumping == true &&
-                m_state->getPlayer()->velocityY <= 0) {
+                m_state->getPlayer()->velocityY <= 0)
+            {
                 // std::cout << "belowCorrection: "<<belowCorrection <<
                 // std::endl;
                 m_state->getPlayer()->m_pos_y -= belowCorrection;
@@ -54,14 +105,19 @@ void Level::checkCollisions() {
             }
         }
         for (auto it = m_dynamic_objects.begin(); it != m_dynamic_objects.end();
-             ++it) {
-            if (!((*it)->isActive())) continue;
-            if (!((*it)->m_class == "Enemy")) continue;
-            Enemy* g_ob = dynamic_cast<Enemy*>(*it);
-            if (g_ob->intersect(*ob)) {
+             ++it)
+        {
+            if (!((*it)->isActive()))
+                continue;
+            if (!((*it)->m_class == "Enemy"))
+                continue;
+            Enemy *g_ob = dynamic_cast<Enemy *>(*it);
+            if (g_ob->intersect(*ob))
+            {
                 float belowCorrection = g_ob->intersectDown(*ob);
                 if (belowCorrection != 0 && g_ob->jumping == true &&
-                    g_ob->velocityY <= 0) {
+                    g_ob->velocityY <= 0)
+                {
                     // std::cout << "belowCorrection: "<<belowCorrection <<
                     // std::endl;
                     g_ob->m_pos_y -= belowCorrection;
@@ -77,25 +133,32 @@ void Level::checkCollisions() {
     // we are ignoring Enemy <-> Enemy collisions since they're on the same "team"
 
     for (auto it = m_dynamic_objects.begin(); it != m_dynamic_objects.end();
-         ++it) {
-        if (!((*it)->isActive())) continue;
-        if (!((*it)->m_class == "Enemy")) continue;
-        Enemy* g_ob = dynamic_cast<Enemy*>(*it);
-        if (g_ob->intersect(*m_state->getPlayer())) {
-             float horizCorrection = g_ob->intersectSideways(*m_state->getPlayer());
-                if (horizCorrection != 0) {
-                    g_ob->m_pos_x += horizCorrection;
-                    g_ob->sword_right->m_pos_x += horizCorrection;
-                    g_ob->sword_left->m_pos_x += horizCorrection;
-                }
+         ++it)
+    {
+        if (!((*it)->isActive()))
+            continue;
+        if (!((*it)->m_class == "Enemy"))
+            continue;
+        Enemy *g_ob = dynamic_cast<Enemy *>(*it);
+        if (g_ob->intersect(*m_state->getPlayer()))
+        {
+            float horizCorrection = g_ob->intersectSideways(*m_state->getPlayer());
+            if (horizCorrection != 0)
+            {
+                g_ob->m_pos_x += horizCorrection;
+                g_ob->sword_right->m_pos_x += horizCorrection;
+                g_ob->sword_left->m_pos_x += horizCorrection;
+            }
         }
     }
 
-
-    for (Obstacle* ob : m_blocks) {
-        if (m_state->getPlayer()->intersect(*ob)) {
+    for (Obstacle *ob : m_blocks)
+    {
+        if (m_state->getPlayer()->intersect(*ob))
+        {
             float vertCorrection = m_state->getPlayer()->intersectAbove(*ob);
-            if (vertCorrection != 0) {
+            if (vertCorrection != 0)
+            {
                 m_state->getPlayer()->m_pos_y += vertCorrection;
                 m_state->getPlayer()->sword_right->m_pos_y += vertCorrection;
                 m_state->getPlayer()->sword_left->m_pos_y += vertCorrection;
@@ -104,13 +167,18 @@ void Level::checkCollisions() {
             }
         }
         for (auto it = m_dynamic_objects.begin(); it != m_dynamic_objects.end();
-             ++it) {
-            if (!((*it)->isActive())) continue;
-            if (!((*it)->m_class == "Enemy")) continue;
-            Enemy* g_ob = dynamic_cast<Enemy*>(*it);
-            if (g_ob->intersect(*ob)) {
+             ++it)
+        {
+            if (!((*it)->isActive()))
+                continue;
+            if (!((*it)->m_class == "Enemy"))
+                continue;
+            Enemy *g_ob = dynamic_cast<Enemy *>(*it);
+            if (g_ob->intersect(*ob))
+            {
                 float vertCorrection = g_ob->intersectAbove(*ob);
-                if (vertCorrection != 0) {
+                if (vertCorrection != 0)
+                {
                     g_ob->m_pos_y += vertCorrection;
                     g_ob->sword_right->m_pos_y += vertCorrection;
                     g_ob->sword_left->m_pos_y += vertCorrection;
@@ -120,24 +188,32 @@ void Level::checkCollisions() {
             }
         }
     }
-    for (Obstacle* ob : m_blocks) {
-        if (m_state->getPlayer()->intersect(*ob)) {
+    for (Obstacle *ob : m_blocks)
+    {
+        if (m_state->getPlayer()->intersect(*ob))
+        {
             float horizCorrection =
                 m_state->getPlayer()->intersectSideways(*ob);
-            if (horizCorrection != 0) {
+            if (horizCorrection != 0)
+            {
                 m_state->getPlayer()->m_pos_x += horizCorrection;
                 m_state->getPlayer()->sword_right->m_pos_x += horizCorrection;
                 m_state->getPlayer()->sword_left->m_pos_x += horizCorrection;
             }
         }
         for (auto it = m_dynamic_objects.begin(); it != m_dynamic_objects.end();
-             ++it) {
-            if (!((*it)->isActive())) continue;
-            if (!((*it)->m_class == "Enemy")) continue;
-            Enemy* g_ob = dynamic_cast<Enemy*>(*it);
-            if (g_ob->intersect(*ob)) {
+             ++it)
+        {
+            if (!((*it)->isActive()))
+                continue;
+            if (!((*it)->m_class == "Enemy"))
+                continue;
+            Enemy *g_ob = dynamic_cast<Enemy *>(*it);
+            if (g_ob->intersect(*ob))
+            {
                 float horizCorrection = g_ob->intersectSideways(*ob);
-                if (horizCorrection != 0) {
+                if (horizCorrection != 0)
+                {
                     g_ob->m_pos_x += horizCorrection;
                     g_ob->sword_right->m_pos_x += horizCorrection;
                     g_ob->sword_left->m_pos_x += horizCorrection;
@@ -179,47 +255,68 @@ void Level::checkCollisions() {
     */
 }
 
-void Level::update(float dt) {
-    if (m_state->getPlayer()->isActive()) m_state->getPlayer()->update(dt);
+void Level::update(float dt)
+{
+    if (m_state->getPlayer()->isActive())
+        m_state->getPlayer()->update(dt);
 
-    for (auto& g_ob : m_dynamic_objects) {
-        if (g_ob->isActive()) g_ob->update(dt);
+    for (auto &g_ob : m_dynamic_objects)
+    {
+        if (g_ob->isActive())
+            g_ob->update(dt);
     }
 
     checkCollisions();
 
+    m_brush_health.texture = std::string(ASSET_PATH) + "Hearts/" + std::to_string(PLAYER->health) + ".png";
+    std::cout << std::string(ASSET_PATH) + "Hearts/" + std::to_string(PLAYER->health) + ".png" << std::endl;
+
     GameObject::update(dt);
 }
 
-void Level::draw() {
+void Level::draw()
+{
     graphics::drawRect(WINDOW_WIDTH / 2, WINDOW_HEIGHT / 2, WINDOW_WIDTH,
                        WINDOW_HEIGHT, m_brush_background);
 
-    // draw player
-    if (m_state->getPlayer()->isActive()) m_state->getPlayer()->draw();
+    graphics::drawRect(WINDOW_WIDTH / 12, WINDOW_HEIGHT / 24, 108, 34, m_brush_health);
 
-    for (auto& g_ob : m_dynamic_objects) {
-        if (g_ob->isActive()) g_ob->draw();
+    // draw player
+    if (m_state->getPlayer()->isActive())
+        m_state->getPlayer()->draw();
+
+    for (auto &g_ob : m_dynamic_objects)
+    {
+        if (g_ob->isActive())
+            g_ob->draw();
     }
 
     // draw obstacles
 
-    for (int i = 0; i < m_blocks.size(); i++) {
+    for (int i = 0; i < m_blocks.size(); i++)
+    {
         m_blocks[i]->draw();
+        if (m_state->m_debugging)
+            graphics::drawRect(m_blocks[i]->m_pos_x, m_blocks[i]->m_pos_y, m_block_size, m_block_size, m_block_brush_debug);
     }
 }
 
-void Level::init() {
+void Level::init()
+{
     // Stage 1
 
-    for (auto p_gob : m_static_objects) {
+    for (auto p_gob : m_static_objects)
+    {
         // std::cout << "here" << std::endl;
-        if (p_gob) p_gob->init();
+        if (p_gob)
+            p_gob->init();
     }
 
-    for (auto p_gob : m_dynamic_objects) {
+    for (auto p_gob : m_dynamic_objects)
+    {
         // std::cout << "there" << std::endl;
-        if (p_gob) p_gob->init();
+        if (p_gob)
+            p_gob->init();
     }
 
     // initialize some collidable blocks here.
@@ -247,20 +344,37 @@ void Level::init() {
         new Obstacle(WINDOW_WIDTH / 2 + 200, 300, 35, 200, "obstacle4"));
 }
 
-Level::Level(const std::string& name) : GameObject(name) {
+Level::Level(const std::string &name) : GameObject(name)
+{
     m_brush_background.outline_opacity = 0.0f;
     m_brush_background.texture = std::string(ASSET_PATH) + "background_lvl.png";
+
+    m_block_brush_debug.fill_opacity = 0.1f;
+    SETCOLOR(m_block_brush_debug.fill_color, 0.1f, 1.0f, 0.1f);
+    SETCOLOR(m_block_brush_debug.outline_color, 0.3f, 1.0f, 0.2f);
+
+    m_brush_health.fill_opacity = 1.0f;
+    m_brush_health.outline_opacity = 0.0f;
+    SETCOLOR(m_brush_health.fill_color, 1.0f, 1.0f, 1.0f)
+    m_brush_health.texture = std::string(ASSET_PATH) + "Hearts/6.png";
 
     m_dynamic_objects.push_back(new Enemy(WINDOW_WIDTH / 4, WINDOW_HEIGHT / 4,
                                           25, 50, "Enemy",
                                           &Enemy::dumbMovement));
-    
+
     for (auto p_go : m_dynamic_objects)
         p_go->init();
-
 }
 
-Level::~Level() {
-    for (auto p_go : m_static_objects) delete p_go;
-    for (auto p_go : m_dynamic_objects) delete p_go;
+void Level::game_over() {
+    // todo: back to start screen
+    delete this;
+}
+
+Level::~Level()
+{
+    for (auto p_go : m_static_objects)
+        delete p_go;
+    for (auto p_go : m_dynamic_objects)
+        delete p_go;
 }
