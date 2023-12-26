@@ -85,7 +85,7 @@ void Level::checkCollisions()
             }
         }
     }
-        // Sword collisions
+    // Sword collisions
 
     // Player, Enemy obstacle collisions
     for (Obstacle *ob : m_blocks)
@@ -296,7 +296,7 @@ void Level::draw()
     {
         m_blocks[i]->draw();
         if (m_state->m_debugging)
-            graphics::drawRect(m_blocks[i]->m_pos_x, m_blocks[i]->m_pos_y, m_block_size, m_block_size, m_block_brush_debug);
+            graphics::drawRect(m_blocks[i]->m_pos_x, m_blocks[i]->m_pos_y, m_blocks[i]->m_width, m_blocks[i]->m_height, m_block_brush_debug);
     }
 }
 

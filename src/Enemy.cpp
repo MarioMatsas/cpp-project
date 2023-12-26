@@ -263,7 +263,7 @@ void Enemy::draw()
 	br.fill_color[1] = 1.0f;
 	br.fill_color[2] = 1.0f;
 	br.fill_opacity = 1.0f;
-	br.outline_opacity = 1;
+	br.outline_opacity = 0.0f;
 
 	int sprite = previous_sprite;
 

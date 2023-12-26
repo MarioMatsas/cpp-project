@@ -65,4 +65,7 @@ public:
 	void init() override;
 	void jump();
 	//void shoot();
+
+protected:
+	void debugDraw();
 };
