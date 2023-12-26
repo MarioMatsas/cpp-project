@@ -264,11 +264,17 @@ void Player::debugDraw()
 	debug_brush.outline_opacity = 1.0f;
 	graphics::drawRect(PLAYER->m_pos_x, PLAYER->m_pos_y, m_width, m_height, debug_brush);
 
-	char s[20];
-	sprintf(s, "(%5.2f, %5.2f)", m_pos_x, m_pos_y);
+	graphics::setFont("assets/JetBrainsMono-Thin.ttf");
+
+	char x[10];
+	char y[10];
+	sprintf(x, "%5.2f", m_pos_x);
+	sprintf(y, "%5.2f", m_pos_y);
 	SETCOLOR(debug_brush.fill_color, 1, 0, 0);
 	debug_brush.fill_opacity = 1.0f;
-	graphics::drawText(m_state->getCanvasWidth() * 0.5f - 0.4f, m_state->getCanvasHeight() * 0.5f - 0.6f, 0.15f, s, debug_brush);
+	graphics::drawText(m_pos_x - m_width/2, m_pos_y + m_height/2, 16, x, debug_brush);
+	graphics::drawText(m_pos_x - m_width/2, m_pos_y + m_height/2 -16, 16, y, debug_brush);
+
 }
 
 void Player::draw()

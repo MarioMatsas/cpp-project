@@ -46,7 +46,8 @@ void Level::checkCollisions()
                 delete *jt;
                 PLAYER->health--;
 
-                if (PLAYER->health == 0) game_over();
+                if (PLAYER->health == 0)
+                    game_over();
 
                 jt = g_ob->bullets.erase(jt);
             }
@@ -56,7 +57,7 @@ void Level::checkCollisions()
             }
         }
     }
-    
+
     for (auto it = m_dynamic_objects.begin(); it != m_dynamic_objects.end();
          ++it)
     {
@@ -69,14 +70,15 @@ void Level::checkCollisions()
         auto jt = m_state->getPlayer()->bullets.begin();
         while (jt != m_state->getPlayer()->bullets.end())
         {
-            if ((*jt)->get_x() > WINDOW_WIDTH || (*jt)->get_x() < 0 || //TODO: replace hardcoded values with util.h defs
+            if ((*jt)->get_x() > WINDOW_WIDTH || (*jt)->get_x() < 0 || // TODO: replace hardcoded values with util.h defs
                 (*jt)->get_y() > WINDOW_HEIGHT || (*jt)->get_y() < 0 ||
                 (*jt)->collision_detected(m_blocks) == true)
             {
                 // Remove the bullet from the list
                 delete *jt;
                 g_ob->health--;
-                if (g_ob->health==0) delete g_ob; // TODO: fix segfault
+                if (g_ob->health == 0)
+                    delete g_ob; // TODO: fix segfault
                 jt = m_state->getPlayer()->bullets.erase(jt);
             }
             else
@@ -278,7 +280,7 @@ void Level::draw()
     graphics::drawRect(WINDOW_WIDTH / 2, WINDOW_HEIGHT / 2, WINDOW_WIDTH,
                        WINDOW_HEIGHT, m_brush_background);
 
-    graphics::drawRect(WINDOW_WIDTH / 12, WINDOW_HEIGHT / 24, 108, 34, m_brush_health);
+    graphics::drawRect(WINDOW_WIDTH / 14, WINDOW_HEIGHT / 16, 108, 34, m_brush_health);
 
     // draw player
     if (m_state->getPlayer()->isActive())
@@ -296,7 +298,22 @@ void Level::draw()
     {
         m_blocks[i]->draw();
         if (m_state->m_debugging)
+        {
+            m_block_brush_debug.fill_opacity = 0.1f;
+            SETCOLOR(m_block_brush_debug.fill_color, 0.1f, 1.0f, 0.1f);
+            SETCOLOR(m_block_brush_debug.outline_color, 0.3f, 1.0f, 0.2f);
             graphics::drawRect(m_blocks[i]->m_pos_x, m_blocks[i]->m_pos_y, m_blocks[i]->m_width, m_blocks[i]->m_height, m_block_brush_debug);
+            graphics::setFont("assets/JetBrainsMono-Thin.ttf");
+
+            char x[10];
+            char y[10];
+            sprintf(x, "%5.2f", m_blocks[i]->m_pos_x);
+            sprintf(y, "%5.2f", m_blocks[i]->m_pos_y);
+            SETCOLOR(m_block_brush_debug.fill_color, 1, 0, 0);
+            m_block_brush_debug.fill_opacity = 1.0f;
+            graphics::drawText(m_blocks[i]->m_pos_x - m_blocks[i]->m_width / 2, m_blocks[i]->m_pos_y + m_blocks[i]->m_height / 2, 16, x, m_block_brush_debug);
+            graphics::drawText(m_blocks[i]->m_pos_x - m_blocks[i]->m_width / 2, m_blocks[i]->m_pos_y + m_blocks[i]->m_height / 2 - 18, 16, y, m_block_brush_debug);
+        }
     }
 }
 
@@ -348,10 +365,6 @@ Level::Level(const std::string &name) : GameObject(name)
     m_brush_background.outline_opacity = 0.0f;
     m_brush_background.texture = std::string(ASSET_PATH) + "background_lvl.png";
 
-    m_block_brush_debug.fill_opacity = 0.1f;
-    SETCOLOR(m_block_brush_debug.fill_color, 0.1f, 1.0f, 0.1f);
-    SETCOLOR(m_block_brush_debug.outline_color, 0.3f, 1.0f, 0.2f);
-
     m_brush_health.fill_opacity = 1.0f;
     m_brush_health.outline_opacity = 0.0f;
     SETCOLOR(m_brush_health.fill_color, 1.0f, 1.0f, 1.0f)
@@ -365,7 +378,8 @@ Level::Level(const std::string &name) : GameObject(name)
         p_go->init();
 }
 
-void Level::game_over() {
+void Level::game_over()
+{
     // todo: back to start screen
     delete this;
 }
