@@ -38,8 +38,8 @@ void Level::checkCollisions()
         auto jt = g_ob->bullets.begin();
         while (jt != g_ob->bullets.end())
         {
-            if ((*jt)->get_x() > 700 || (*jt)->get_x() < 0 ||
-                (*jt)->get_y() > 450 || (*jt)->get_y() < 0 ||
+            if ((*jt)->get_x() > WINDOW_WIDTH || (*jt)->get_x() < 0 ||
+                (*jt)->get_y() > WINDOW_HEIGHT || (*jt)->get_y() < 0 ||
                 (*jt)->collision_detected(m_blocks) == true)
             {
                 // Remove the bullet from the list
@@ -69,8 +69,8 @@ void Level::checkCollisions()
         auto jt = m_state->getPlayer()->bullets.begin();
         while (jt != m_state->getPlayer()->bullets.end())
         {
-            if ((*jt)->get_x() > 700 || (*jt)->get_x() < 0 || //TODO: replace hardcoded values with util.h defs
-                (*jt)->get_y() > 450 || (*jt)->get_y() < 0 ||
+            if ((*jt)->get_x() > WINDOW_WIDTH || (*jt)->get_x() < 0 || //TODO: replace hardcoded values with util.h defs
+                (*jt)->get_y() > WINDOW_HEIGHT || (*jt)->get_y() < 0 ||
                 (*jt)->collision_detected(m_blocks) == true)
             {
                 // Remove the bullet from the list

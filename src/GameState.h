@@ -1,5 +1,5 @@
 #pragma once
-
+#include "Config.h"
 #include <string>
 
 class GameState
@@ -9,8 +9,8 @@ private:
 
 	const std::string m_asset_path = "assets\\";
 
-	const float m_canvas_width = 750.0f;
-	const float m_canvas_height = 400.0f;
+	const float m_canvas_width = WINDOW_WIDTH;
+	const float m_canvas_height = WINDOW_HEIGHT;
 
 	class Level* m_current_level = 0;
 	class Player* m_player = 0;
