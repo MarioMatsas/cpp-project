@@ -11,7 +11,7 @@ Enemy::Enemy()
 */
 // MOUSE POSITION WHEN WINDOW SIZE CHANGES NEEDS TO BE FIXED!!!!!!!!!!!
 
-Enemy::Enemy(float x, float y, float w, float h, std::string name, DecFn func): Box(x,y,w,h), GameObject(name, "Enemy"), movement(func)
+Enemy::Enemy(float x, float y, float w, float h, std::string name, DecFn func) : Box(x, y, w, h), GameObject(name, "Enemy"), movement(func)
 {
 	sword_right = new Sword(m_pos_x + 30, m_pos_y, 25.0f, 7.0f, "right sword");
 	sword_left = new Sword(m_pos_x - 30, m_pos_y, 25.0f, 7.0f, "left sword");
@@ -55,7 +55,7 @@ Enemy::Enemy(float x, float y, float w, float h, std::string name, DecFn func): 
 }
 
 void Enemy::update(float dt)
-{	
+{
 	dt_sum += dt;
 	/*
 	for (Bullet* bullet : bullets) {
@@ -71,30 +71,35 @@ void Enemy::update(float dt)
 
 	}
 	*/
-	
-	if (Enemy::should_i_shoot()) {
-		if (gun_selected) {
-			//std::cout << "shoot" << std::endl;
-			Bullet* b = new Bullet(m_pos_x, m_pos_y, m_width, m_height, "bullet");
+
+	if (Enemy::should_i_shoot())
+	{
+		if (gun_selected)
+		{
+			// std::cout << "shoot" << std::endl;
+			Bullet *b = new Bullet(m_pos_x, m_pos_y, m_width, m_height, "bullet");
 			b->setMouse_x(m_state->getPlayer()->m_pos_x);
 			b->setMouse_y(m_state->getPlayer()->m_pos_y);
 			bullets.push_back(b);
 		}
-		else {
-			//std::cout << "slash" << std::endl;
-			//bool ans = sword_right->collision_detected();
-			//std::cout << ans << std::endl;
+		else
+		{
+			// std::cout << "slash" << std::endl;
+			// bool ans = sword_right->collision_detected();
+			// std::cout << ans << std::endl;
 		}
 		attacking = true;
 	}
-	
-	
-	if (mouse.button_right_pressed && !mouse.button_left_pressed && !attacking) {
+
+	if (mouse.button_right_pressed && !mouse.button_left_pressed && !attacking)
+	{
 		// Invert the boolean values
 		sword_selected = !sword_selected;
 		gun_selected = !gun_selected;
-		if (sword_selected) std::cout << "sword" << std::endl;
-		else std::cout << "gun" << std::endl;
+		if (sword_selected)
+			std::cout << "sword" << std::endl;
+		else
+			std::cout << "gun" << std::endl;
 	}
 	/*
 	if (graphics::getKeyState(graphics::SCANCODE_Q)) {
@@ -106,24 +111,28 @@ void Enemy::update(float dt)
 
 	}
 	*/
-	
-	for (Bullet* bullet : bullets) {
-		if (bullet->get_shot() == false) {
+
+	for (Bullet *bullet : bullets)
+	{
+		if (bullet->get_shot() == false)
+		{
 			bullet->shoot();
 		}
 
 		bullet->update(dt);
 		bullet->set_shot(true);
 	}
-	
+
 	float prevPosX = m_pos_x;
 	float move = 0.0f;
-	if (((this->*movement)().first == graphics::SCANCODE_A && !attacking)) { // Call the movement member function correctly
+	if (((this->*movement)().first == graphics::SCANCODE_A && !attacking))
+	{ // Call the movement member function correctly
 		looking_left = true;
 		looking_right = false;
 		move = -1.0f;
 	}
-	if ((this->*movement)().first == graphics::SCANCODE_D && !attacking) { // Call the movement member function correctly
+	if ((this->*movement)().first == graphics::SCANCODE_D && !attacking)
+	{ // Call the movement member function correctly
 		looking_left = false;
 		looking_right = true;
 		move = 1.0f;
@@ -156,14 +165,16 @@ void Enemy::update(float dt)
 	sword->m_pos_x += speed * graphics::getDeltaTime() / 20.0f;
 	*/
 
-	if (((this->*movement)().second == graphics::SCANCODE_W) && jumping == false && falling == false && !attacking) {
+	if (((this->*movement)().second == graphics::SCANCODE_W) && jumping == false && falling == false && !attacking)
+	{
 		velocityY = -3.5;
 		jumping = true;
-		//posy_dummy = posy;
+		// posy_dummy = posy;
 	}
 
 	// Apply gravity until terminal velocity is reached
-	if (velocityY < 3.5) velocityY += gravity;
+	if (velocityY < 3.5)
+		velocityY += gravity;
 	m_pos_y += velocityY * graphics::getDeltaTime() / 10.0f;
 	sword_right->m_pos_y += velocityY * graphics::getDeltaTime() / 10.0f;
 	sword_left->m_pos_y += velocityY * graphics::getDeltaTime() / 10.0f;
@@ -219,7 +230,6 @@ void Enemy::update(float dt)
 	}
 	*/
 
-
 	/*
 	if ((posx > posx_ - width / 2 && posx < posx_ + width / 2) && (posy > posy_ - height / 2 && posy < posy_ + height / 2)) {
 		if (jumping == true && up_velocity >= 0) {
@@ -257,36 +267,48 @@ void Enemy::draw()
 
 	int sprite = previous_sprite;
 
-	if (attacking) {
-		if (looking_right) {
-			if (gun_selected) {
-				if (frameCounter < 18) {
+	if (attacking)
+	{
+		if (looking_right)
+		{
+			if (gun_selected)
+			{
+				if (frameCounter < 18)
+				{
 					br.texture = attack_sprites[3];
 				}
-				else if (frameCounter < 36) {
+				else if (frameCounter < 36)
+				{
 					br.texture = attack_sprites[4];
 				}
-				else if (frameCounter < 54) {
+				else if (frameCounter < 54)
+				{
 					br.texture = attack_sprites[5];
 				}
-				else if (frameCounter < 72) {
+				else if (frameCounter < 72)
+				{
 					br.texture = attack_sprites[6];
 				}
-				else if (frameCounter < 90) {
+				else if (frameCounter < 90)
+				{
 					br.texture = attack_sprites[7];
 					frameCounter = 0;
 					attacking = false;
 				}
 				frameCounter++;
 			}
-			else if (sword_selected) {
-				if (frameCounter < 25) {
+			else if (sword_selected)
+			{
+				if (frameCounter < 25)
+				{
 					br.texture = attack_sprites[0];
 				}
-				else if (frameCounter < 50) {
+				else if (frameCounter < 50)
+				{
 					br.texture = attack_sprites[1];
 				}
-				else if (frameCounter < 75) {
+				else if (frameCounter < 75)
+				{
 					br.texture = attack_sprites[2];
 					frameCounter = 0;
 					attacking = false;
@@ -294,35 +316,46 @@ void Enemy::draw()
 				frameCounter++;
 			}
 		}
-		else {
-			if (gun_selected) {
-				if (frameCounter < 18) {
+		else
+		{
+			if (gun_selected)
+			{
+				if (frameCounter < 18)
+				{
 					br.texture = attack_sprites[11];
 				}
-				else if (frameCounter < 36) {
+				else if (frameCounter < 36)
+				{
 					br.texture = attack_sprites[12];
 				}
-				else if (frameCounter < 54) {
+				else if (frameCounter < 54)
+				{
 					br.texture = attack_sprites[13];
 				}
-				else if (frameCounter < 72) {
+				else if (frameCounter < 72)
+				{
 					br.texture = attack_sprites[14];
 				}
-				else if (frameCounter < 90) {
+				else if (frameCounter < 90)
+				{
 					br.texture = attack_sprites[15];
 					frameCounter = 0;
 					attacking = false;
 				}
 				frameCounter++;
 			}
-			else if (sword_selected) {
-				if (frameCounter < 25) {
+			else if (sword_selected)
+			{
+				if (frameCounter < 25)
+				{
 					br.texture = attack_sprites[8];
 				}
-				else if (frameCounter < 50) {
+				else if (frameCounter < 50)
+				{
 					br.texture = attack_sprites[9];
 				}
-				else if (frameCounter < 75) {
+				else if (frameCounter < 75)
+				{
 					br.texture = attack_sprites[10];
 					frameCounter = 0;
 					attacking = false;
@@ -330,42 +363,54 @@ void Enemy::draw()
 				frameCounter++;
 			}
 		}
-
 	}
-	else if (jumping) {
-		if (looking_right) {
-			if (velocityY < 0) {
+	else if (jumping)
+	{
+		if (looking_right)
+		{
+			if (velocityY < 0)
+			{
 				br.texture = jumping_sprites[0];
 			}
-			else {
+			else
+			{
 				br.texture = jumping_sprites[1];
 			}
 		}
-		else {
-			if (velocityY < 0) {
+		else
+		{
+			if (velocityY < 0)
+			{
 				br.texture = jumping_sprites[2];
 			}
-			else {
+			else
+			{
 				br.texture = jumping_sprites[3];
 			}
 		}
 	}
 
-	else {
-		if (looking_right) {
-			if (m_vx == 0) {
+	else
+	{
+		if (looking_right)
+		{
+			if (m_vx == 0)
+			{
 				sprite = 0;
 				br.texture = standing_sprites[sprite];
 			}
-			else {
+			else
+			{
 				same_counter = 0;
-				if (frameCounter < 12) {
+				if (frameCounter < 12)
+				{
 					br.texture = sprites[previous_sprite];
 					frameCounter++;
 				}
-				else {
+				else
+				{
 					sprite = ((int)fmod(100.0f - m_pos_x * 9.0f, sprites.size()) + 7) % 4;
-					//std::cout << sprite << std::endl;
+					// std::cout << sprite << std::endl;
 
 					br.texture = sprites[sprite];
 
@@ -373,24 +418,28 @@ void Enemy::draw()
 					frameCounter = 0;
 				}
 			}
-
 		}
 
-		else {
+		else
+		{
 
-			if (m_vx == 0) {
+			if (m_vx == 0)
+			{
 				sprite = 1;
 				br.texture = standing_sprites[sprite];
 			}
-			else {
+			else
+			{
 				same_counter = 0;
-				if (frameCounter < 12) {
+				if (frameCounter < 12)
+				{
 					br.texture = sprites[previous_sprite];
 					frameCounter++;
 				}
-				else {
+				else
+				{
 					sprite = ((int)fmod(100.0f - m_pos_x * 9.0f, sprites.size()) + 7) % 4 + 4;
-					//std::cout << sprite << std::endl;
+					// std::cout << sprite << std::endl;
 
 					br.texture = sprites[sprite];
 
@@ -400,11 +449,11 @@ void Enemy::draw()
 			}
 		}
 	}
-	//int sprite = ((int)fmod(100.0f - m_pos_x * 9.0f, sprites.size()) + 9)%5;
-	//std::cout << sprite << std::endl;
+	// int sprite = ((int)fmod(100.0f - m_pos_x * 9.0f, sprites.size()) + 9)%5;
+	// std::cout << sprite << std::endl;
 
 	// if he is facing to the left
-	//25.0f, 50.0f
+	// 25.0f, 50.0f
 
 	graphics::drawRect(m_pos_x, m_pos_y, 25.0f, 50.0f, br);
 
@@ -413,7 +462,8 @@ void Enemy::draw()
 	sword_left->draw();
 
 	// Draw Bullets
-	for (Bullet* bullet : bullets) {
+	for (Bullet *bullet : bullets)
+	{
 		bullet->draw();
 	}
 }
@@ -424,36 +474,62 @@ void Enemy::init()
 
 void Enemy::jump()
 {
-
 }
 
-std::pair<graphics::scancode_t, graphics::scancode_t> Enemy::dumbMovement(void) {
+std::pair<graphics::scancode_t, graphics::scancode_t> Enemy::dumbMovement(void)
+{
 	std::pair<graphics::scancode_t, graphics::scancode_t> decision;
-	
-	int dx = m_state->getPlayer()->m_pos_x - this->m_pos_x;
-	if (dx > 0) {
-		decision.first = graphics::SCANCODE_D;
-	} else if (dx < 0) {
-		decision.first = graphics::SCANCODE_A;
-	} else {
-		decision.first = graphics::SCANCODE_Q;
-	}
 
-	int dy = m_state->getPlayer()->m_pos_y - this->m_pos_y;
-	if (dy > 0) {
+	int MAX_PLATFORM_WIDTH = 64;
+
+	int dx = m_state->getPlayer()->m_pos_x - this->m_pos_x;
+	int dy = -(m_state->getPlayer()->m_pos_y - this->m_pos_y);
+
+	if (dy > 0)
+	{
 		decision.second = graphics::SCANCODE_W;
-	} else if (dy < 0) {
-		decision.second = graphics::SCANCODE_S;
-	} else {
+		if (dx > 0)
+		{
+			decision.first = graphics::SCANCODE_D;
+		}
+		else if (dx < 0)
+		{
+			decision.first = graphics::SCANCODE_A;
+		}
+		else
+		{
+			decision.first = graphics::SCANCODE_Q;
+		}
+	}
+	else if (dy < 0)
+	{
+		decision.second = graphics::SCANCODE_Q;
+		if (dx > MAX_PLATFORM_WIDTH/2)
+		{
+			decision.first = graphics::SCANCODE_D;
+		}
+		else if (dx < -MAX_PLATFORM_WIDTH/2)
+		{
+			decision.first = graphics::SCANCODE_A;
+		}
+		else
+		{
+			
+			decision.first = graphics::SCANCODE_Q;
+		}
+	}
+	else
+	{
 		decision.second = graphics::SCANCODE_Q;
 	}
-	
-	return decision;
 
+	return decision;
 }
 
-bool Enemy::should_i_shoot() {
-	if (dt_sum < 600) return false;
-	dt_sum = 0; 
-	return (std::rand() < (RAND_MAX*0.2)) && (0 <= this->m_pos_x) && (this->m_pos_x <= WINDOW_WIDTH) && (0 <= this->m_pos_y) && (this->m_pos_y <= WINDOW_HEIGHT);
+bool Enemy::should_i_shoot()
+{
+	if (dt_sum < 600)
+		return false;
+	dt_sum = 0;
+	return (std::rand() < (RAND_MAX * 0.2)) && (0 <= this->m_pos_x) && (this->m_pos_x <= WINDOW_WIDTH) && (0 <= this->m_pos_y) && (this->m_pos_y <= WINDOW_HEIGHT);
 }

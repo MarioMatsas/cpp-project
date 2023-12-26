@@ -269,7 +269,6 @@ void Level::update(float dt)
     checkCollisions();
 
     m_brush_health.texture = std::string(ASSET_PATH) + "Hearts/" + std::to_string(PLAYER->health) + ".png";
-    std::cout << std::string(ASSET_PATH) + "Hearts/" + std::to_string(PLAYER->health) + ".png" << std::endl;
 
     GameObject::update(dt);
 }
