@@ -2,6 +2,7 @@
 #include "graphics.h"
 #include <iostream>
 #include "Player.h"
+#include "util.h"
 #include <cstdlib>
 /*
 Enemy::Enemy()
@@ -254,6 +255,23 @@ void Enemy::update(float dt)
 	*/
 }
 
+void Enemy::debugDraw()
+{
+	graphics::Brush debug_brush;
+	SETCOLOR(debug_brush.fill_color, 1, 0.3f, 0);
+	SETCOLOR(debug_brush.outline_color, 1, 0.1f, 0);
+	debug_brush.fill_opacity = 0.1f;
+	debug_brush.outline_opacity = 1.0f;
+	graphics::drawRect(m_pos_x, m_pos_y, m_width, m_height, debug_brush);
+
+	char s[20];
+	sprintf(s, "(%5.2f, %5.2f)", m_pos_x, m_pos_y);
+	SETCOLOR(debug_brush.fill_color, 1, 0, 0);
+	debug_brush.fill_opacity = 1.0f;
+	graphics::drawText(m_state->getCanvasWidth() * 0.5f - 0.4f, m_state->getCanvasHeight() * 0.5f - 0.6f, 0.15f, s, debug_brush);
+}
+
+
 void Enemy::draw()
 {
 	// Draw Enemy
@@ -466,6 +484,10 @@ void Enemy::draw()
 	{
 		bullet->draw();
 	}
+
+	if (m_state->m_debugging)
+		debugDraw();
+
 }
 
 void Enemy::init()
