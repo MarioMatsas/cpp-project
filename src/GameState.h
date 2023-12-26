@@ -1,6 +1,7 @@
 #pragma once
 #include "Config.h"
 #include <string>
+#include "sgg/graphics.h"
 
 class GameState
 {
@@ -14,6 +15,15 @@ private:
 
 	class Level* m_current_level = 0;
 	class Player* m_player = 0;
+
+	bool main_menu_active = true;
+	bool controls_screen_active = false;
+	bool level_1_active = false;
+	bool level_2_active = false;
+	bool level_3_active = false;
+	bool level_4_active = false;
+	bool level_5_active = false;
+	graphics::MouseState mouse;
 
 	GameState();
 
