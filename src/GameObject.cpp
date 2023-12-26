@@ -1,4 +1,4 @@
-#include "gameobject.h"
+#include "GameObject.h"
 
 int GameObject::m_next_id = 1;
 

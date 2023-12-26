@@ -1,5 +1,5 @@
 #include <graphics.h>
-#include "gamestate.h"
+#include "GameState.h"
 
 void draw()
 {

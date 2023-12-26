@@ -1,6 +1,6 @@
-#include "gamestate.h"
-#include "level.h"
-#include "player.h"
+#include "GameState.h"
+#include "Level.h"
+#include "Player.h"
 #include <thread>
 #include <chrono>
 using namespace std::chrono_literals;

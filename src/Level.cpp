@@ -1,9 +1,9 @@
-#include "level.h"
+#include "Level.h"
 
 #include <graphics.h>
 
 #include "Enemy.h"
-#include "player.h"
+#include "Player.h"
 
 /*
 void Level::drawBlock(int i)
