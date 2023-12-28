@@ -35,7 +35,6 @@ public:
 	Sword* sword_right;
 	Sword* sword_left;
 	graphics::MouseState mouse;
-	//std::vector<Obstacle*>& obstaclesList;
 	double velocityY = 0; // Vertical velocity
 	const double gravity = 0.1; // Gravity strength
 	std::list<Bullet*> bullets;
@@ -59,6 +58,7 @@ public:
 	//Enemy();
 	Enemy(float x, float y, float w, float h, std::string name, DecFn func);
 	std::pair<graphics::scancode_t, graphics::scancode_t> dumbMovement(void);
+	~Enemy();
 	bool should_i_shoot();
 	void update(float dt) override;
 	void draw() override;

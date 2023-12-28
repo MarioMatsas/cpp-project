@@ -70,15 +70,16 @@ void Level::checkCollisions()
         auto jt = m_state->getPlayer()->bullets.begin();
         while (jt != m_state->getPlayer()->bullets.end())
         {
-            if ((*jt)->get_x() > WINDOW_WIDTH || (*jt)->get_x() < 0 || // TODO: replace hardcoded values with util.h defs
+            if ((*jt)->get_x() > WINDOW_WIDTH || (*jt)->get_x() < 0 ||
                 (*jt)->get_y() > WINDOW_HEIGHT || (*jt)->get_y() < 0 ||
                 (*jt)->collision_detected(m_blocks) == true)
             {
                 // Remove the bullet from the list
                 delete *jt;
                 g_ob->health--;
-                if (g_ob->health == 0)
+                if (g_ob->health == 0) {
                     delete g_ob; // TODO: fix segfault
+                std::cout << "here" << std::endl; }
                 jt = m_state->getPlayer()->bullets.erase(jt);
             }
             else

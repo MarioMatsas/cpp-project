@@ -55,6 +55,15 @@ Enemy::Enemy(float x, float y, float w, float h, std::string name, DecFn func) :
 	jumping_sprites.push_back(std::string(ASSET_PATH) + "/" + name + "/" + "16_left.png");
 }
 
+Enemy::~Enemy() {
+	delete sword_left;
+	delete sword_right;
+
+	for (auto bullet : bullets)
+		delete bullet;
+
+}
+
 void Enemy::update(float dt)
 {
 	dt_sum += dt;
