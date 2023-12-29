@@ -113,7 +113,7 @@ float Bullet::get_x()
 }
 float Bullet::get_y()
 {
-	return m_pos_y;;
+	return m_pos_y;
 }
 
 void Bullet::set_shot(bool s)

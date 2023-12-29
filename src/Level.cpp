@@ -68,6 +68,7 @@ void Level::checkCollisions() {
                     it = m_dynamic_objects.erase(it);
                     delete g_ob;
                     jt = m_state->getPlayer()->bullets.erase(jt);
+                    break;
                 } else {
                     ++jt;
                 }
