@@ -51,6 +51,7 @@ void GameState::draw()
 	if (main_menu_active) {
 		graphics::Brush br;
 		br.texture = std::string(ASSET_PATH) + "main_menu_screen.png";
+		std::cout << std::string(ASSET_PATH)  << std::endl;
 		graphics::drawRect(WINDOW_WIDTH / 2, WINDOW_HEIGHT / 2, WINDOW_WIDTH, WINDOW_HEIGHT, br);
 	}
 

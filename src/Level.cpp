@@ -78,8 +78,8 @@ void Level::checkCollisions()
                 delete *jt;
                 g_ob->health--;
                 if (g_ob->health == 0) {
-                    delete g_ob; // TODO: fix segfault
-                std::cout << "here" << std::endl; }
+                    it = m_dynamic_objects.erase(it);
+                    delete g_ob;
                 jt = m_state->getPlayer()->bullets.erase(jt);
             }
             else
@@ -371,7 +371,13 @@ Level::Level(const std::string &name) : GameObject(name)
     SETCOLOR(m_brush_health.fill_color, 1.0f, 1.0f, 1.0f)
     m_brush_health.texture = std::string(ASSET_PATH) + "Hearts/6.png";
 
+    m_dynamic_objects.push_back(new Enemy(WINDOW_WIDTH / 8, WINDOW_HEIGHT / 8,
+                                          25, 50, "Enemy",
+                                          &Enemy::dumbMovement));
     m_dynamic_objects.push_back(new Enemy(WINDOW_WIDTH / 4, WINDOW_HEIGHT / 4,
+                                          25, 50, "Enemy",
+                                          &Enemy::dumbMovement));
+    m_dynamic_objects.push_back(new Enemy(WINDOW_WIDTH / 2, WINDOW_HEIGHT / 2,
                                           25, 50, "Enemy",
                                           &Enemy::dumbMovement));
 
