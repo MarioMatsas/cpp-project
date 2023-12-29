@@ -13,7 +13,7 @@ class Level : public GameObject
 	graphics::Brush m_brush_background;
 	graphics::Brush m_brush_health;
 
-	std::vector<Obstacle *> *m_static_objects;
+	std::vector<GameObject *> *m_static_objects;
 	std::list<GameObject *> *m_dynamic_objects;
 
 	// add some collidable blocks
@@ -38,7 +38,7 @@ public:
 	void draw() override;
 	void init() override;
 
-	Level(std::vector<Obstacle *> *m_static_objects,
+	Level(std::vector<GameObject *> *m_static_objects,
 		  std::list<GameObject *> *m_dynamic_objects, const std::string &name = "Level0");
 	~Level() override;
 };

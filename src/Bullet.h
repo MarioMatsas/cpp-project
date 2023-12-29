@@ -34,5 +34,5 @@ public:
 	float get_y();
 	void set_shot(bool s);
 	bool get_shot();
-	bool collision_detected(std::vector<Obstacle*>& obstaclesList);
+	bool collision_detected(std::vector<GameObject*>& obstaclesList);
 };

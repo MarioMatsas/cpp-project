@@ -32,8 +32,11 @@ bool GameState::init()
 	// Start level 1
 	if (level_1_active)
 	{
-		std::vector<Obstacle *> *m_static_objects = new std::vector<Obstacle *>();
+		std::vector<GameObject *> *m_static_objects = new std::vector<GameObject *>();
 		std::list<GameObject *> *m_dynamic_objects = new std::list<GameObject *>();
+
+		// TODO: these can be automated by loading from a file!
+
 		m_static_objects->push_back(
 			new Obstacle(WINDOW_WIDTH / 2, 300, 700, 35, "floor.png", "obstacle1"));
 		m_static_objects->push_back(

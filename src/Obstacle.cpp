@@ -1,7 +1,7 @@
 #include "Obstacle.h"
 #include "graphics.h"
 
-Obstacle::Obstacle(float x, float y, float w, float h, std::string texture, std::string name) : Box(x, y, w, h), GameObject(name), texture(texture)
+Obstacle::Obstacle(float x, float y, float w, float h, std::string texture, std::string name) : Box(x, y, w, h), GameObject(name, "Obstacle"), texture(texture)
 {
 }
 

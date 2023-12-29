@@ -76,8 +76,11 @@ void Level::checkCollisions()
     // Sword collisions
 
     // Player, Enemy obstacle collisions
-    for (Obstacle *ob : *m_static_objects)
+    for (GameObject *s_ob : *m_static_objects)
     {
+        if (!(s_ob->m_class == "Obstacle"))
+                continue;
+        Obstacle *ob= dynamic_cast<Obstacle *>(s_ob);
         if (m_state->getPlayer()->intersect(*ob))
         {
             float belowCorrection = m_state->getPlayer()->intersectDown(*ob);
@@ -142,8 +145,11 @@ void Level::checkCollisions()
         }
     }
 
-    for (Obstacle *ob : *m_static_objects)
+    for (GameObject *s_ob : *m_static_objects)
     {
+        if (!(s_ob->m_class == "Obstacle"))
+                continue;
+        Obstacle *ob= dynamic_cast<Obstacle *>(s_ob);
         if (m_state->getPlayer()->intersect(*ob))
         {
             float vertCorrection = m_state->getPlayer()->intersectAbove(*ob);
@@ -178,8 +184,11 @@ void Level::checkCollisions()
             }
         }
     }
-    for (Obstacle *ob : *m_static_objects)
+    for (GameObject *s_ob : *m_static_objects)
     {
+        if (!(s_ob->m_class == "Obstacle"))
+                continue;
+        Obstacle *ob= dynamic_cast<Obstacle *>(s_ob);
         if (m_state->getPlayer()->intersect(*ob))
         {
             float horizCorrection =
@@ -330,7 +339,7 @@ void Level::init()
     }
 }
 
-Level::Level(std::vector<Obstacle *> *m_static_objects,
+Level::Level(std::vector<GameObject *> *m_static_objects,
              std::list<GameObject *> *m_dynamic_objects, const std::string &name) : GameObject(name), m_static_objects(m_static_objects), m_dynamic_objects(m_dynamic_objects)
 {
     m_brush_background.outline_opacity = 0.0f;

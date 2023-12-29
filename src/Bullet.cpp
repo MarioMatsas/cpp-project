@@ -126,10 +126,13 @@ bool Bullet::get_shot()
 	return shot;
 }
 
-bool Bullet::collision_detected(std::vector<Obstacle*>& m_blocks)
+bool Bullet::collision_detected(std::vector<GameObject*>& m_blocks)
 {
 	// Check for any collion with Obstacles
-	for (Obstacle* ob : m_blocks) {
+	for (GameObject* s_ob : m_blocks) {
+		if (!(s_ob->m_class == "Obstacle"))
+                continue;
+        Obstacle *ob= dynamic_cast<Obstacle *>(s_ob);
 		if (intersect(*ob)) {
 			return true;
 		}
