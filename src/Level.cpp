@@ -334,13 +334,6 @@ Level::Level(const std::string &name) : GameObject(name) {
     m_dynamic_objects.push_back(new Enemy(WINDOW_WIDTH / 8, WINDOW_HEIGHT / 8,
                                           25, 50, "Enemy",
                                           &Enemy::dumbMovement));
-    m_dynamic_objects.push_back(new Enemy(WINDOW_WIDTH / 4, WINDOW_HEIGHT / 4,
-                                          25, 50, "Enemy",
-                                          &Enemy::dumbMovement));
-    m_dynamic_objects.push_back(new Enemy(WINDOW_WIDTH / 2, WINDOW_HEIGHT / 2,
-                                          25, 50, "Enemy",
-                                          &Enemy::dumbMovement));
-
     for (auto p_go : m_dynamic_objects) p_go->init();
 }
 
