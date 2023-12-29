@@ -33,7 +33,7 @@ void Bullet::draw()
 	br.fill_opacity = 1.0f;
 	br.gradient = true;
 	br.outline_opacity = 1;
-	br.texture = std::string(ASSET_PATH) + "output-onlinepngtools (17)_left.png";
+	br.texture = std::string(ASSET_PATH) + "output-onlinepngtools (17).png";
 	graphics::drawDisk(m_pos_x, m_pos_y, 5.0f, br);
 }
 

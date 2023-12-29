@@ -97,10 +97,12 @@ void Player::update(float dt)
 		// Invert the boolean values
 		sword_selected = !sword_selected;
 		gun_selected = !gun_selected;
+		/*
 		if (sword_selected)
 			std::cout << "sword" << std::endl;
 		else
 			std::cout << "gun" << std::endl;
+		*/
 	}
 	/*
 	if (graphics::getKeyState(graphics::SCANCODE_Q)) {
