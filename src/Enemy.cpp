@@ -275,7 +275,7 @@ void Enemy::debugDraw()
 	debug_brush.outline_opacity = 1.0f;
 	graphics::drawRect(m_pos_x, m_pos_y, m_width, m_height, debug_brush);
 
-	graphics::setFont("assets/JetBrainsMono-Thin.ttf");
+	graphics::setFont(std::string(ASSET_PATH)+"JetBrainsMono-Thin.ttf");
 	char x[10];
 	char y[10];
 	sprintf(x, "%5.2f", m_pos_x);

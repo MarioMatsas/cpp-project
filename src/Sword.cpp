@@ -16,8 +16,7 @@ void Sword::debugDraw()
 
 	graphics::drawRect(m_pos_x, m_pos_y, m_width, m_height, debug_brush);
 
-	graphics::setFont("assets/JetBrainsMono-Thin.ttf");
-
+	graphics::setFont(std::string(ASSET_PATH) + "JetBrainsMono-Thin.ttf");
 	/* we don't need that since it's always the same relative to the player.
 	char x[10];
 	char y[10];

@@ -76,7 +76,7 @@ void Level::checkCollisions()
     // Sword collisions
 
     // Player, Enemy obstacle collisions
-    for (Obstacle* ob : *m_static_objects)
+    for (Obstacle *ob : *m_static_objects)
     {
         if (m_state->getPlayer()->intersect(*ob))
         {
@@ -287,7 +287,7 @@ void Level::draw()
     for (int i = 0; i < m_static_objects->size(); i++)
     {
         (*m_static_objects)[i]->draw();
-        Box* curr = dynamic_cast<Box *>((*m_static_objects)[i]);
+        Box *curr = dynamic_cast<Box *>((*m_static_objects)[i]);
         if (m_state->m_debugging)
         {
 
@@ -297,8 +297,7 @@ void Level::draw()
             graphics::drawRect(curr->m_pos_x, curr->m_pos_y,
                                curr->m_width, curr->m_height,
                                m_block_brush_debug);
-            graphics::setFont("assets/JetBrainsMono-Thin.ttf");
-
+            graphics::setFont(std::string(ASSET_PATH) + "JetBrainsMono-Thin.ttf");
             char x[10];
             char y[10];
             sprintf(x, "%5.2f", curr->m_pos_x);
