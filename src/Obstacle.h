@@ -8,8 +8,11 @@ class Obstacle : public GameObject, public Box {
 	//float width = 200.0f;
 	//float height = 50.0f;
 
+protected:
+	const std::string texture;
+
 public:
-	Obstacle(float x, float y, float w, float h, std::string name);
+	Obstacle(float x, float y, float w, float h, std::string texture, std::string name);
 	void update(float dt) override;
 	void draw() override;
 	void init() override;
