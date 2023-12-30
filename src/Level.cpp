@@ -336,6 +336,16 @@ void Level::checkCollisions()
 
 void Level::game_over()
 {
-    // todo: back to start screen
+    graphics::Brush br;
+    br.texture = std::string(ASSET_PATH) + "GameOver.png"
+
+    while (true) {
+        if (graphics::getKeyState(graphics::SCANCODE_Y) && !graphics::getKeyState(graphics::SCANCODE_N)) {
+            
+        } else if (graphics::getKeyState(graphics::SCANCODE_N) && !graphics::getKeyState(graphics::SCANCODE_Y)) {
+
+        }
+    }
+
     delete this;
 }

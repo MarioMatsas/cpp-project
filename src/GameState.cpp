@@ -30,7 +30,7 @@ GameState *GameState::getInstance()
 bool GameState::init()
 {
 	// Start level 1
-	if (level_1_active)
+	if (curr_level == 1)
 	{
 		std::vector<GameObject *> *m_static_objects = new std::vector<GameObject *>();
 		std::list<GameObject *> *m_dynamic_objects = new std::list<GameObject *>();
@@ -75,28 +75,25 @@ bool GameState::init()
 
 void GameState::draw()
 {
-	// Draw the main menu
-	if (main_menu_active)
+	graphics::Brush br;
+	switch (curr_level)
 	{
-		graphics::Brush br;
+	case -1:
 		br.texture = std::string(ASSET_PATH) + "main_menu_screen.png";
 		graphics::drawRect(WINDOW_WIDTH / 2, WINDOW_HEIGHT / 2, WINDOW_WIDTH, WINDOW_HEIGHT, br);
-	}
+		break;
 
-	// Draw the controls
-	else if (controls_screen_active)
-	{
-		graphics::Brush br;
+	case 0:
 		br.texture = std::string(ASSET_PATH) + "controls_screen.png";
 		graphics::drawRect(WINDOW_WIDTH / 2, WINDOW_HEIGHT / 2, WINDOW_WIDTH, WINDOW_HEIGHT, br);
-	}
-	// Finaly draw the current level
-	else
-	{
+		break;
+
+	default:
 		if (!m_current_level)
 			return;
 
 		m_current_level->draw();
+		break;
 	}
 }
 
@@ -113,36 +110,33 @@ void GameState::update(float dt)
 		std::this_thread::sleep_for(std::chrono::duration<float, std::milli>(sleep_time));
 	}
 
-	// Check if the we are at the main menu
-	if (main_menu_active)
+	switch (curr_level)
 	{
+	case -1:
 		graphics::getMouseState(mouse);
 		if (mouse.button_left_pressed)
 		{
 			// Move onto the controls screen
-			main_menu_active = false;
-			controls_screen_active = true;
-		}
-	}
-	else if (controls_screen_active)
-	{
-		graphics::getMouseState(mouse);
-		if (mouse.button_left_pressed)
-		{
-			// Move onto the first level
-			controls_screen_active = false;
-			level_1_active = true;
-			init();
-		}
-	}
-	else
-	{
-		if (!m_current_level)
-			return;
+			curr_level = 0;
+			break;
+		case 0:
+			graphics::getMouseState(mouse);
+			if (mouse.button_left_pressed)
+			{
+				// Move onto the first level
+				curr_level = 1;
+				init();
+			}
+			break;
+		default:
+			if (!m_current_level)
+				return;
 
-		m_current_level->update(dt);
+			m_current_level->update(dt);
 
-		m_debugging = graphics::getKeyState(graphics::SCANCODE_0);
+			m_debugging = graphics::getKeyState(graphics::SCANCODE_0);
+			break;
+		}
 	}
 }
 

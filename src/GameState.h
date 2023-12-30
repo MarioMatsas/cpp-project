@@ -16,13 +16,8 @@ private:
 	class Level* m_current_level = 0;
 	class Player* m_player = 0;
 
-	bool main_menu_active = true;
-	bool controls_screen_active = false;
-	bool level_1_active = false;
-	bool level_2_active = false;
-	bool level_3_active = false;
-	bool level_4_active = false;
-	bool level_5_active = false;
+	int curr_level = -1;
+
 	graphics::MouseState mouse;
 
 	GameState();
