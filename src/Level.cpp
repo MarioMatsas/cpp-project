@@ -43,6 +43,13 @@ void Level::init()
 }
 void Level::draw()
 {
+    if (PLAYER->health <= 0)
+    {
+        graphics::Brush br;
+        br.texture = std::string(ASSET_PATH) + "GameOver.png";
+        graphics::drawRect(WINDOW_WIDTH / 2, WINDOW_HEIGHT / 2, WINDOW_WIDTH, WINDOW_HEIGHT, br);
+        return;
+    }
     graphics::drawRect(WINDOW_WIDTH / 2, WINDOW_HEIGHT / 2, WINDOW_WIDTH,
                        WINDOW_HEIGHT, m_brush_background);
     for (int i = 0; i < m_static_objects->size(); i++)
@@ -69,6 +76,20 @@ void Level::draw()
 
 void Level::update(float dt)
 {
+    if (PLAYER->health <= 0)
+    {
+        if (graphics::getKeyState(graphics::SCANCODE_Y) && !graphics::getKeyState(graphics::SCANCODE_N))
+        {
+            m_state->m_curr_lvl_ptr = nullptr;
+            delete this;
+            return;
+        }
+        else if (graphics::getKeyState(graphics::SCANCODE_N) && !graphics::getKeyState(graphics::SCANCODE_Y))
+        {
+            graphics::stopMessageLoop();
+        }
+    }
+
     if (m_state->getPlayer()->isActive())
         m_state->getPlayer()->update(dt);
 
@@ -79,6 +100,9 @@ void Level::update(float dt)
     }
 
     checkCollisions();
+
+    // TODO: add a check here for reaching some milestone to switch levels.
+    // in that case, I think just incrementing m_curr_lvl will be enough!
 
     m_brush_health.texture = std::string(ASSET_PATH) + "Hearts/" +
                              std::to_string(PLAYER->health) + ".png";
@@ -108,10 +132,6 @@ void Level::checkCollisions()
                 // Remove the bullet from the list
                 delete *jt;
                 PLAYER->health--;
-
-                if (PLAYER->health == 0)
-                    game_over();
-
                 jt = g_ob->bullets.erase(jt);
             }
             else
@@ -332,20 +352,4 @@ void Level::checkCollisions()
 
     }
     */
-}
-
-void Level::game_over()
-{
-    graphics::Brush br;
-    br.texture = std::string(ASSET_PATH) + "GameOver.png"
-
-    while (true) {
-        if (graphics::getKeyState(graphics::SCANCODE_Y) && !graphics::getKeyState(graphics::SCANCODE_N)) {
-            
-        } else if (graphics::getKeyState(graphics::SCANCODE_N) && !graphics::getKeyState(graphics::SCANCODE_Y)) {
-
-        }
-    }
-
-    delete this;
 }

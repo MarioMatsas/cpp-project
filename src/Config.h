@@ -7,7 +7,7 @@
 #elif __APPLE__
 #include <TargetConditionals.h>
 #if TARGET_OS_MAC
-#define ASSET_PATH "/Users/basil/uni/cpp/project/assets/"
+#define ASSET_PATH "/Users/basil/sandbox/home/uni/cpp/project/assets/"
 #endif
 #elif __linux__
 #define ASSET_PATH "/home/basil/cpp-project/assets/"

@@ -14,8 +14,8 @@ GameState::GameState()
 
 GameState::~GameState()
 {
-	if (m_current_level)
-		delete m_current_level;
+	if (m_curr_lvl_ptr)
+		delete m_curr_lvl_ptr;
 }
 
 GameState *GameState::getInstance()
@@ -30,7 +30,7 @@ GameState *GameState::getInstance()
 bool GameState::init()
 {
 	// Start level 1
-	if (curr_level == 1)
+	if (m_curr_lvl == 1)
 	{
 		std::vector<GameObject *> *m_static_objects = new std::vector<GameObject *>();
 		std::list<GameObject *> *m_dynamic_objects = new std::list<GameObject *>();
@@ -55,12 +55,11 @@ bool GameState::init()
 		m_dynamic_objects->push_back(new Enemy(WINDOW_WIDTH / 8, WINDOW_HEIGHT / 8,
 											   25, 50, "Enemy",
 											   &Enemy::dumbMovement));
-
-		m_current_level = new Level(m_static_objects, m_dynamic_objects, "1.lvl");
-		m_current_level->init();
-
 		m_player = new Player(WINDOW_WIDTH / 2, WINDOW_HEIGHT / 2, 25, 50, "Player");
 		m_player->init();
+
+		m_curr_lvl_ptr = new Level(m_static_objects, m_dynamic_objects, "1.lvl");
+		m_curr_lvl_ptr->init();
 
 		// graphics::preloadBitmaps(getAssetDir());
 		// graphics::setFont(m_asset_path + "OpenSans-Regular.ttf");
@@ -76,7 +75,7 @@ bool GameState::init()
 void GameState::draw()
 {
 	graphics::Brush br;
-	switch (curr_level)
+	switch (m_curr_lvl)
 	{
 	case -1:
 		br.texture = std::string(ASSET_PATH) + "main_menu_screen.png";
@@ -89,10 +88,12 @@ void GameState::draw()
 		break;
 
 	default:
-		if (!m_current_level)
+		if (!m_curr_lvl_ptr) {
+			init();
 			return;
+		}
 
-		m_current_level->draw();
+		m_curr_lvl_ptr->draw();
 		break;
 	}
 }
@@ -110,33 +111,35 @@ void GameState::update(float dt)
 		std::this_thread::sleep_for(std::chrono::duration<float, std::milli>(sleep_time));
 	}
 
-	switch (curr_level)
+	switch (m_curr_lvl)
 	{
 	case -1:
 		graphics::getMouseState(mouse);
 		if (mouse.button_left_pressed)
 		{
 			// Move onto the controls screen
-			curr_level = 0;
-			break;
-		case 0:
-			graphics::getMouseState(mouse);
-			if (mouse.button_left_pressed)
-			{
-				// Move onto the first level
-				curr_level = 1;
-				init();
-			}
-			break;
-		default:
-			if (!m_current_level)
-				return;
-
-			m_current_level->update(dt);
-
-			m_debugging = graphics::getKeyState(graphics::SCANCODE_0);
+			m_curr_lvl = 0;
 			break;
 		}
+	case 0:
+		graphics::getMouseState(mouse);
+		if (mouse.button_left_pressed)
+		{
+			// Move onto the first level
+			m_curr_lvl = 1;
+			init();
+		}
+		break;
+	default:
+		if (!m_curr_lvl_ptr) {
+			init();
+			return;
+		}
+
+		m_curr_lvl_ptr->update(dt);
+
+		m_debugging = graphics::getKeyState(graphics::SCANCODE_0);
+		break;
 	}
 }
 

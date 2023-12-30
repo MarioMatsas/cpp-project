@@ -2,7 +2,6 @@
 #include "graphics.h"
 #include "util.h"
 #include <cstdio>
-
 #include <iostream>
 /*
 Player::Player()
@@ -497,6 +496,7 @@ void Player::draw()
 
 void Player::init()
 {
+	health = 6;
 }
 
 void Player::jump()

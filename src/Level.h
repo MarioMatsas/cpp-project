@@ -16,8 +16,6 @@ class Level : public GameObject
 	std::vector<GameObject *> *m_static_objects;
 	std::list<GameObject *> *m_dynamic_objects;
 
-	void game_over();
-
 	// detect collisions
 	void checkCollisions();
 

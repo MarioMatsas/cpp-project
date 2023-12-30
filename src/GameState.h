@@ -13,10 +13,12 @@ private:
 	const float m_canvas_width = WINDOW_WIDTH;
 	const float m_canvas_height = WINDOW_HEIGHT;
 
-	class Level* m_current_level = 0;
+	class Level* m_curr_lvl_ptr = 0;
 	class Player* m_player = 0;
 
-	int curr_level = -1;
+	int m_curr_lvl = -1; // -1: start screen
+						 //  0: tutorial screen
+						 //  1-4: levels
 
 	graphics::MouseState mouse;
 
@@ -40,4 +42,6 @@ public:
 	float getCanvasHeight() { return m_canvas_height; }
 
 	class Player* getPlayer() { return m_player; }
+
+	friend class Level;
 };
