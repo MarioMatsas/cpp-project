@@ -1,9 +1,6 @@
 #pragma once
-#pragma once
-// "Game.h"
 #include "GameObject.h"
 #include <string>
-//#include "Bullet.h"
 #include "Config.h"
 #include "box.h"
 #include "graphics.h"
@@ -14,6 +11,10 @@
 #include "Sword.h"
 
 class Enemy : public GameObject, public Box {
+protected:
+	graphics::Brush m_brush;
+	graphics::Brush m_brush_debug;
+
 public:
 	const float m_accel_horizontal = 20.0f;
 	const float m_max_velocity = 5.0f;
@@ -34,7 +35,6 @@ public:
 	bool gun_selected = true;
 	Sword* sword_right;
 	Sword* sword_left;
-	graphics::MouseState mouse;
 	double velocityY = 0; // Vertical velocity
 	const double gravity = 0.1; // Gravity strength
 	std::list<Bullet*> bullets;

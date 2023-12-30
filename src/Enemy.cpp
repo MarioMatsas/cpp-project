@@ -100,19 +100,21 @@ void Enemy::update(float dt)
 		}
 		attacking = true;
 	}
-
+	
+	/*
+	TODO: fix!
 	if (mouse.button_right_pressed && !mouse.button_left_pressed && !attacking)
 	{
 		// Invert the boolean values
 		sword_selected = !sword_selected;
 		gun_selected = !gun_selected;
-		/*
 		if (sword_selected)
 			std::cout << "sword" << std::endl;
 		else
 			std::cout << "gun" << std::endl;
-		*/
 	}
+	*/
+
 	/*
 	if (graphics::getKeyState(graphics::SCANCODE_Q)) {
 		// Invert the boolean values
@@ -268,34 +270,31 @@ void Enemy::update(float dt)
 
 void Enemy::debugDraw()
 {
-	graphics::Brush debug_brush;
-	SETCOLOR(debug_brush.fill_color, 1, 0.3f, 0);
-	SETCOLOR(debug_brush.outline_color, 1, 0.1f, 0);
-	debug_brush.fill_opacity = 0.1f;
-	debug_brush.outline_opacity = 1.0f;
-	graphics::drawRect(m_pos_x, m_pos_y, m_width, m_height, debug_brush);
+	SETCOLOR(m_brush_debug.fill_color, 1, 0.3f, 0);
+	SETCOLOR(m_brush_debug.outline_color, 1, 0.1f, 0);
+	m_brush_debug.fill_opacity = 0.1f;
+	m_brush_debug.outline_opacity = 1.0f;
+	graphics::drawRect(m_pos_x, m_pos_y, m_width, m_height, m_brush_debug);
 
 	graphics::setFont(std::string(ASSET_PATH)+"JetBrainsMono-Thin.ttf");
 	char x[10];
 	char y[10];
 	sprintf(x, "%5.2f", m_pos_x);
 	sprintf(y, "%5.2f", m_pos_y);
-	SETCOLOR(debug_brush.fill_color, 1, 0, 0);
-	debug_brush.fill_opacity = 1.0f;
-	graphics::drawText(m_pos_x - m_width/2, m_pos_y + m_height/2, 16, x, debug_brush);
-	graphics::drawText(m_pos_x - m_width/2, m_pos_y + m_height/2 -16, 16, y, debug_brush);}
+	SETCOLOR(m_brush_debug.fill_color, 1, 0, 0);
+	m_brush_debug.fill_opacity = 1.0f;
+	graphics::drawText(m_pos_x - m_width/2, m_pos_y + m_height/2, 16, x, m_brush_debug);
+	graphics::drawText(m_pos_x - m_width/2, m_pos_y + m_height/2 -16, 16, y, m_brush_debug);}
 
 
 void Enemy::draw()
 {
 	// Draw Enemy
-	graphics::Brush br;
-
-	br.fill_color[0] = 1.0f;
-	br.fill_color[1] = 1.0f;
-	br.fill_color[2] = 1.0f;
-	br.fill_opacity = 1.0f;
-	br.outline_opacity = 0.0f;
+	m_brush.fill_color[0] = 1.0f;
+	m_brush.fill_color[1] = 1.0f;
+	m_brush.fill_color[2] = 1.0f;
+	m_brush.fill_opacity = 1.0f;
+	m_brush.outline_opacity = 0.0f;
 
 	int sprite = previous_sprite;
 
@@ -307,23 +306,23 @@ void Enemy::draw()
 			{
 				if (frameCounter < 18)
 				{
-					br.texture = attack_sprites[3];
+					m_brush.texture = attack_sprites[3];
 				}
 				else if (frameCounter < 36)
 				{
-					br.texture = attack_sprites[4];
+					m_brush.texture = attack_sprites[4];
 				}
 				else if (frameCounter < 54)
 				{
-					br.texture = attack_sprites[5];
+					m_brush.texture = attack_sprites[5];
 				}
 				else if (frameCounter < 72)
 				{
-					br.texture = attack_sprites[6];
+					m_brush.texture = attack_sprites[6];
 				}
 				else if (frameCounter < 90)
 				{
-					br.texture = attack_sprites[7];
+					m_brush.texture = attack_sprites[7];
 					frameCounter = 0;
 					attacking = false;
 				}
@@ -333,15 +332,15 @@ void Enemy::draw()
 			{
 				if (frameCounter < 25)
 				{
-					br.texture = attack_sprites[0];
+					m_brush.texture = attack_sprites[0];
 				}
 				else if (frameCounter < 50)
 				{
-					br.texture = attack_sprites[1];
+					m_brush.texture = attack_sprites[1];
 				}
 				else if (frameCounter < 75)
 				{
-					br.texture = attack_sprites[2];
+					m_brush.texture = attack_sprites[2];
 					frameCounter = 0;
 					attacking = false;
 				}
@@ -354,23 +353,23 @@ void Enemy::draw()
 			{
 				if (frameCounter < 18)
 				{
-					br.texture = attack_sprites[11];
+					m_brush.texture = attack_sprites[11];
 				}
 				else if (frameCounter < 36)
 				{
-					br.texture = attack_sprites[12];
+					m_brush.texture = attack_sprites[12];
 				}
 				else if (frameCounter < 54)
 				{
-					br.texture = attack_sprites[13];
+					m_brush.texture = attack_sprites[13];
 				}
 				else if (frameCounter < 72)
 				{
-					br.texture = attack_sprites[14];
+					m_brush.texture = attack_sprites[14];
 				}
 				else if (frameCounter < 90)
 				{
-					br.texture = attack_sprites[15];
+					m_brush.texture = attack_sprites[15];
 					frameCounter = 0;
 					attacking = false;
 				}
@@ -380,15 +379,15 @@ void Enemy::draw()
 			{
 				if (frameCounter < 25)
 				{
-					br.texture = attack_sprites[8];
+					m_brush.texture = attack_sprites[8];
 				}
 				else if (frameCounter < 50)
 				{
-					br.texture = attack_sprites[9];
+					m_brush.texture = attack_sprites[9];
 				}
 				else if (frameCounter < 75)
 				{
-					br.texture = attack_sprites[10];
+					m_brush.texture = attack_sprites[10];
 					frameCounter = 0;
 					attacking = false;
 				}
@@ -402,22 +401,22 @@ void Enemy::draw()
 		{
 			if (velocityY < 0)
 			{
-				br.texture = jumping_sprites[0];
+				m_brush.texture = jumping_sprites[0];
 			}
 			else
 			{
-				br.texture = jumping_sprites[1];
+				m_brush.texture = jumping_sprites[1];
 			}
 		}
 		else
 		{
 			if (velocityY < 0)
 			{
-				br.texture = jumping_sprites[2];
+				m_brush.texture = jumping_sprites[2];
 			}
 			else
 			{
-				br.texture = jumping_sprites[3];
+				m_brush.texture = jumping_sprites[3];
 			}
 		}
 	}
@@ -429,14 +428,14 @@ void Enemy::draw()
 			if (m_vx == 0)
 			{
 				sprite = 0;
-				br.texture = standing_sprites[sprite];
+				m_brush.texture = standing_sprites[sprite];
 			}
 			else
 			{
 				same_counter = 0;
 				if (frameCounter < 12)
 				{
-					br.texture = sprites[previous_sprite];
+					m_brush.texture = sprites[previous_sprite];
 					frameCounter++;
 				}
 				else
@@ -444,7 +443,7 @@ void Enemy::draw()
 					sprite = ((int)fmod(100.0f - m_pos_x * 9.0f, sprites.size()) + 7) % 4;
 					// std::cout << sprite << std::endl;
 
-					br.texture = sprites[sprite];
+					m_brush.texture = sprites[sprite];
 
 					previous_sprite = sprite;
 					frameCounter = 0;
@@ -458,14 +457,14 @@ void Enemy::draw()
 			if (m_vx == 0)
 			{
 				sprite = 1;
-				br.texture = standing_sprites[sprite];
+				m_brush.texture = standing_sprites[sprite];
 			}
 			else
 			{
 				same_counter = 0;
 				if (frameCounter < 12)
 				{
-					br.texture = sprites[previous_sprite];
+					m_brush.texture = sprites[previous_sprite];
 					frameCounter++;
 				}
 				else
@@ -473,7 +472,7 @@ void Enemy::draw()
 					sprite = ((int)fmod(100.0f - m_pos_x * 9.0f, sprites.size()) + 7) % 4 + 4;
 					// std::cout << sprite << std::endl;
 
-					br.texture = sprites[sprite];
+					m_brush.texture = sprites[sprite];
 
 					previous_sprite = sprite;
 					frameCounter = 0;
@@ -487,7 +486,7 @@ void Enemy::draw()
 	// if he is facing to the left
 	// 25.0f, 50.0f
 
-	graphics::drawRect(m_pos_x, m_pos_y, 25.0f, 50.0f, br);
+	graphics::drawRect(m_pos_x, m_pos_y, 25.0f, 50.0f, m_brush);
 
 	// Draw Sword
 	sword_right->draw();

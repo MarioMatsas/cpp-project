@@ -1,10 +1,90 @@
 #include "Level.h"
-
 #include <graphics.h>
-
 #include "Enemy.h"
 #include "Player.h"
 #include "util.h"
+
+Level::Level(std::vector<GameObject *> *m_static_objects,
+             std::list<GameObject *> *m_dynamic_objects, const std::string &name) : GameObject(name), m_static_objects(m_static_objects), m_dynamic_objects(m_dynamic_objects)
+{
+    m_brush_background.outline_opacity = 0.0f;
+    m_brush_background.texture = std::string(ASSET_PATH) + "background_lvl.png";
+
+    m_brush_health.fill_opacity = 1.0f;
+    m_brush_health.outline_opacity = 0.0f;
+    SETCOLOR(m_brush_health.fill_color, 1.0f, 1.0f, 1.0f)
+    m_brush_health.texture = std::string(ASSET_PATH) + "Hearts/6.png";
+
+    for (auto &p_go : *m_dynamic_objects)
+        p_go->init();
+}
+
+Level::~Level()
+{
+    for (auto &p_go : *m_static_objects)
+        delete p_go;
+    for (auto &p_go : *m_dynamic_objects)
+        delete p_go;
+}
+
+void Level::init()
+{
+    for (auto &p_go : *m_static_objects)
+    {
+        if (p_go)
+            p_go->init();
+    }
+
+    for (auto &p_go : *m_dynamic_objects)
+    {
+        if (p_go)
+            p_go->init();
+    }
+}
+void Level::draw()
+{
+    graphics::drawRect(WINDOW_WIDTH / 2, WINDOW_HEIGHT / 2, WINDOW_WIDTH,
+                       WINDOW_HEIGHT, m_brush_background);
+    for (int i = 0; i < m_static_objects->size(); i++)
+    {
+        if ((*m_static_objects)[i]->m_class == "Obstacle")
+        {
+            Obstacle *g_ob = dynamic_cast<Obstacle *>((*m_static_objects)[i]);
+            g_ob->draw();
+        }
+    }
+    for (auto &g_ob : *m_dynamic_objects)
+    {
+        if (g_ob->m_class == "Enemy" && g_ob->isActive())
+            g_ob->draw();
+    }
+
+    graphics::drawRect(WINDOW_WIDTH / 14, WINDOW_HEIGHT / 16, 108, 34,
+                       m_brush_health);
+
+    // draw player
+    if (m_state->getPlayer()->isActive())
+        m_state->getPlayer()->draw();
+}
+
+void Level::update(float dt)
+{
+    if (m_state->getPlayer()->isActive())
+        m_state->getPlayer()->update(dt);
+
+    for (auto &g_ob : *m_dynamic_objects)
+    {
+        if (g_ob->isActive())
+            g_ob->update(dt);
+    }
+
+    checkCollisions();
+
+    m_brush_health.texture = std::string(ASSET_PATH) + "Hearts/" +
+                             std::to_string(PLAYER->health) + ".png";
+
+    GameObject::update(dt);
+}
 
 void Level::checkCollisions()
 {
@@ -79,8 +159,8 @@ void Level::checkCollisions()
     for (GameObject *s_ob : *m_static_objects)
     {
         if (!(s_ob->m_class == "Obstacle"))
-                continue;
-        Obstacle *ob= dynamic_cast<Obstacle *>(s_ob);
+            continue;
+        Obstacle *ob = dynamic_cast<Obstacle *>(s_ob);
         if (m_state->getPlayer()->intersect(*ob))
         {
             float belowCorrection = m_state->getPlayer()->intersectDown(*ob);
@@ -148,8 +228,8 @@ void Level::checkCollisions()
     for (GameObject *s_ob : *m_static_objects)
     {
         if (!(s_ob->m_class == "Obstacle"))
-                continue;
-        Obstacle *ob= dynamic_cast<Obstacle *>(s_ob);
+            continue;
+        Obstacle *ob = dynamic_cast<Obstacle *>(s_ob);
         if (m_state->getPlayer()->intersect(*ob))
         {
             float vertCorrection = m_state->getPlayer()->intersectAbove(*ob);
@@ -187,8 +267,8 @@ void Level::checkCollisions()
     for (GameObject *s_ob : *m_static_objects)
     {
         if (!(s_ob->m_class == "Obstacle"))
-                continue;
-        Obstacle *ob= dynamic_cast<Obstacle *>(s_ob);
+            continue;
+        Obstacle *ob = dynamic_cast<Obstacle *>(s_ob);
         if (m_state->getPlayer()->intersect(*ob))
         {
             float horizCorrection =
@@ -254,116 +334,8 @@ void Level::checkCollisions()
     */
 }
 
-void Level::update(float dt)
-{
-    if (m_state->getPlayer()->isActive())
-        m_state->getPlayer()->update(dt);
-
-    for (auto &g_ob : *m_dynamic_objects)
-    {
-        if (g_ob->isActive())
-            g_ob->update(dt);
-    }
-
-    checkCollisions();
-
-    m_brush_health.texture = std::string(ASSET_PATH) + "Hearts/" +
-                             std::to_string(PLAYER->health) + ".png";
-
-    GameObject::update(dt);
-}
-
-void Level::draw()
-{
-    graphics::drawRect(WINDOW_WIDTH / 2, WINDOW_HEIGHT / 2, WINDOW_WIDTH,
-                       WINDOW_HEIGHT, m_brush_background);
-
-    graphics::drawRect(WINDOW_WIDTH / 14, WINDOW_HEIGHT / 16, 108, 34,
-                       m_brush_health);
-
-    // draw player
-    if (m_state->getPlayer()->isActive())
-        m_state->getPlayer()->draw();
-
-    for (auto &g_ob : *m_dynamic_objects)
-    {
-        if (g_ob->isActive())
-            g_ob->draw();
-    }
-
-    // draw obstacles
-
-    for (int i = 0; i < m_static_objects->size(); i++)
-    {
-        (*m_static_objects)[i]->draw();
-        Box *curr = dynamic_cast<Box *>((*m_static_objects)[i]);
-        if (m_state->m_debugging)
-        {
-
-            m_block_brush_debug.fill_opacity = 0.1f;
-            SETCOLOR(m_block_brush_debug.fill_color, 0.1f, 1.0f, 0.1f);
-            SETCOLOR(m_block_brush_debug.outline_color, 0.3f, 1.0f, 0.2f);
-            graphics::drawRect(curr->m_pos_x, curr->m_pos_y,
-                               curr->m_width, curr->m_height,
-                               m_block_brush_debug);
-            graphics::setFont(std::string(ASSET_PATH) + "JetBrainsMono-Thin.ttf");
-            char x[10];
-            char y[10];
-            sprintf(x, "%5.2f", curr->m_pos_x);
-            sprintf(y, "%5.2f", curr->m_pos_y);
-            SETCOLOR(m_block_brush_debug.fill_color, 1, 0, 0);
-            m_block_brush_debug.fill_opacity = 1.0f;
-            graphics::drawText(curr->m_pos_x - curr->m_width / 2,
-                               curr->m_pos_y + curr->m_height / 2,
-                               16, x, m_block_brush_debug);
-            graphics::drawText(
-                curr->m_pos_x - curr->m_width / 2,
-                curr->m_pos_y + curr->m_height / 2 - 18, 16, y,
-                m_block_brush_debug);
-        }
-    }
-}
-
-void Level::init()
-{
-    for (auto &p_go : *m_static_objects)
-    {
-        if (p_go)
-            p_go->init();
-    }
-
-    for (auto &p_go : *m_dynamic_objects)
-    {
-        if (p_go)
-            p_go->init();
-    }
-}
-
-Level::Level(std::vector<GameObject *> *m_static_objects,
-             std::list<GameObject *> *m_dynamic_objects, const std::string &name) : GameObject(name), m_static_objects(m_static_objects), m_dynamic_objects(m_dynamic_objects)
-{
-    m_brush_background.outline_opacity = 0.0f;
-    m_brush_background.texture = std::string(ASSET_PATH) + "background_lvl.png";
-
-    m_brush_health.fill_opacity = 1.0f;
-    m_brush_health.outline_opacity = 0.0f;
-    SETCOLOR(m_brush_health.fill_color, 1.0f, 1.0f, 1.0f)
-    m_brush_health.texture = std::string(ASSET_PATH) + "Hearts/6.png";
-
-    for (auto &p_go : *m_dynamic_objects)
-        p_go->init();
-}
-
 void Level::game_over()
 {
     // todo: back to start screen
     delete this;
-}
-
-Level::~Level()
-{
-    for (auto &p_go : *m_static_objects)
-        delete p_go;
-    for (auto &p_go : *m_dynamic_objects)
-        delete p_go;
 }

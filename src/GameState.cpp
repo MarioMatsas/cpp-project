@@ -38,13 +38,13 @@ bool GameState::init()
 		// TODO: these can be automated by loading from a file!
 
 		m_static_objects->push_back(
-			new Obstacle(WINDOW_WIDTH / 2, 300, 700, 35, "floor.png", "obstacle1"));
+			new Obstacle(WINDOW_WIDTH / 2, 300, 700, 35, 0.5f, 0.0f, 0.5f, 0.0f, "floor.png", "obstacle1"));
 		m_static_objects->push_back(
-			new Obstacle(WINDOW_WIDTH / 2 + 20, 300, 35, 200, "floor.png", "obstacle2"));
+			new Obstacle(WINDOW_WIDTH / 2 + 20, 300, 35, 200, 0.5f, 0.0f, 0.5f, 0.0f, "floor.png", "obstacle2"));
 		m_static_objects->push_back(
-			new Obstacle(WINDOW_WIDTH / 2, 100, 400, 35, "floor.png", "obstacle3"));
+			new Obstacle(WINDOW_WIDTH / 2, 100, 400, 35, 0.5f, 0.0f, 0.5f, 0.0f, "floor.png", "obstacle3"));
 		m_static_objects->push_back(
-			new Obstacle(WINDOW_WIDTH / 2 + 200, 300, 35, 200, "floor.png", "obstacle4"));
+			new Obstacle(WINDOW_WIDTH / 2 + 200, 300, 35, 200, 0.5f, 0.0f, 0.5f, 0.0f, "floor.png", "obstacle4"));
 
 		m_dynamic_objects->push_back(new Enemy(WINDOW_WIDTH / 4, WINDOW_HEIGHT / 4,
 											   25, 50, "Enemy",
@@ -55,8 +55,6 @@ bool GameState::init()
 		m_dynamic_objects->push_back(new Enemy(WINDOW_WIDTH / 8, WINDOW_HEIGHT / 8,
 											   25, 50, "Enemy",
 											   &Enemy::dumbMovement));
-
-		std::cout << m_static_objects->size() << std::endl;
 
 		m_current_level = new Level(m_static_objects, m_dynamic_objects, "1.lvl");
 		m_current_level->init();
