@@ -1,6 +1,7 @@
 #include "Arrow.h"
 #include "Level.h"
 #include <iostream>
+#include <cmath>
 
 void Arrow::update(float dt)
 {
@@ -27,21 +28,18 @@ void Arrow::draw()
 {
 	//std::cout << " drawn " << std::endl;
 	graphics::Brush br;
-	br.fill_color[0] = 1.0f;
-	br.fill_color[1] = 0.5f;
-	br.fill_color[2] = 0.5f;
-	br.fill_opacity = 1.0f;
-	br.gradient = true;
-	br.outline_opacity = 1;
-	br.texture = std::string(ASSET_PATH) + "output-onlinepngtools (17).png";
-	graphics::drawDisk(m_pos_x, m_pos_y, 5.0f, br);
+	br.outline_opacity = 0.0f;
+	br.texture = std::string(ASSET_PATH) + "Arrow1.png";
+	graphics::setOrientation(theta*(180/M_PI));
+	graphics::drawRect(m_pos_x, m_pos_y, 121.0f/3, 26.0f/3, br);
+	graphics::resetPose();
 }
 
 void Arrow::init()
 {
 }
 
-Arrow::Arrow(float x, float y, float w, float h, std::string name) : Box(x, y, w, h), GameObject(name)
+Arrow::Arrow(float x, float y, float w, float h, float theta, std::string name) : Box(x, y, w, h), GameObject(name), theta(theta)
 {
 }
 

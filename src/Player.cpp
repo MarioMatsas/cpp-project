@@ -3,6 +3,8 @@
 #include "util.h"
 #include <cstdio>
 #include <iostream>
+#include <cmath>
+
 /*
 Player::Player()
 {
@@ -74,13 +76,22 @@ void Player::update(float dt)
 	graphics::getMouseState(mouse);
 	if (mouse.button_left_pressed)
 	{
-		if (gun_selected)
+		if (gun_selected && (quiver > 0))
 		{
 			// std::cout << "shoot" << std::endl;
-			Arrow *b = new Arrow(m_pos_x, m_pos_y, m_width, m_height, "arrow");
+			Arrow *b;
+			if (mouse.cur_pos_x - m_pos_x >= 0)
+			{
+				b = new Arrow(m_pos_x, m_pos_y, m_width, m_height, atan((-(mouse.cur_pos_y - m_pos_y)) / (mouse.cur_pos_x - m_pos_x)), "arrow"); // WHY DOES SGG COUNT Y BACKWARDS???
+			}
+			else
+			{
+				b = new Arrow(m_pos_x, m_pos_y, m_width, m_height, M_PI + atan((-(mouse.cur_pos_y - m_pos_y)) / (mouse.cur_pos_x - m_pos_x)), "arrow");
+			}
 			b->setMouse_x(mouse.cur_pos_x);
 			b->setMouse_y(mouse.cur_pos_y);
 			arrows.push_back(b);
+			quiver--;
 		}
 		else
 		{

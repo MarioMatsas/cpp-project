@@ -87,7 +87,17 @@ void Enemy::update(float dt)
 		if (gun_selected)
 		{
 			// std::cout << "shoot" << std::endl;
-			Arrow *b = new Arrow(m_pos_x, m_pos_y, m_width, m_height, "arrow");
+			Arrow *b = new Arrow(m_pos_x, m_pos_y, m_width, m_height, atan((-(m_state->getPlayer()->m_pos_y-m_pos_y))/(m_state->getPlayer()->m_pos_x-m_pos_x)), "arrow");
+			
+			if (m_state->getPlayer()->m_pos_x - m_pos_x >= 0)
+			{
+				b = new Arrow(m_pos_x, m_pos_y, m_width, m_height, atan((-(m_state->getPlayer()->m_pos_y - m_pos_y)) / (m_state->getPlayer()->m_pos_x - m_pos_x)), "arrow"); // WHY DOES SGG COUNT Y BACKWARDS???
+			}
+			else
+			{
+				b = new Arrow(m_pos_x, m_pos_y, m_width, m_height, M_PI + atan((-(m_state->getPlayer()->m_pos_y - m_pos_y)) / (m_state->getPlayer()->m_pos_x - m_pos_x)), "arrow");
+			}
+
 			b->setMouse_x(m_state->getPlayer()->m_pos_x);
 			b->setMouse_y(m_state->getPlayer()->m_pos_y);
 			arrows.push_back(b);

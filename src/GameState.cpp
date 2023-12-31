@@ -45,7 +45,6 @@ bool GameState::init()
 			new Obstacle(WINDOW_WIDTH / 2, 100, 400, 35, 0.5f, 0.0f, 0.5f, 0.0f, "floor.png", "obstacle3"));
 		m_static_objects->push_back(
 			new Obstacle(WINDOW_WIDTH / 2 + 200, 300, 35, 200, 0.5f, 0.0f, 0.5f, 0.0f, "floor.png", "obstacle4"));
-
 		m_dynamic_objects->push_back(new Enemy(WINDOW_WIDTH / 4, WINDOW_HEIGHT / 4,
 											   25, 50, "Enemy",
 											   &Enemy::dumbMovement));
