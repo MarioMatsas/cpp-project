@@ -5,7 +5,7 @@
 #include "Config.h"
 #include "graphics.h"
 
-class Bullet : public GameObject, public Box {
+class Arrow : public GameObject, public Box {
 	//std::vector<Obstacle*>& obstaclesList;
 	float length = 0.0;
 	float initialVelocityX = 0.0f;
@@ -25,8 +25,8 @@ public:
 	void update(float dt) override;
 	void draw() override;
 	void init() override;
-	Bullet(float x, float y, float w, float h, std::string name);
-	~Bullet();
+	Arrow(float x, float y, float w, float h, std::string name);
+	~Arrow();
 	void shoot();
 	void setMouse_x(float pos_x);
 	void setMouse_y(float pos_y);

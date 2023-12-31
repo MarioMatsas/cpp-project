@@ -1,10 +1,10 @@
-#include "Bullet.h"
+#include "Arrow.h"
 #include "Level.h"
 #include <iostream>
 
-void Bullet::update(float dt)
+void Arrow::update(float dt)
 {
-	// Depending on the positionof the players mouse, we change the position of the bullet to simulate it's firing
+	// Depending on the positionof the players mouse, we change the position of the arrow to simulate it's firing
 	if (up_right) {
 		m_pos_y -= initialVelocityY;
 		m_pos_x += initialVelocityX;
@@ -23,7 +23,7 @@ void Bullet::update(float dt)
 	}
 }
 
-void Bullet::draw()
+void Arrow::draw()
 {
 	//std::cout << " drawn " << std::endl;
 	graphics::Brush br;
@@ -37,19 +37,19 @@ void Bullet::draw()
 	graphics::drawDisk(m_pos_x, m_pos_y, 5.0f, br);
 }
 
-void Bullet::init()
+void Arrow::init()
 {
 }
 
-Bullet::Bullet(float x, float y, float w, float h, std::string name) : Box(x, y, w, h), GameObject(name)
+Arrow::Arrow(float x, float y, float w, float h, std::string name) : Box(x, y, w, h), GameObject(name)
 {
 }
 
-Bullet::~Bullet()
+Arrow::~Arrow()
 {
 }
 
-void Bullet::shoot()
+void Arrow::shoot()
 {
 	float direction_x = abs(mouse_x - m_pos_x);
 	float direction_y = abs(mouse_y - m_pos_y);
@@ -97,36 +97,36 @@ void Bullet::shoot()
 
 }
 
-void Bullet::setMouse_x(float pos_x)
+void Arrow::setMouse_x(float pos_x)
 {
 	mouse_x = pos_x;
 }
 
-void Bullet::setMouse_y(float pos_y)
+void Arrow::setMouse_y(float pos_y)
 {
 	mouse_y = pos_y;
 }
 
-float Bullet::get_x()
+float Arrow::get_x()
 {
 	return m_pos_x;
 }
-float Bullet::get_y()
+float Arrow::get_y()
 {
 	return m_pos_y;
 }
 
-void Bullet::set_shot(bool s)
+void Arrow::set_shot(bool s)
 {
 	shot = true;
 }
 
-bool Bullet::get_shot()
+bool Arrow::get_shot()
 {
 	return shot;
 }
 
-bool Bullet::collision_detected(std::vector<GameObject*>& m_blocks)
+bool Arrow::collision_detected(std::vector<GameObject*>& m_blocks)
 {
 	// Check for any collion with Obstacles
 	for (GameObject* s_ob : m_blocks) {

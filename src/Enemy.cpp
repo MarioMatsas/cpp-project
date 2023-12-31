@@ -59,8 +59,8 @@ Enemy::~Enemy() {
 	delete sword_left;
 	delete sword_right;
 
-	for (auto bullet : bullets)
-		delete bullet;
+	for (auto arrow : arrows)
+		delete arrow;
 
 }
 
@@ -68,15 +68,15 @@ void Enemy::update(float dt)
 {
 	dt_sum += dt;
 	/*
-	for (Bullet* bullet : bullets) {
-		if (bullet->get_x() > 700 || bullet->get_x() < 0 || bullet->get_y() > 450 || bullet->get_y() < 0 || bullet->collision_detected() == true) {
+	for (Arrow* arrow : arrows) {
+		if (arrow->get_x() > 700 || arrow->get_x() < 0 || arrow->get_y() > 450 || arrow->get_y() < 0 || arrow->collision_detected() == true) {
 			std::cout << "deleted" << std::endl;
-			// Remove the bullet from the active bullets vector
-			auto it = std::find(bullets.begin(), bullets.end(), bullet);
-			bullets.erase(it);
+			// Remove the arrow from the active arrows vector
+			auto it = std::find(arrows.begin(), arrows.end(), arrow);
+			arrows.erase(it);
 			// Delete it and release the heap space
-			//delete bullet;
-			//bullet = nullptr;
+			//delete arrow;
+			//arrow = nullptr;
 		}
 
 	}
@@ -87,10 +87,10 @@ void Enemy::update(float dt)
 		if (gun_selected)
 		{
 			// std::cout << "shoot" << std::endl;
-			Bullet *b = new Bullet(m_pos_x, m_pos_y, m_width, m_height, "bullet");
+			Arrow *b = new Arrow(m_pos_x, m_pos_y, m_width, m_height, "arrow");
 			b->setMouse_x(m_state->getPlayer()->m_pos_x);
 			b->setMouse_y(m_state->getPlayer()->m_pos_y);
-			bullets.push_back(b);
+			arrows.push_back(b);
 		}
 		else
 		{
@@ -126,15 +126,15 @@ void Enemy::update(float dt)
 	}
 	*/
 
-	for (Bullet *bullet : bullets)
+	for (Arrow *arrow : arrows)
 	{
-		if (bullet->get_shot() == false)
+		if (arrow->get_shot() == false)
 		{
-			bullet->shoot();
+			arrow->shoot();
 		}
 
-		bullet->update(dt);
-		bullet->set_shot(true);
+		arrow->update(dt);
+		arrow->set_shot(true);
 	}
 
 	float prevPosX = m_pos_x;
@@ -492,10 +492,10 @@ void Enemy::draw()
 	sword_right->draw();
 	sword_left->draw();
 
-	// Draw Bullets
-	for (Bullet *bullet : bullets)
+	// Draw arrows
+	for (Arrow *arrow : arrows)
 	{
-		bullet->draw();
+		arrow->draw();
 	}
 
 	if (m_state->m_debugging)

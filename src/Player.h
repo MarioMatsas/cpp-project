@@ -3,14 +3,14 @@
 // "Game.h"
 #include "GameObject.h"
 #include <string>
-//#include "Bullet.h"
+//#include "Arrow.h"
 #include "Config.h"
 #include "box.h"
 #include "graphics.h"
 #include "vector"
 #include "list"
 #include "Obstacle.h"
-#include "Bullet.h"
+#include "Arrow.h"
 #include "Sword.h"
 
 class Player : public GameObject, public Box {
@@ -36,7 +36,7 @@ public:
 	//std::vector<Obstacle*>& obstaclesList;
 	double velocityY = 0; // Vertical velocity
 	const double gravity = 0.1; // Gravity strength
-	std::list<Bullet*> bullets;
+	std::list<Arrow*> arrows;
 	bool jumping = false;
 	bool falling = false;
 	float speed = 4.0f;

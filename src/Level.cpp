@@ -112,7 +112,7 @@ void Level::update(float dt)
 
 void Level::checkCollisions()
 {
-    // Bullet collisions / Out of bounds check
+    // Arrow collisions / Out of bounds check
 
     for (auto it = m_dynamic_objects->begin(); it != m_dynamic_objects->end();
          ++it)
@@ -122,17 +122,17 @@ void Level::checkCollisions()
         if (!((*it)->m_class == "Enemy"))
             continue;
         Enemy *g_ob = dynamic_cast<Enemy *>(*it);
-        auto jt = g_ob->bullets.begin();
-        while (jt != g_ob->bullets.end())
+        auto jt = g_ob->arrows.begin();
+        while (jt != g_ob->arrows.end())
         {
             if ((*jt)->get_x() > WINDOW_WIDTH || (*jt)->get_x() < 0 ||
                 (*jt)->get_y() > WINDOW_HEIGHT || (*jt)->get_y() < 0 ||
                 (*jt)->collision_detected(*m_static_objects) == true)
             {
-                // Remove the bullet from the list
+                // Remove the arrow from the list
                 delete *jt;
                 PLAYER->health--;
-                jt = g_ob->bullets.erase(jt);
+                jt = g_ob->arrows.erase(jt);
             }
             else
             {
@@ -150,14 +150,14 @@ void Level::checkCollisions()
             continue;
         Enemy *g_ob = dynamic_cast<Enemy *>(*it);
 
-        auto jt = m_state->getPlayer()->bullets.begin();
-        while (jt != m_state->getPlayer()->bullets.end())
+        auto jt = m_state->getPlayer()->arrows.begin();
+        while (jt != m_state->getPlayer()->arrows.end())
         {
             if ((*jt)->get_x() > WINDOW_WIDTH || (*jt)->get_x() < 0 ||
                 (*jt)->get_y() > WINDOW_HEIGHT || (*jt)->get_y() < 0 ||
                 (*jt)->collision_detected(*m_static_objects) == true)
             {
-                // Remove the bullet from the list
+                // Remove the arrow from the list
                 delete *jt;
                 g_ob->health--;
                 if (g_ob->health == 0)
@@ -165,7 +165,7 @@ void Level::checkCollisions()
                     it = m_dynamic_objects->erase(it);
                     delete g_ob;
                 }
-                jt = m_state->getPlayer()->bullets.erase(jt);
+                jt = m_state->getPlayer()->arrows.erase(jt);
             }
             else
             {

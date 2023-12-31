@@ -7,7 +7,7 @@
 #include "vector"
 #include "list"
 #include "Obstacle.h"
-#include "Bullet.h"
+#include "Arrow.h"
 #include "Sword.h"
 
 class Enemy : public GameObject, public Box {
@@ -37,7 +37,7 @@ public:
 	Sword* sword_left;
 	double velocityY = 0; // Vertical velocity
 	const double gravity = 0.1; // Gravity strength
-	std::list<Bullet*> bullets;
+	std::list<Arrow*> arrows;
 	typedef std::pair<graphics::scancode_t, graphics::scancode_t> (Enemy::*DecFn)();
 	DecFn movement;
 	bool jumping = false;
