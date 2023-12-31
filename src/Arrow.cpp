@@ -128,8 +128,9 @@ bool Arrow::collision_detected(std::vector<GameObject*>& m_blocks)
 {
 	// Check for any collion with Obstacles
 	for (GameObject* s_ob : m_blocks) {
-		if (!(s_ob->m_class == "Obstacle"))
-                continue;
+		if (!(s_ob->m_class == "Obstacle")){
+					continue;
+		}
         Obstacle *ob= dynamic_cast<Obstacle *>(s_ob);
 		if (intersect(*ob)) {
 			return true;

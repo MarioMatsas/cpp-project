@@ -10,7 +10,8 @@
 #include "Arrow.h"
 #include "Sword.h"
 
-class Enemy : public GameObject, public Box {
+class Enemy : public GameObject, public Box
+{
 protected:
 	graphics::Brush m_brush;
 	graphics::Brush m_brush_debug;
@@ -33,17 +34,18 @@ public:
 	bool looking_left = false;
 	bool sword_selected = false;
 	bool gun_selected = true;
-	Sword* sword_right;
-	Sword* sword_left;
-	double velocityY = 0; // Vertical velocity
+	Sword *sword_right;
+	Sword *sword_left;
+	double velocityY = 0;		// Vertical velocity
 	const double gravity = 0.1; // Gravity strength
-	std::list<Arrow*> arrows;
+	std::list<Arrow *> arrows;
+	std::vector<Box *> sword_hits;
 	typedef std::pair<graphics::scancode_t, graphics::scancode_t> (Enemy::*DecFn)();
 	DecFn movement;
 	bool jumping = false;
 	bool falling = false;
 	float speed = 4.0f;
-	//const Game& game;
+	// const Game& game;
 	float length = 0.0;
 	float initialVelocityX = 0.0f;
 	float initialVelocityY = 0.0f;
@@ -54,8 +56,9 @@ public:
 	float tangent = 0.0f;
 	bool collided = false;
 	bool shot = false;
+
 public:
-	//Enemy();
+	// Enemy();
 	Enemy(float x, float y, float w, float h, std::string name, DecFn func);
 	std::pair<graphics::scancode_t, graphics::scancode_t> dumbMovement(void);
 	~Enemy();
@@ -65,7 +68,7 @@ public:
 	void draw() override;
 	void init() override;
 	void jump();
-	//void shoot();
+	// void shoot();
 
 protected:
 	void debugDraw();

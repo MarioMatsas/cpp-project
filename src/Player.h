@@ -41,7 +41,7 @@ public:
 					 // we are not going to limit the enemies likewise, to make it harder
 					 // (gta also does this I'm pretty sure)
 	std::list<Arrow*> arrows;
-	std::vector<std::pair<float, float>> sword_hits;
+	std::vector<Box*> sword_hits;
 	bool jumping = false;
 	bool falling = false;
 	float speed = 4.0f;

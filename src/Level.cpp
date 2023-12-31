@@ -128,6 +128,21 @@ void Level::update(float dt)
 void Level::checkCollisions()
 {
     // Arrow collisions / Out of bounds check
+    auto jt = m_state->getPlayer()->arrows.begin();
+    while (jt != m_state->getPlayer()->arrows.end())
+    {
+        if ((*jt)->get_x() > WINDOW_WIDTH || (*jt)->get_x() < 0 ||
+            (*jt)->get_y() > WINDOW_HEIGHT || (*jt)->get_y() < 0 ||
+            (*jt)->collision_detected(*m_static_objects))
+        {
+            delete *jt;
+            jt = m_state->getPlayer()->arrows.erase(jt);
+        }
+        else
+        {
+            ++jt;
+        }
+    }
 
     for (auto it = m_dynamic_objects->begin(); it != m_dynamic_objects->end();
          ++it)
@@ -137,16 +152,29 @@ void Level::checkCollisions()
         if (!((*it)->m_class == "Enemy"))
             continue;
         Enemy *g_ob = dynamic_cast<Enemy *>(*it);
+
+        auto s_it = g_ob->sword_hits.begin();
+        while (s_it != g_ob->sword_hits.end())
+        {
+            if ((*s_it)->intersect(*PLAYER))
+            {
+                delete *s_it;
+                PLAYER->health--;
+            } else {
+                ++s_it;
+            }
+        }
+
+        g_ob->sword_hits.clear();
+
         auto jt = g_ob->arrows.begin();
         while (jt != g_ob->arrows.end())
         {
-            if ((*jt)->get_x() > WINDOW_WIDTH || (*jt)->get_x() < 0 ||
-                (*jt)->get_y() > WINDOW_HEIGHT || (*jt)->get_y() < 0 ||
-                (*jt)->collision_detected(*m_static_objects) == true)
+            if ((*jt)->intersect(*PLAYER))
             {
                 // Remove the arrow from the list
                 delete *jt;
-                PLAYER->health--;
+                //PLAYER->health--;
                 jt = g_ob->arrows.erase(jt);
             }
             else
@@ -166,27 +194,37 @@ void Level::checkCollisions()
         Enemy *g_ob = dynamic_cast<Enemy *>(*it);
 
         auto s_it = PLAYER->sword_hits.begin();
-        while (s_it != PLAYER->sword_hits.end()) {
+        while (s_it != PLAYER->sword_hits.end())
+        {
+            if ((*s_it)->intersect(*g_ob))
+            {
+                delete *s_it;
+                g_ob->health--;
 
-
+                if (g_ob->health == 0) // TODO: I have a feeling this should go in update?
+                {
+                    delete g_ob;
+                    it = m_dynamic_objects->erase(it);
+                }
+            } else {
+                ++s_it;
+            }
         }
 
         auto jt = m_state->getPlayer()->arrows.begin();
         while (jt != m_state->getPlayer()->arrows.end())
         {
-            if ((*jt)->get_x() > WINDOW_WIDTH || (*jt)->get_x() < 0 ||
-                (*jt)->get_y() > WINDOW_HEIGHT || (*jt)->get_y() < 0 ||
-                (*jt)->collision_detected(*m_static_objects) == true) // lol we're only checking for collision with obstacles but killing enemies for colliding with obstacles wtf
+            if ((*jt)->intersect(*g_ob)) // this isn't working well diagonally, like, at all
             {
-                // Remove the arrow from the list
                 delete *jt;
                 g_ob->health--;
+                jt = m_state->getPlayer()->arrows.erase(jt);
+
                 if (g_ob->health == 0)
                 {
-                    it = m_dynamic_objects->erase(it);
                     delete g_ob;
+                    it = m_dynamic_objects->erase(it);
                 }
-                jt = m_state->getPlayer()->arrows.erase(jt);
             }
             else
             {
@@ -194,6 +232,8 @@ void Level::checkCollisions()
             }
         }
     }
+
+    PLAYER->sword_hits.clear();
 
     // Player, Enemy obstacle collisions
     for (GameObject *s_ob : *m_static_objects)

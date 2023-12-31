@@ -97,11 +97,11 @@ void Player::update(float dt)
 		{
 			if (looking_right)
 			{
-				sword_hits.push_back(std::make_pair(m_pos_x + 30, m_pos_y));
+				sword_hits.push_back(new Box(m_pos_x + 30, m_pos_y, 25.0f, 7.0f));
 			}
 			else
 			{
-				sword_hits.push_back(std::make_pair(m_pos_x - 30, m_pos_y));
+				sword_hits.push_back(new Box(m_pos_x - 30, m_pos_y, 25.0f, 7.0f));
 			}
 		}
 		attacking = true;

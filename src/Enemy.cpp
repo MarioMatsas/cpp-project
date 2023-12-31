@@ -104,9 +104,14 @@ void Enemy::update(float dt)
 		}
 		else
 		{
-			// std::cout << "slash" << std::endl;
-			// bool ans = sword_right->collision_detected();
-			// std::cout << ans << std::endl;
+			if (looking_right)
+			{
+				sword_hits.push_back(new Box(m_pos_x + 30, m_pos_y, 25.0f, 7.0f));
+			}
+			else
+			{
+				sword_hits.push_back(new Box(m_pos_x - 30, m_pos_y, 25.0f, 7.0f));
+			}
 		}
 		attacking = true;
 	}
@@ -523,11 +528,11 @@ std::pair<graphics::scancode_t, graphics::scancode_t> Enemy::dumbMovement(void)
 	if (dy > 0)
 	{
 		decision.second = graphics::SCANCODE_W;
-		if (dx > 0)
+		if (dx > m_width / 2)
 		{
 			decision.first = graphics::SCANCODE_D;
 		}
-		else if (dx < 0)
+		else if (dx < -m_width / 2)
 		{
 			decision.first = graphics::SCANCODE_A;
 		}
@@ -536,7 +541,7 @@ std::pair<graphics::scancode_t, graphics::scancode_t> Enemy::dumbMovement(void)
 			decision.first = graphics::SCANCODE_Q;
 		}
 	}
-	else if (dy < 0)
+	else if (dy <= 0)
 	{
 		decision.second = graphics::SCANCODE_Q;
 		if (dx > m_width / 2)
@@ -549,7 +554,6 @@ std::pair<graphics::scancode_t, graphics::scancode_t> Enemy::dumbMovement(void)
 		}
 		else
 		{
-
 			decision.first = graphics::SCANCODE_Q;
 		}
 	}
@@ -563,7 +567,7 @@ std::pair<graphics::scancode_t, graphics::scancode_t> Enemy::dumbMovement(void)
 
 bool Enemy::should_I_shoot()
 {
-	if (abs(this->m_pos_x - PLAYER->m_pos_x) < m_width)
+	if (abs(this->m_pos_x - PLAYER->m_pos_x) < 2*m_width)
 		return false;
 	if (dt_sum < 600)
 		return false;
@@ -573,9 +577,9 @@ bool Enemy::should_I_shoot()
 
 bool Enemy::should_I_thrust()
 {
-	if (fabs(this->m_pos_y - PLAYER->m_pos_y) > m_height/2)
+	if (fabs(this->m_pos_y - PLAYER->m_pos_y) >= 2*m_height)
 		return false;
-	if (fabs(this->m_pos_x - PLAYER->m_pos_x) >= m_width/2)
+	if (fabs(this->m_pos_x - PLAYER->m_pos_x) >= 2*m_width)
 		return false;
 	if (dt_sum < 600)
 		return false;
