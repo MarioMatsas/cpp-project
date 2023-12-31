@@ -17,7 +17,6 @@ class Arrow : public GameObject, public Box {
 	float tangent = 0.0f;
 	float mouse_x = 0.0;
 	float mouse_y = 0.0;
-public:
 	float theta = 0.0;
 	float speed = 8.0f;
 	bool collided = false;
