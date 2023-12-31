@@ -76,13 +76,12 @@ void Level::draw()
     graphics::drawRect(WINDOW_WIDTH / 14, WINDOW_HEIGHT / 16, 108, 34,
                        m_brush_health);
 
-    graphics::drawRect(WINDOW_WIDTH * 0.9, WINDOW_HEIGHT / 16, 151.0f/3, 151.0f/3,
+    graphics::drawRect(WINDOW_WIDTH * 0.9, WINDOW_HEIGHT / 16, 151.0f / 3, 151.0f / 3,
                        m_brush_quiver);
-    
-    
-	graphics::setFont(std::string(ASSET_PATH)+"din1451alt.ttf");
 
-    graphics::drawText(WINDOW_WIDTH * 0.93, WINDOW_HEIGHT / 16 + 151.0f/9, 151.0f/3, std::to_string(PLAYER->quiver),
+    graphics::setFont(std::string(ASSET_PATH) + "din1451alt.ttf");
+
+    graphics::drawText(WINDOW_WIDTH * 0.93, WINDOW_HEIGHT / 16 + 151.0f / 9, 151.0f / 3, std::to_string(PLAYER->quiver),
                        m_brush_quiver_text);
 
     // draw player
@@ -166,12 +165,18 @@ void Level::checkCollisions()
             continue;
         Enemy *g_ob = dynamic_cast<Enemy *>(*it);
 
+        auto s_it = PLAYER->sword_hits.begin();
+        while (s_it != PLAYER->sword_hits.end()) {
+
+
+        }
+
         auto jt = m_state->getPlayer()->arrows.begin();
         while (jt != m_state->getPlayer()->arrows.end())
         {
             if ((*jt)->get_x() > WINDOW_WIDTH || (*jt)->get_x() < 0 ||
                 (*jt)->get_y() > WINDOW_HEIGHT || (*jt)->get_y() < 0 ||
-                (*jt)->collision_detected(*m_static_objects) == true)
+                (*jt)->collision_detected(*m_static_objects) == true) // lol we're only checking for collision with obstacles but killing enemies for colliding with obstacles wtf
             {
                 // Remove the arrow from the list
                 delete *jt;
@@ -189,7 +194,6 @@ void Level::checkCollisions()
             }
         }
     }
-    // Sword collisions
 
     // Player, Enemy obstacle collisions
     for (GameObject *s_ob : *m_static_objects)

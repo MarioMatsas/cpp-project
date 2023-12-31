@@ -95,9 +95,14 @@ void Player::update(float dt)
 		}
 		else
 		{
-			// std::cout << "slash" << std::endl;
-			// bool ans = sword_right->collision_detected();
-			// std::cout << ans << std::endl;
+			if (looking_right)
+			{
+				sword_hits.push_back(std::make_pair(m_pos_x + 30, m_pos_y));
+			}
+			else
+			{
+				sword_hits.push_back(std::make_pair(m_pos_x - 30, m_pos_y));
+			}
 		}
 		attacking = true;
 	}
@@ -443,8 +448,7 @@ void Player::draw()
 				}
 				else
 				{
-					sprite = ((int)fmod(100.0f - m_pos_x * 9.0f, sprites.size()) + 7) % 4;
-					// std::cout << sprite << std::endl;
+					sprite = ((int)fmod(100.0f - m_pos_x * 9.0f, sprites.size()) + 7) % 4; // what the fuck are you talking about Jesse
 
 					br.texture = sprites[sprite];
 
@@ -474,7 +478,6 @@ void Player::draw()
 				{
 					sprite = ((int)fmod(100.0f - m_pos_x * 9.0f, sprites.size()) + 7) % 4 + 4;
 					// std::cout << sprite << std::endl;
-
 					br.texture = sprites[sprite];
 
 					previous_sprite = sprite;

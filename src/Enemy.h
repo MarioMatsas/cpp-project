@@ -59,7 +59,8 @@ public:
 	Enemy(float x, float y, float w, float h, std::string name, DecFn func);
 	std::pair<graphics::scancode_t, graphics::scancode_t> dumbMovement(void);
 	~Enemy();
-	bool should_i_shoot();
+	bool should_I_shoot();
+	bool should_I_thrust();
 	void update(float dt) override;
 	void draw() override;
 	void init() override;

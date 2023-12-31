@@ -55,13 +55,13 @@ Enemy::Enemy(float x, float y, float w, float h, std::string name, DecFn func) :
 	jumping_sprites.push_back(std::string(ASSET_PATH) + "/" + name + "/" + "16_left.png");
 }
 
-Enemy::~Enemy() {
+Enemy::~Enemy()
+{
 	delete sword_left;
 	delete sword_right;
 
 	for (auto arrow : arrows)
 		delete arrow;
-
 }
 
 void Enemy::update(float dt)
@@ -82,13 +82,13 @@ void Enemy::update(float dt)
 	}
 	*/
 
-	if (Enemy::should_i_shoot())
+	if (Enemy::should_I_shoot())
 	{
 		if (gun_selected)
 		{
 			// std::cout << "shoot" << std::endl;
-			Arrow *b = new Arrow(m_pos_x, m_pos_y, m_width, m_height, atan((-(m_state->getPlayer()->m_pos_y-m_pos_y))/(m_state->getPlayer()->m_pos_x-m_pos_x)), "arrow");
-			
+			Arrow *b = new Arrow(m_pos_x, m_pos_y, m_width, m_height, atan((-(m_state->getPlayer()->m_pos_y - m_pos_y)) / (m_state->getPlayer()->m_pos_x - m_pos_x)), "arrow");
+
 			if (m_state->getPlayer()->m_pos_x - m_pos_x >= 0)
 			{
 				b = new Arrow(m_pos_x, m_pos_y, m_width, m_height, atan((-(m_state->getPlayer()->m_pos_y - m_pos_y)) / (m_state->getPlayer()->m_pos_x - m_pos_x)), "arrow"); // WHY DOES SGG COUNT Y BACKWARDS???
@@ -110,20 +110,13 @@ void Enemy::update(float dt)
 		}
 		attacking = true;
 	}
-	
-	/*
-	TODO: fix!
-	if (mouse.button_right_pressed && !mouse.button_left_pressed && !attacking)
+
+	if (should_I_thrust() && !attacking)
 	{
 		// Invert the boolean values
 		sword_selected = !sword_selected;
 		gun_selected = !gun_selected;
-		if (sword_selected)
-			std::cout << "sword" << std::endl;
-		else
-			std::cout << "gun" << std::endl;
 	}
-	*/
 
 	/*
 	if (graphics::getKeyState(graphics::SCANCODE_Q)) {
@@ -286,16 +279,16 @@ void Enemy::debugDraw()
 	m_brush_debug.outline_opacity = 1.0f;
 	graphics::drawRect(m_pos_x, m_pos_y, m_width, m_height, m_brush_debug);
 
-	graphics::setFont(std::string(ASSET_PATH)+"JetBrainsMono-Thin.ttf");
+	graphics::setFont(std::string(ASSET_PATH) + "JetBrainsMono-Thin.ttf");
 	char x[10];
 	char y[10];
 	sprintf(x, "%5.2f", m_pos_x);
 	sprintf(y, "%5.2f", m_pos_y);
 	SETCOLOR(m_brush_debug.fill_color, 1, 0, 0);
 	m_brush_debug.fill_opacity = 1.0f;
-	graphics::drawText(m_pos_x - m_width/2, m_pos_y + m_height/2, 16, x, m_brush_debug);
-	graphics::drawText(m_pos_x - m_width/2, m_pos_y + m_height/2 -16, 16, y, m_brush_debug);}
-
+	graphics::drawText(m_pos_x - m_width / 2, m_pos_y + m_height / 2, 16, x, m_brush_debug);
+	graphics::drawText(m_pos_x - m_width / 2, m_pos_y + m_height / 2 - 16, 16, y, m_brush_debug);
+}
 
 void Enemy::draw()
 {
@@ -510,7 +503,6 @@ void Enemy::draw()
 
 	if (m_state->m_debugging)
 		debugDraw();
-
 }
 
 void Enemy::init()
@@ -524,8 +516,6 @@ void Enemy::jump()
 std::pair<graphics::scancode_t, graphics::scancode_t> Enemy::dumbMovement(void)
 {
 	std::pair<graphics::scancode_t, graphics::scancode_t> decision;
-
-	int MAX_PLATFORM_WIDTH = 64;
 
 	int dx = m_state->getPlayer()->m_pos_x - this->m_pos_x;
 	int dy = -(m_state->getPlayer()->m_pos_y - this->m_pos_y);
@@ -549,17 +539,17 @@ std::pair<graphics::scancode_t, graphics::scancode_t> Enemy::dumbMovement(void)
 	else if (dy < 0)
 	{
 		decision.second = graphics::SCANCODE_Q;
-		if (dx > MAX_PLATFORM_WIDTH/2)
+		if (dx > m_width / 2)
 		{
 			decision.first = graphics::SCANCODE_D;
 		}
-		else if (dx < -MAX_PLATFORM_WIDTH/2)
+		else if (dx < -m_width / 2)
 		{
 			decision.first = graphics::SCANCODE_A;
 		}
 		else
 		{
-			
+
 			decision.first = graphics::SCANCODE_Q;
 		}
 	}
@@ -571,8 +561,22 @@ std::pair<graphics::scancode_t, graphics::scancode_t> Enemy::dumbMovement(void)
 	return decision;
 }
 
-bool Enemy::should_i_shoot()
+bool Enemy::should_I_shoot()
 {
+	if (abs(this->m_pos_x - PLAYER->m_pos_x) < m_width)
+		return false;
+	if (dt_sum < 600)
+		return false;
+	dt_sum = 0;
+	return (std::rand() < (RAND_MAX * 0.2)) && (0 <= this->m_pos_x) && (this->m_pos_x <= WINDOW_WIDTH) && (0 <= this->m_pos_y) && (this->m_pos_y <= WINDOW_HEIGHT);
+}
+
+bool Enemy::should_I_thrust()
+{
+	if (fabs(this->m_pos_y - PLAYER->m_pos_y) > m_height/2)
+		return false;
+	if (fabs(this->m_pos_x - PLAYER->m_pos_x) >= m_width/2)
+		return false;
 	if (dt_sum < 600)
 		return false;
 	dt_sum = 0;

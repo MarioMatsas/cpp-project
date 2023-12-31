@@ -12,7 +12,6 @@ public:
 	void draw() override;
 	void init() override;
 	Sword(float x, float y, float w, float h, std::string name);
-	//bool collision_detected();
 
 protected:
 	void debugDraw();
