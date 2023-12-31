@@ -15,6 +15,13 @@ Level::Level(std::vector<GameObject *> *m_static_objects,
     SETCOLOR(m_brush_health.fill_color, 1.0f, 1.0f, 1.0f)
     m_brush_health.texture = std::string(ASSET_PATH) + "Hearts/6.png";
 
+    m_brush_quiver.fill_opacity = 1.0f;
+    m_brush_quiver.outline_opacity = 0.0f;
+    SETCOLOR(m_brush_quiver.fill_color, 1.0f, 1.0f, 1.0f)
+    m_brush_quiver.texture = std::string(ASSET_PATH) + "Arrow.png";
+
+    SETCOLOR(m_brush_quiver_text.fill_color, 0.0f, 0.0f, 0.0f);
+
     for (auto &p_go : *m_dynamic_objects)
         p_go->init();
 }
@@ -68,6 +75,15 @@ void Level::draw()
 
     graphics::drawRect(WINDOW_WIDTH / 14, WINDOW_HEIGHT / 16, 108, 34,
                        m_brush_health);
+
+    graphics::drawRect(WINDOW_WIDTH * 0.9, WINDOW_HEIGHT / 16, 151.0f/3, 151.0f/3,
+                       m_brush_quiver);
+    
+    
+	graphics::setFont(std::string(ASSET_PATH)+"din1451alt.ttf");
+
+    graphics::drawText(WINDOW_WIDTH * 0.93, WINDOW_HEIGHT / 16 + 151.0f/9, 151.0f/3, std::to_string(PLAYER->quiver),
+                       m_brush_quiver_text);
 
     // draw player
     if (m_state->getPlayer()->isActive())

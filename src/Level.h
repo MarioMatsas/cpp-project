@@ -12,6 +12,8 @@ class Level : public GameObject
 {
 	graphics::Brush m_brush_background;
 	graphics::Brush m_brush_health;
+	graphics::Brush m_brush_quiver;
+	graphics::Brush m_brush_quiver_text;
 
 	std::vector<GameObject *> *m_static_objects;
 	std::list<GameObject *> *m_dynamic_objects;
