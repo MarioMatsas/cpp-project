@@ -174,7 +174,7 @@ void Level::checkCollisions()
             {
                 // Remove the arrow from the list
                 delete *jt;
-                //PLAYER->health--;
+                PLAYER->health--;
                 jt = g_ob->arrows.erase(jt);
             }
             else
