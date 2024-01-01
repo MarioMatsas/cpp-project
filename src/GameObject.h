@@ -8,7 +8,6 @@ class GameObject
 
 protected:
 	class GameState *m_state;
-	std::string m_name;
 	int m_id = 0;
 	bool m_active = true;
 public:
@@ -19,6 +18,7 @@ public:
 	virtual ~GameObject() {}
 	bool isActive() { return m_active; }
 	void setActive(bool a) { m_active = a; }
+	std::string m_name;
 	const std::string m_class; // can turn this into a vector to support multiple inheritance, if needed
 							   // for some reason I feel like there should be a better way to do this
 };
