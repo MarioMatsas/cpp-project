@@ -128,21 +128,6 @@ void Level::update(float dt)
 void Level::checkCollisions()
 {
     // Arrow collisions / Out of bounds check
-    auto jt = m_state->getPlayer()->arrows.begin();
-    while (jt != m_state->getPlayer()->arrows.end())
-    {
-        if ((*jt)->get_x() > WINDOW_WIDTH || (*jt)->get_x() < 0 ||
-            (*jt)->get_y() > WINDOW_HEIGHT || (*jt)->get_y() < 0 ||
-            (*jt)->collision_detected(*m_static_objects))
-        {
-            delete *jt;
-            jt = m_state->getPlayer()->arrows.erase(jt);
-        }
-        else
-        {
-            ++jt;
-        }
-    }
 
     for (auto it = m_dynamic_objects->begin(); it != m_dynamic_objects->end();
          ++it)
