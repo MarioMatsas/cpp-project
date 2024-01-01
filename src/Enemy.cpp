@@ -82,9 +82,9 @@ void Enemy::update(float dt)
 	}
 	*/
 
-	if (Enemy::should_I_shoot())
+	if ((std::rand() < (RAND_MAX * 0.2)))
 	{
-		if (gun_selected)
+		if (Enemy::should_I_shoot())
 		{
 			// std::cout << "shoot" << std::endl;
 			Arrow *b = new Arrow(m_pos_x, m_pos_y, m_width, m_height, atan((-(m_state->getPlayer()->m_pos_y - m_pos_y)) / (m_state->getPlayer()->m_pos_x - m_pos_x)), "arrow");
@@ -102,25 +102,28 @@ void Enemy::update(float dt)
 			b->setMouse_y(m_state->getPlayer()->m_pos_y);
 			arrows.push_back(b);
 		}
-		else
+		if (Enemy::should_I_thrust())
 		{
 			if (looking_right)
-			{
 				sword_hits.push_back(new Box(m_pos_x + 30, m_pos_y, 25.0f, 7.0f));
-			}
 			else
-			{
 				sword_hits.push_back(new Box(m_pos_x - 30, m_pos_y, 25.0f, 7.0f));
-			}
 		}
 		attacking = true;
 	}
 
-	if (should_I_thrust() && !attacking)
+	if (!attacking)
 	{
-		// Invert the boolean values
-		sword_selected = !sword_selected;
-		gun_selected = !gun_selected;
+		if (should_I_thrust())
+		{
+			sword_selected = true;
+			gun_selected = false;
+		}
+		else
+		{
+			sword_selected = false;
+			gun_selected = true;
+		}
 	}
 
 	/*
@@ -200,6 +203,9 @@ void Enemy::update(float dt)
 	m_pos_y += velocityY * graphics::getDeltaTime() / 10.0f;
 	sword_right->m_pos_y += velocityY * graphics::getDeltaTime() / 10.0f;
 	sword_left->m_pos_y += velocityY * graphics::getDeltaTime() / 10.0f;
+
+	if (dt_sum > 600)
+		dt_sum = 0;
 
 	/*
 	if (jumping) {
@@ -567,22 +573,24 @@ std::pair<graphics::scancode_t, graphics::scancode_t> Enemy::dumbMovement(void)
 
 bool Enemy::should_I_shoot()
 {
-	if (abs(this->m_pos_x - PLAYER->m_pos_x) < 2*m_width)
-		return false;
 	if (dt_sum < 600)
 		return false;
-	dt_sum = 0;
-	return (std::rand() < (RAND_MAX * 0.2)) && (0 <= this->m_pos_x) && (this->m_pos_x <= WINDOW_WIDTH) && (0 <= this->m_pos_y) && (this->m_pos_y <= WINDOW_HEIGHT);
+	if (fabs(this->m_pos_x - PLAYER->m_pos_x) < 4 * m_width)
+		return false;
+	return (0 <= this->m_pos_x) && (this->m_pos_x <= WINDOW_WIDTH) && (0 <= this->m_pos_y) && (this->m_pos_y <= WINDOW_HEIGHT);
 }
 
 bool Enemy::should_I_thrust()
 {
-	if (fabs(this->m_pos_y - PLAYER->m_pos_y) >= 2*m_height)
-		return false;
-	if (fabs(this->m_pos_x - PLAYER->m_pos_x) >= 2*m_width)
-		return false;
 	if (dt_sum < 600)
 		return false;
-	dt_sum = 0;
-	return (std::rand() < (RAND_MAX * 0.2)) && (0 <= this->m_pos_x) && (this->m_pos_x <= WINDOW_WIDTH) && (0 <= this->m_pos_y) && (this->m_pos_y <= WINDOW_HEIGHT);
+	if (fabs(this->m_pos_y - PLAYER->m_pos_y) >= m_height)
+	{
+		return false;
+	}
+	if (fabs(this->m_pos_x - PLAYER->m_pos_x) >= 2 * m_width)
+	{
+		return false;
+	}
+	return (0 <= this->m_pos_x) && (this->m_pos_x <= WINDOW_WIDTH) && (0 <= this->m_pos_y) && (this->m_pos_y <= WINDOW_HEIGHT);
 }

@@ -156,6 +156,7 @@ void Level::checkCollisions()
         auto s_it = g_ob->sword_hits.begin();
         while (s_it != g_ob->sword_hits.end())
         {
+            DEBUG
             if ((*s_it)->intersect(*PLAYER))
             {
                 delete *s_it;
