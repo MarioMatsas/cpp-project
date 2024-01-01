@@ -128,258 +128,228 @@ void Level::update(float dt)
 void Level::checkCollisions()
 {
     // Arrow collisions / Out of bounds check
-    auto jt = m_state->getPlayer()->arrows.begin();
-    while (jt != m_state->getPlayer()->arrows.end())
-    {
-        if ((*jt)->get_x() > WINDOW_WIDTH || (*jt)->get_x() < 0 ||
-            (*jt)->get_y() > WINDOW_HEIGHT || (*jt)->get_y() < 0 ||
-            (*jt)->collision_detected(*m_static_objects))
-        {
-            delete *jt;
-            jt = m_state->getPlayer()->arrows.erase(jt);
-        }
-        else
-        {
-            ++jt;
-        }
-    }
 
-    for (auto it = m_dynamic_objects->begin(); it != m_dynamic_objects->end();
-         ++it)
-    {
-        if (!((*it)->isActive()))
-            continue;
-        if (!((*it)->m_class == "Enemy"))
-            continue;
-        Enemy *g_ob = dynamic_cast<Enemy *>(*it);
-
-        auto s_it = g_ob->sword_hits.begin();
-        while (s_it != g_ob->sword_hits.end())
-        {
-            if ((*s_it)->intersect(*PLAYER))
-            {
-                delete *s_it;
-                PLAYER->health--;
-            } else {
-                ++s_it;
-            }
-        }
-
-        g_ob->sword_hits.clear();
-
-        auto jt = g_ob->arrows.begin();
-        while (jt != g_ob->arrows.end())
-        {
-            if ((*jt)->intersect(*PLAYER))
-            {
-                // Remove the arrow from the list
-                delete *jt;
-                PLAYER->health--;
-                jt = g_ob->arrows.erase(jt);
-            }
-            else
-            {
-                ++jt;
-            }
-        }
-    }
-
-    for (auto it = m_dynamic_objects->begin(); it != m_dynamic_objects->end();
-         ++it)
-    {
-        if (!((*it)->isActive()))
-            continue;
-        if (!((*it)->m_class == "Enemy"))
-            continue;
-        Enemy *g_ob = dynamic_cast<Enemy *>(*it);
-
-        auto s_it = PLAYER->sword_hits.begin();
-        while (s_it != PLAYER->sword_hits.end())
-        {
-            if ((*s_it)->intersect(*g_ob))
-            {
-                delete *s_it;
-                g_ob->health--;
-
-                if (g_ob->health == 0) // TODO: I have a feeling this should go in update?
-                {
-                    delete g_ob;
-                    it = m_dynamic_objects->erase(it);
-                }
-            } else {
-                ++s_it;
-            }
-        }
-
-        auto jt = m_state->getPlayer()->arrows.begin();
-        while (jt != m_state->getPlayer()->arrows.end())
-        {
-            if ((*jt)->intersect(*g_ob)) // this isn't working well diagonally, like, at all
-            {
-                delete *jt;
-                g_ob->health--;
-                jt = m_state->getPlayer()->arrows.erase(jt);
-
-                if (g_ob->health == 0)
-                {
-                    delete g_ob;
-                    it = m_dynamic_objects->erase(it);
-                }
-            }
-            else
-            {
-                ++jt;
-            }
-        }
-    }
-
-    PLAYER->sword_hits.clear();
-
-    // Player, Enemy obstacle collisions
-    for (GameObject *s_ob : *m_static_objects)
-    {
-        if (!(s_ob->m_class == "Obstacle"))
-            continue;
-        Obstacle *ob = dynamic_cast<Obstacle *>(s_ob);
-        if (m_state->getPlayer()->intersect(*ob))
-        {
-            float belowCorrection = m_state->getPlayer()->intersectDown(*ob);
-            if (belowCorrection != 0 && m_state->getPlayer()->jumping == true &&
-                m_state->getPlayer()->velocityY <= 0)
-            {
-                // std::cout << "belowCorrection: "<<belowCorrection <<
-                // std::endl;
-                m_state->getPlayer()->m_pos_y -= belowCorrection;
-                m_state->getPlayer()->sword_right->m_pos_y -= belowCorrection;
-                m_state->getPlayer()->sword_left->m_pos_y -= belowCorrection;
-                m_state->getPlayer()->velocityY = 0;
-            }
-        }
-        for (auto it = m_dynamic_objects->begin(); it != m_dynamic_objects->end();
-             ++it)
-        {
-            if (!((*it)->isActive()))
-                continue;
-            if (!((*it)->m_class == "Enemy"))
-                continue;
-            Enemy *g_ob = dynamic_cast<Enemy *>(*it);
-            if (g_ob->intersect(*ob))
-            {
-                float belowCorrection = g_ob->intersectDown(*ob);
-                if (belowCorrection != 0 && g_ob->jumping == true &&
-                    g_ob->velocityY <= 0)
-                {
-                    // std::cout << "belowCorrection: "<<belowCorrection <<
-                    // std::endl;
-                    g_ob->m_pos_y -= belowCorrection;
-                    g_ob->sword_right->m_pos_y -= belowCorrection;
-                    g_ob->sword_left->m_pos_y -= belowCorrection;
-                    g_ob->velocityY = 0;
-                }
-            }
-        }
-    }
-
-    // Player <-> Enemy collisions (we move Enemy)
-    // we are ignoring Enemy <-> Enemy collisions since they're on the same
-    // "team"
-
-    for (auto it = m_dynamic_objects->begin(); it != m_dynamic_objects->end();
-         ++it)
-    {
-        if (!((*it)->isActive()))
-            continue;
-        if (!((*it)->m_class == "Enemy"))
-            continue;
-        Enemy *g_ob = dynamic_cast<Enemy *>(*it);
-        if (g_ob->intersect(*m_state->getPlayer()))
-        {
-            float horizCorrection =
-                g_ob->intersectSideways(*m_state->getPlayer());
-            if (horizCorrection != 0)
-            {
-                g_ob->m_pos_x += horizCorrection;
-                g_ob->sword_right->m_pos_x += horizCorrection;
-                g_ob->sword_left->m_pos_x += horizCorrection;
-            }
-        }
-    }
-
-    for (GameObject *s_ob : *m_static_objects)
-    {
-        if (!(s_ob->m_class == "Obstacle"))
-            continue;
-        Obstacle *ob = dynamic_cast<Obstacle *>(s_ob);
-        if (m_state->getPlayer()->intersect(*ob))
-        {
-            float vertCorrection = m_state->getPlayer()->intersectAbove(*ob);
-            if (vertCorrection != 0)
-            {
-                m_state->getPlayer()->m_pos_y += vertCorrection;
-                m_state->getPlayer()->sword_right->m_pos_y += vertCorrection;
-                m_state->getPlayer()->sword_left->m_pos_y += vertCorrection;
-                m_state->getPlayer()->velocityY = 0;
-                m_state->getPlayer()->jumping = false;
-            }
-        }
-        for (auto it = m_dynamic_objects->begin(); it != m_dynamic_objects->end();
-             ++it)
-        {
-            if (!((*it)->isActive()))
-                continue;
-            if (!((*it)->m_class == "Enemy"))
-                continue;
-            Enemy *g_ob = dynamic_cast<Enemy *>(*it);
-            if (g_ob->intersect(*ob))
-            {
-                float vertCorrection = g_ob->intersectAbove(*ob);
-                if (vertCorrection != 0)
-                {
-                    g_ob->m_pos_y += vertCorrection;
-                    g_ob->sword_right->m_pos_y += vertCorrection;
-                    g_ob->sword_left->m_pos_y += vertCorrection;
-                    g_ob->velocityY = 0;
-                    g_ob->jumping = false;
-                }
-            }
-        }
-    }
-    for (GameObject *s_ob : *m_static_objects)
-    {
-        if (!(s_ob->m_class == "Obstacle"))
-            continue;
-        Obstacle *ob = dynamic_cast<Obstacle *>(s_ob);
-        if (m_state->getPlayer()->intersect(*ob))
-        {
-            float horizCorrection =
-                m_state->getPlayer()->intersectSideways(*ob);
-            if (horizCorrection != 0)
-            {
-                m_state->getPlayer()->m_pos_x += horizCorrection;
-                m_state->getPlayer()->sword_right->m_pos_x += horizCorrection;
-                m_state->getPlayer()->sword_left->m_pos_x += horizCorrection;
-            }
-        }
-        for (auto it = m_dynamic_objects->begin(); it != m_dynamic_objects->end();
-             ++it)
-        {
-            if (!((*it)->isActive()))
-                continue;
-            if (!((*it)->m_class == "Enemy"))
-                continue;
-            Enemy *g_ob = dynamic_cast<Enemy *>(*it);
-            if (g_ob->intersect(*ob))
-            {
-                float horizCorrection = g_ob->intersectSideways(*ob);
-                if (horizCorrection != 0)
-                {
-                    g_ob->m_pos_x += horizCorrection;
-                    g_ob->sword_right->m_pos_x += horizCorrection;
-                    g_ob->sword_left->m_pos_x += horizCorrection;
-                }
-            }
-        }
-    }
+  for (auto it = m_dynamic_objects->begin(); it != m_dynamic_objects->end();
+      ++it)
+  {
+      if (!((*it)->isActive()))
+          continue;
+      if (!((*it)->m_class == "Enemy"))
+          continue;
+      Enemy* g_ob = dynamic_cast<Enemy*>(*it);
+      auto jt = g_ob->arrows.begin();
+      while (jt != g_ob->arrows.end())
+      {
+          if ((*jt)->get_x() > WINDOW_WIDTH || (*jt)->get_x() < 0 ||
+              (*jt)->get_y() > WINDOW_HEIGHT || (*jt)->get_y() < 0 ||
+              (*jt)->collision_detected(*m_static_objects) == true)
+          {
+              // Remove the arrow from the list
+              delete* jt;
+              PLAYER->health--;
+              jt = g_ob->arrows.erase(jt);
+          }
+          else
+          {
+              ++jt;
+          }
+      }
+  }
+  
+  for (auto it = m_dynamic_objects->begin(); it != m_dynamic_objects->end();
+      ++it)
+  {
+      if (!((*it)->isActive()))
+          continue;
+      if (!((*it)->m_class == "Enemy"))
+          continue;
+      Enemy* g_ob = dynamic_cast<Enemy*>(*it);
+  
+      auto jt = m_state->getPlayer()->arrows.begin();
+      while (jt != m_state->getPlayer()->arrows.end())
+      {
+          if ((*jt)->get_x() > WINDOW_WIDTH || (*jt)->get_x() < 0 ||
+              (*jt)->get_y() > WINDOW_HEIGHT || (*jt)->get_y() < 0 ||
+              (*jt)->collision_detected(*m_static_objects) == true)
+          {
+              // Remove the arrow from the list
+              delete* jt;
+              g_ob->health--;
+              if (g_ob->health == 0)
+              {
+                  it = m_dynamic_objects->erase(it);
+                  delete g_ob;
+              }
+              jt = m_state->getPlayer()->arrows.erase(jt);
+          }
+          else
+          {
+              ++jt;
+          }
+      }
+  }
+  // Sword collisions
+  
+  
+  // Out of bounds for Player 
+  if (m_state->getPlayer()->m_pos_x < 0) {
+      m_state->getPlayer()->m_pos_x = 0 ;
+      m_state->getPlayer()->initialVelocityX = 0;
+  }
+  else if (m_state->getPlayer()->m_pos_x > WINDOW_WIDTH){
+      m_state->getPlayer()->m_pos_x = WINDOW_WIDTH ;
+      m_state->getPlayer()->initialVelocityX = 0;
+  }
+  
+  // Player, Enemy obstacle collisions
+  for (GameObject* s_ob : *m_static_objects)
+  {
+      if (!(s_ob->m_class == "Obstacle"))
+          continue;
+      Obstacle* ob = dynamic_cast<Obstacle*>(s_ob);
+      if (m_state->getPlayer()->intersect(*ob))
+      {
+          float belowCorrection = m_state->getPlayer()->intersectDown(*ob);
+          if (belowCorrection != 0 && m_state->getPlayer()->jumping == true &&
+              m_state->getPlayer()->velocityY <= 0)
+          {
+              // std::cout << "belowCorrection: "<<belowCorrection <<
+              // std::endl;
+              m_state->getPlayer()->m_pos_y -= belowCorrection;
+              m_state->getPlayer()->sword_right->m_pos_y -= belowCorrection;
+              m_state->getPlayer()->sword_left->m_pos_y -= belowCorrection;
+              m_state->getPlayer()->velocityY = 0;
+          }
+      }
+      for (auto it = m_dynamic_objects->begin(); it != m_dynamic_objects->end();
+          ++it)
+      {
+          if (!((*it)->isActive()))
+              continue;
+          if (!((*it)->m_class == "Enemy"))
+              continue;
+          Enemy* g_ob = dynamic_cast<Enemy*>(*it);
+          if (g_ob->intersect(*ob))
+          {
+              float belowCorrection = g_ob->intersectDown(*ob);
+              if (belowCorrection != 0 && g_ob->jumping == true &&
+                  g_ob->velocityY <= 0)
+              {
+                  // std::cout << "belowCorrection: "<<belowCorrection <<
+                  // std::endl;
+                  g_ob->m_pos_y -= belowCorrection;
+                  g_ob->sword_right->m_pos_y -= belowCorrection;
+                  g_ob->sword_left->m_pos_y -= belowCorrection;
+                  g_ob->velocityY = 0;
+              }
+          }
+      }
+  }
+  
+  // Player <-> Enemy collisions (we move Enemy)
+  // we are ignoring Enemy <-> Enemy collisions since they're on the same
+  // "team"
+  
+  for (auto it = m_dynamic_objects->begin(); it != m_dynamic_objects->end();
+      ++it)
+  {
+      if (!((*it)->isActive()))
+          continue;
+      if (!((*it)->m_class == "Enemy"))
+          continue;
+      Enemy* g_ob = dynamic_cast<Enemy*>(*it);
+      if (g_ob->intersect(*m_state->getPlayer()))
+      {
+          float horizCorrection =
+              g_ob->intersectSideways(*m_state->getPlayer());
+          if (horizCorrection != 0)
+          {
+              g_ob->m_pos_x += horizCorrection;
+              g_ob->sword_right->m_pos_x += horizCorrection;
+              g_ob->sword_left->m_pos_x += horizCorrection;
+          }
+      }
+  }
+  
+  for (GameObject* s_ob : *m_static_objects)
+  {
+      if (!(s_ob->m_class == "Obstacle"))
+          continue;
+      Obstacle* ob = dynamic_cast<Obstacle*>(s_ob);
+      if (m_state->getPlayer()->intersect(*ob))
+      {
+          float horizCorrection =m_state->getPlayer()->intersectSideways(*ob); 
+  
+          if (((horizCorrection < 0 && horizCorrection > -20) || (horizCorrection > 0 && horizCorrection < 20)) && m_state->getPlayer()->velocityY > 0
+              && (*ob).m_name != "Main Platform")
+          {
+              m_state->getPlayer()->m_pos_x += horizCorrection;
+              m_state->getPlayer()->sword_right->m_pos_x += horizCorrection;
+              m_state->getPlayer()->sword_left->m_pos_x += horizCorrection;
+              m_state->getPlayer()->initialVelocityX = 0;
+          }
+      }
+      for (auto it = m_dynamic_objects->begin(); it != m_dynamic_objects->end();
+          ++it)
+      {
+          if (!((*it)->isActive()))
+              continue;
+          if (!((*it)->m_class == "Enemy"))
+              continue;
+          Enemy* g_ob = dynamic_cast<Enemy*>(*it);
+          if (g_ob->intersect(*ob))
+          {
+              float horizCorrection = g_ob->intersectSideways(*ob);
+              if (((horizCorrection < 0 && horizCorrection > -20) || (horizCorrection > 0 && horizCorrection < 20)) && g_ob->velocityY > 0
+                  && (*ob).m_name != "Main Platform")
+              {
+                  g_ob->m_pos_x += horizCorrection;
+                  g_ob->sword_right->m_pos_x += horizCorrection;
+                  g_ob->sword_left->m_pos_x += horizCorrection;
+              }
+          }
+      }
+  }
+  
+  for (GameObject* s_ob : *m_static_objects)
+  {
+      if (!(s_ob->m_class == "Obstacle"))
+          continue;
+      Obstacle* ob = dynamic_cast<Obstacle*>(s_ob);
+      if (m_state->getPlayer()->intersect(*ob))
+      {
+          float vertCorrection = m_state->getPlayer()->intersectAbove(*ob);
+          if (vertCorrection != 0)
+          {
+              m_state->getPlayer()->m_pos_y += vertCorrection;
+              m_state->getPlayer()->sword_right->m_pos_y += vertCorrection;
+              m_state->getPlayer()->sword_left->m_pos_y += vertCorrection;
+              m_state->getPlayer()->velocityY = 0;
+              m_state->getPlayer()->jumping = false;
+          }
+      }
+      for (auto it = m_dynamic_objects->begin(); it != m_dynamic_objects->end();
+          ++it)
+      {
+          if (!((*it)->isActive()))
+              continue;
+          if (!((*it)->m_class == "Enemy"))
+              continue;
+          Enemy* g_ob = dynamic_cast<Enemy*>(*it);
+          if (g_ob->intersect(*ob))
+          {
+              float vertCorrection = g_ob->intersectAbove(*ob);
+              if (vertCorrection != 0)
+              {
+                  g_ob->m_pos_y += vertCorrection;
+                  g_ob->sword_right->m_pos_y += vertCorrection;
+                  g_ob->sword_left->m_pos_y += vertCorrection;
+                  g_ob->velocityY = 0;
+                  g_ob->jumping = false;
+              }
+          }
+      }
+  }
     /*
     for (auto& block : m_static_objects)
     {
