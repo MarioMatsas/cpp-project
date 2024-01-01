@@ -38,7 +38,7 @@ bool GameState::init()
 		// TODO: these can be automated by loading from a file!
 
 		m_static_objects->push_back(
-			new Obstacle(WINDOW_WIDTH / 2, 300, 700, 35, 0.5f, 0.0f, 0.5f, 0.0f, "floor.png", "obstacle1"));
+			new Obstacle(WINDOW_WIDTH / 2, 300, 700, 35, 0.5f, 0.0f, 0.5f, 0.0f, "floor.png", "Main Platform"));
 		m_static_objects->push_back(
 			new Obstacle(WINDOW_WIDTH / 2 + 20, 300, 35, 200, 0.5f, 0.0f, 0.5f, 0.0f, "floor.png", "obstacle2"));
 		m_static_objects->push_back(
