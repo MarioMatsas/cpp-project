@@ -5,10 +5,10 @@
 #include "util.h"
 
 Level::Level(std::vector<GameObject *> *m_static_objects,
-             std::list<GameObject *> *m_dynamic_objects, const std::string &name) : GameObject(name), m_static_objects(m_static_objects), m_dynamic_objects(m_dynamic_objects)
+             std::list<GameObject *> *m_dynamic_objects, const std::string &bg, const std::string &name) : GameObject(name), m_static_objects(m_static_objects), m_dynamic_objects(m_dynamic_objects)
 {
     m_brush_background.outline_opacity = 0.0f;
-    m_brush_background.texture = std::string(ASSET_PATH) + "background_lvl.png";
+    m_brush_background.texture = std::string(ASSET_PATH) + bg;
 
     m_brush_health.fill_opacity = 1.0f;
     m_brush_health.outline_opacity = 0.0f;

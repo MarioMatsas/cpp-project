@@ -57,7 +57,7 @@ bool GameState::init()
 		m_player = new Player(WINDOW_WIDTH / 2, WINDOW_HEIGHT / 2, 25, 50, "Player");
 		m_player->init();
 
-		m_curr_lvl_ptr = new Level(m_static_objects, m_dynamic_objects, "1.lvl");
+		m_curr_lvl_ptr = new Level(m_static_objects, m_dynamic_objects, "background_lvl.png", "1.lvl");
 		m_curr_lvl_ptr->init();
 
 		// graphics::preloadBitmaps(getAssetDir());

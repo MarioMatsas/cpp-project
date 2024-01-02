@@ -27,6 +27,6 @@ public:
 	void init() override;
 
 	Level(std::vector<GameObject *> *m_static_objects,
-		  std::list<GameObject *> *m_dynamic_objects, const std::string &name = "Level0");
+		  std::list<GameObject *> *m_dynamic_objects, const std::string &bg, const std::string &name = "Level0");
 	~Level() override;
 };
