@@ -1,12 +1,11 @@
 #pragma once
-#pragma once
 // "Game.h"
 #include "GameObject.h"
 #include <string>
 //#include "Arrow.h"
 #include "Config.h"
 #include "box.h"
-#include "graphics.h"
+#include "sgg/graphics.h"
 #include "vector"
 #include "list"
 #include "Obstacle.h"
@@ -36,10 +35,10 @@ public:
 	//std::vector<Obstacle*>& obstaclesList;
 	double velocityY = 0; // Vertical velocity
 	const double gravity = 0.1; // Gravity strength
-	int quiver = 24; // amount of arrows available to shoot, 0 <= quiver <= 24
-					 // should only be reset when restarting a level, not between levels
-					 // we are not going to limit the enemies likewise, to make it harder
-					 // (gta also does this I'm pretty sure)
+	int quiver = 50; // amount of arrows available to shoot, 0 <= quiver <= 24
+	// should only be reset when restarting a level, not between levels
+	// we are not going to limit the enemies likewise, to make it harder
+	// (gta also does this I'm pretty sure)
 	std::list<Arrow*> arrows;
 	std::vector<Box*> sword_hits;
 	bool jumping = false;
