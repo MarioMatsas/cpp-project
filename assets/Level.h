@@ -24,7 +24,7 @@ class Level : public GameObject
 	bool coin_condition_active = false;
 	bool enemy_condition_active = false;
 	bool door_condition_active = true;
-
+	bool advance = false;
 	// detect collisions
 	void checkCollisions();
 	bool check_end_condition();

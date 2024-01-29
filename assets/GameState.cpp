@@ -36,7 +36,7 @@ bool GameState::init()
 		std::list<GameObject *> *m_dynamic_objects = new std::list<GameObject *>();
 
 		// TODO: these can be automated by loading from a file!
-
+		// Statics
 		m_static_objects->push_back(
 			new Obstacle(WINDOW_WIDTH / 2, WINDOW_HEIGHT - 35 / 2, WINDOW_WIDTH, 35, 0.5f, 0.0f, 0.5f, 0.0f, "floor.png", "Main Platform"));
 		m_static_objects->push_back(
@@ -53,28 +53,83 @@ bool GameState::init()
 			new Obstacle(WINDOW_WIDTH / 2 + 300, WINDOW_HEIGHT - 120, 200, 35, 0.5f, 0.0f, 0.5f, 0.0f, "floor.png", "obstacle7"));
 		m_static_objects->push_back(
 			new Obstacle(WINDOW_WIDTH / 2 - 300, WINDOW_HEIGHT - 120, 200, 35, 0.5f, 0.0f, 0.5f, 0.0f, "floor.png", "obstacle8"));
+		m_static_objects->push_back(
+			new Obstacle(WINDOW_WIDTH - 60, WINDOW_HEIGHT - 35 / 2 - 50, 30, 100, 0.5f, 0.0f, 0.5f, 0.0f, "", "Door"));
+
+		// Dynamics
 		m_dynamic_objects->push_back(
-			new Obstacle(WINDOW_WIDTH / 2, WINDOW_HEIGHT / 2 - 35, 20, 20, 0.5f, 0.0f, 0.5f, 0.0f, "floor.png", "Coin"));
-		m_dynamic_objects->push_back(new Enemy(WINDOW_WIDTH / 2 + 200, WINDOW_HEIGHT / 4 + 30 - 35 / 2,
-											   25, 50, "Enemy",
-											   &Enemy::dumbMovement, true));
+			new Obstacle(WINDOW_WIDTH / 2, WINDOW_HEIGHT / 2 - 35, 20, 20, 0.5f, 0.0f, 0.5f, 0.0f, "", "Coin"));
+		m_dynamic_objects->push_back(new Enemy(WINDOW_WIDTH / 2 + 200, WINDOW_HEIGHT / 4 + 30-35/2,
+			25, 50, "Enemy",
+			&Enemy::dumbMovement, false));
 		m_dynamic_objects->push_back(new Enemy(WINDOW_WIDTH / 2 - 200, WINDOW_HEIGHT / 4 + 30 - 35 / 2,
-											   25, 50, "Enemy",
-											   &Enemy::dumbMovement, true));
+			25, 50, "Enemy",
+			&Enemy::dumbMovement, false));
 		m_dynamic_objects->push_back(new Enemy(WINDOW_WIDTH / 2 + 300, WINDOW_HEIGHT - 150,
-											   25, 50, "Enemy",
-											   &Enemy::dumbMovement, false));
-		m_dynamic_objects->push_back(new Enemy(WINDOW_WIDTH / 2 - 300, WINDOW_HEIGHT - 150,
-											   25, 50, "Enemy",
-											   &Enemy::dumbMovement, false));
+			25, 50, "Enemy",
+			&Enemy::dumbMovement, false));
+		m_dynamic_objects->push_back(new Enemy(WINDOW_WIDTH / 2 - 300, WINDOW_HEIGHT -150 ,
+			25, 50, "Enemy",
+			&Enemy::dumbMovement, false));
 		m_player = new Player(WINDOW_WIDTH / 2, WINDOW_HEIGHT / 2, 25, 50, "Player");
 		m_player->init();
 
-		m_curr_lvl_ptr = new Level(m_static_objects, m_dynamic_objects, "background_lvl.png", {true, false}, "1.lvl");
+		m_curr_lvl_ptr = new Level(m_static_objects, m_dynamic_objects, "background_lvl.png", {false, false}, "1.lvl");
 		m_curr_lvl_ptr->init();
 
 		// graphics::preloadBitmaps(getAssetDir());
 		// graphics::setFont(m_asset_path + "OpenSans-Regular.ttf");
+	}
+	if (m_curr_lvl == 2) {
+		// Delete he previous level before starting anew
+		//delete m_curr_lvl_ptr;
+
+
+		std::vector<GameObject*>* m_static_objects = new std::vector<GameObject*>();
+		std::list<GameObject*>* m_dynamic_objects = new std::list<GameObject*>();
+
+		// TODO: these can be automated by loading from a file!
+		// Statics
+		m_static_objects->push_back(
+			new Obstacle(WINDOW_WIDTH / 2, WINDOW_HEIGHT - 35 / 2, WINDOW_WIDTH, 35, 0.5f, 0.0f, 0.5f, 0.0f, "floor.png", "Main Platform"));
+		//m_static_objects->push_back(
+		//	new Obstacle(WINDOW_WIDTH / 2 + 200, WINDOW_HEIGHT / 4 + 30, 200, 35, 0.5f, 0.0f, 0.5f, 0.0f, "floor.png", "obstacle2"));
+		m_static_objects->push_back(
+			new Obstacle(WINDOW_WIDTH / 2 - 200, WINDOW_HEIGHT / 4 + 30, 200, 35, 0.5f, 0.0f, 0.5f, 0.0f, "floor.png", "obstacle3"));
+		m_static_objects->push_back(
+			new Obstacle(WINDOW_WIDTH / 2, WINDOW_HEIGHT / 2, 200, 35, 0.5f, 0.0f, 0.5f, 0.0f, "floor.png", "obstacle4"));
+		m_static_objects->push_back(
+			new Obstacle(WINDOW_WIDTH / 2 + 200, WINDOW_HEIGHT / 2 + 50, 75, 35, 0.5f, 0.0f, 0.5f, 0.0f, "floor.png", "obstacle5"));
+		m_static_objects->push_back(
+			new Obstacle(WINDOW_WIDTH / 2 - 200, WINDOW_HEIGHT / 2 + 50, 75, 35, 0.5f, 0.0f, 0.5f, 0.0f, "floor.png", "obstacle6"));
+		m_static_objects->push_back(
+			new Obstacle(WINDOW_WIDTH / 2 + 300, WINDOW_HEIGHT - 120, 200, 35, 0.5f, 0.0f, 0.5f, 0.0f, "floor.png", "obstacle7"));
+		m_static_objects->push_back(
+			new Obstacle(WINDOW_WIDTH / 2 - 300, WINDOW_HEIGHT - 120, 200, 35, 0.5f, 0.0f, 0.5f, 0.0f, "floor.png", "obstacle8"));
+		m_static_objects->push_back(
+			new Obstacle(WINDOW_WIDTH - 60, WINDOW_HEIGHT - 35 / 2 - 50, 30, 100, 0.5f, 0.0f, 0.5f, 0.0f, "", "Door"));
+
+		// Dynamics
+		m_dynamic_objects->push_back(
+			new Obstacle(WINDOW_WIDTH / 2, WINDOW_HEIGHT / 2 - 35, 20, 20, 0.5f, 0.0f, 0.5f, 0.0f, "", "Coin"));
+		m_dynamic_objects->push_back(new Enemy(WINDOW_WIDTH / 2 + 300, WINDOW_HEIGHT - 150,
+			25, 50, "Enemy",
+			&Enemy::dumbMovement, false));
+		m_dynamic_objects->push_back(new Enemy(WINDOW_WIDTH / 2 - 300, WINDOW_HEIGHT - 150,
+			25, 50, "Enemy",
+			&Enemy::dumbMovement, false));
+		m_player = new Player(WINDOW_WIDTH / 2, WINDOW_HEIGHT / 2, 25, 50, "Player");
+		m_player->init();
+
+		m_curr_lvl_ptr = new Level(m_static_objects, m_dynamic_objects, "background_lvl.png", { false, false }, "1.lvl");
+		m_curr_lvl_ptr->init();
+
+		// graphics::preloadBitmaps(getAssetDir());
+		// graphics::setFont(m_asset_path + "OpenSans-Regular.ttf");
+	}
+	if (m_curr_lvl == 3) {
+		// Print a gameover screen, and send user back to main menu
+		graphics::stopMessageLoop();
 	}
 	// Start level 2
 	// Start level 3

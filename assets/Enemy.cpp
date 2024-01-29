@@ -580,7 +580,6 @@ std::pair<graphics::scancode_t, graphics::scancode_t> Enemy::dumbMovement(void)
 
 bool Enemy::should_I_shoot()
 {
-	return false;
 	if (dt_sum < 600)
 		return false;
 	if (fabs(this->m_pos_x - PLAYER->m_pos_x) < 4 * m_width)
@@ -590,7 +589,6 @@ bool Enemy::should_I_shoot()
 
 bool Enemy::should_I_thrust()
 {
-	return false;
 	if (dt_sum < 600)
 		return false;
 	if (fabs(this->m_pos_y - PLAYER->m_pos_y) >= m_height)

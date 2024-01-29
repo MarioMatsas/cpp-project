@@ -101,7 +101,6 @@ void Level::draw()
 
 void Level::update(float dt)
 {
-    bool y = check_end_condition();
 
     if (PLAYER->health <= 0)
     {
@@ -128,6 +127,12 @@ void Level::update(float dt)
 
     checkCollisions();
 
+    if (advance == true) {
+        m_state->m_curr_lvl += 1;
+        m_state->m_curr_lvl_ptr = nullptr;
+        delete this;
+        return;
+    }
     // TODO: add a check here for reaching some milestone to switch levels.
     // in that case, I think just incrementing m_curr_lvl will be enough!
 
@@ -149,8 +154,9 @@ void Level::checkCollisions()
         if (!((*it)->m_class == "Enemy"))
             continue;
         Enemy* g_ob = dynamic_cast<Enemy*>(*it);
-
+        // Problem !!!! ///////////////////////////////
         auto s_it = g_ob->sword_hits.begin();
+
         while (s_it != g_ob->sword_hits.end())
         {
                 if ((*s_it)->intersect(*PLAYER))
@@ -158,7 +164,7 @@ void Level::checkCollisions()
                     delete* s_it;
                     PLAYER->health--;
                 }
-                else {
+                else {    // PROBLEM !!!!!
                     ++s_it;
                 }
         }
@@ -181,6 +187,17 @@ void Level::checkCollisions()
             }
         }
     }
+    /*
+        for (const auto& ob : g_ob->sword_hits) {
+            if ((ob)->intersect(*PLAYER)) {
+                PLAYER->health--;
+            }
+        }
+        for (const auto& ob : g_ob->sword_hits) {
+            delete ob;
+        }
+        std::cout << "size: " << g_ob->sword_hits.size() << std::endl;
+        */
 
     for (auto it = m_dynamic_objects->begin(); it != m_dynamic_objects->end();
         ++it)
@@ -253,7 +270,7 @@ void Level::checkCollisions()
         m_state->getPlayer()->initialVelocityX = 0;
     }
 
-    // Player/ Enemy obstacle collisions
+    // Player / Enemy obstacle collisions
     for (GameObject* s_ob : *m_static_objects)
     {
         if (!(s_ob->m_class == "Obstacle"))
@@ -261,6 +278,14 @@ void Level::checkCollisions()
         Obstacle* ob = dynamic_cast<Obstacle*>(s_ob);
         if (m_state->getPlayer()->intersect(*ob))
         {
+            // Check if the conditions have been met
+            bool cond = check_end_condition();
+            if (cond && ob->m_name == "Door") {
+                std::cout << "Hooray you advance!";
+                advance = true;
+                return;
+            }
+
             float belowCorrection = m_state->getPlayer()->intersectDown(*ob);
             if (belowCorrection != 0 && m_state->getPlayer()->jumping == true &&
                 m_state->getPlayer()->velocityY <= 0)
@@ -370,7 +395,7 @@ void Level::checkCollisions()
         Obstacle* ob = dynamic_cast<Obstacle*>(s_ob);
         if (m_state->getPlayer()->intersect(*ob))
         {
-            float vertCorrection = m_state->getPlayer()->intersectAbove(*ob);
+            float vertCorrection = m_state->getPlayer()->intersectAbove(*ob);         
             if (vertCorrection != 0)
             {
                 m_state->getPlayer()->m_pos_y += vertCorrection;
@@ -446,7 +471,6 @@ bool Level::check_end_condition() {
             if (!((*it)->isActive()))
                 continue;
             if (((*it)->m_class == "Obstacle"))
-                std::cout << "Not collected" << std::endl;
                 return false;
         }
     }
@@ -462,21 +486,5 @@ bool Level::check_end_condition() {
                 return false;
         }
     }
-
-    // Check if we are at the door
-    if (door_condition_active) {
-        for (GameObject* s_ob : *m_static_objects)
-        {
-            if (!(s_ob->m_class == "Door"))
-                continue;
-            Obstacle* ob = dynamic_cast<Obstacle*>(s_ob);
-            if (m_state->getPlayer()->intersect(*ob))
-            {
-                return true;
-            }
-        }
-
-        // If we are not at the door then the game wont adavance 
-        return false;
-    }
+    return true;
 }
