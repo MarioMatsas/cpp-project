@@ -18,7 +18,7 @@ GameState::~GameState()
 		delete m_curr_lvl_ptr;
 }
 
-GameState* GameState::getInstance()
+GameState *GameState::getInstance()
 {
 	if (!m_unique_instance)
 	{
@@ -32,41 +32,41 @@ bool GameState::init()
 	// Start level 1
 	if (m_curr_lvl == 1)
 	{
-		std::vector<GameObject*>* m_static_objects = new std::vector<GameObject*>();
-		std::list<GameObject*>* m_dynamic_objects = new std::list<GameObject*>();
+		std::vector<GameObject *> *m_static_objects = new std::vector<GameObject *>();
+		std::list<GameObject *> *m_dynamic_objects = new std::list<GameObject *>();
 
 		// TODO: these can be automated by loading from a file!
 
 		m_static_objects->push_back(
-			new Obstacle(WINDOW_WIDTH / 2, WINDOW_HEIGHT-35/2, WINDOW_WIDTH, 35, 0.5f, 0.0f, 0.5f, 0.0f, "floor.png", "Main Platform"));
+			new Obstacle(WINDOW_WIDTH / 2, WINDOW_HEIGHT - 35 / 2, WINDOW_WIDTH, 35, 0.5f, 0.0f, 0.5f, 0.0f, "floor.png", "Main Platform"));
 		m_static_objects->push_back(
-			new Obstacle(WINDOW_WIDTH / 2 + 200, WINDOW_HEIGHT/4 + 30, 200, 35, 0.5f, 0.0f, 0.5f, 0.0f, "floor.png", "obstacle2"));
+			new Obstacle(WINDOW_WIDTH / 2 + 200, WINDOW_HEIGHT / 4 + 30, 200, 35, 0.5f, 0.0f, 0.5f, 0.0f, "floor.png", "obstacle2"));
 		m_static_objects->push_back(
-			new Obstacle(WINDOW_WIDTH / 2 - 200, WINDOW_HEIGHT/4 + 30, 200, 35, 0.5f, 0.0f, 0.5f, 0.0f, "floor.png", "obstacle3"));
+			new Obstacle(WINDOW_WIDTH / 2 - 200, WINDOW_HEIGHT / 4 + 30, 200, 35, 0.5f, 0.0f, 0.5f, 0.0f, "floor.png", "obstacle3"));
 		m_static_objects->push_back(
 			new Obstacle(WINDOW_WIDTH / 2, WINDOW_HEIGHT / 2, 200, 35, 0.5f, 0.0f, 0.5f, 0.0f, "floor.png", "obstacle4"));
 		m_static_objects->push_back(
 			new Obstacle(WINDOW_WIDTH / 2 + 200, WINDOW_HEIGHT / 2 + 50, 75, 35, 0.5f, 0.0f, 0.5f, 0.0f, "floor.png", "obstacle5"));
 		m_static_objects->push_back(
-			new Obstacle(WINDOW_WIDTH / 2 - 200, WINDOW_HEIGHT / 2 + 50 , 75, 35, 0.5f, 0.0f, 0.5f, 0.0f, "floor.png", "obstacle6"));
+			new Obstacle(WINDOW_WIDTH / 2 - 200, WINDOW_HEIGHT / 2 + 50, 75, 35, 0.5f, 0.0f, 0.5f, 0.0f, "floor.png", "obstacle6"));
 		m_static_objects->push_back(
 			new Obstacle(WINDOW_WIDTH / 2 + 300, WINDOW_HEIGHT - 120, 200, 35, 0.5f, 0.0f, 0.5f, 0.0f, "floor.png", "obstacle7"));
 		m_static_objects->push_back(
 			new Obstacle(WINDOW_WIDTH / 2 - 300, WINDOW_HEIGHT - 120, 200, 35, 0.5f, 0.0f, 0.5f, 0.0f, "floor.png", "obstacle8"));
 		m_dynamic_objects->push_back(
 			new Obstacle(WINDOW_WIDTH / 2, WINDOW_HEIGHT / 2 - 35, 20, 20, 0.5f, 0.0f, 0.5f, 0.0f, "floor.png", "Coin"));
-		m_dynamic_objects->push_back(new Enemy(WINDOW_WIDTH / 2 + 200, WINDOW_HEIGHT / 4 + 30-35/2,
-			25, 50, "Enemy",
-			&Enemy::dumbMovement, true));
+		m_dynamic_objects->push_back(new Enemy(WINDOW_WIDTH / 2 + 200, WINDOW_HEIGHT / 4 + 30 - 35 / 2,
+											   25, 50, "Enemy",
+											   &Enemy::dumbMovement, true));
 		m_dynamic_objects->push_back(new Enemy(WINDOW_WIDTH / 2 - 200, WINDOW_HEIGHT / 4 + 30 - 35 / 2,
-			25, 50, "Enemy",
-			&Enemy::dumbMovement, true));
+											   25, 50, "Enemy",
+											   &Enemy::dumbMovement, true));
 		m_dynamic_objects->push_back(new Enemy(WINDOW_WIDTH / 2 + 300, WINDOW_HEIGHT - 150,
-			25, 50, "Enemy",
-			&Enemy::dumbMovement, false));
-		m_dynamic_objects->push_back(new Enemy(WINDOW_WIDTH / 2 - 300, WINDOW_HEIGHT -150 ,
-			25, 50, "Enemy",
-			&Enemy::dumbMovement, false));
+											   25, 50, "Enemy",
+											   &Enemy::dumbMovement, false));
+		m_dynamic_objects->push_back(new Enemy(WINDOW_WIDTH / 2 - 300, WINDOW_HEIGHT - 150,
+											   25, 50, "Enemy",
+											   &Enemy::dumbMovement, false));
 		m_player = new Player(WINDOW_WIDTH / 2, WINDOW_HEIGHT / 2, 25, 50, "Player");
 		m_player->init();
 
@@ -100,7 +100,8 @@ void GameState::draw()
 		break;
 
 	default:
-		if (!m_curr_lvl_ptr) {
+		if (!m_curr_lvl_ptr)
+		{
 			init();
 			return;
 		}
@@ -143,7 +144,8 @@ void GameState::update(float dt)
 		}
 		break;
 	default:
-		if (!m_curr_lvl_ptr) {
+		if (!m_curr_lvl_ptr)
+		{
 			init();
 			return;
 		}
@@ -155,7 +157,7 @@ void GameState::update(float dt)
 	}
 }
 
-std::string GameState::getFullAssetPath(const std::string& asset)
+std::string GameState::getFullAssetPath(const std::string &asset)
 {
 	return m_asset_path + asset;
 }
@@ -165,4 +167,4 @@ std::string GameState::getAssetDir()
 	return m_asset_path;
 }
 
-GameState* GameState::m_unique_instance = nullptr;
+GameState *GameState::m_unique_instance = nullptr;

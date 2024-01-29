@@ -26,14 +26,18 @@ private:
 
 public:
 	bool m_debugging = false;
+	int real_canvas_width = WINDOW_WIDTH;
+	int real_canvas_height = WINDOW_HEIGHT;
+	int real_window_width = WINDOW_WIDTH;
+	int real_window_height = WINDOW_HEIGHT;
 
-public:
 	~GameState();
 	static GameState* getInstance();
 
 	bool init();
 	void draw();
 	void update(float dt);
+	void resize(int new_w, int new_h);
 
 	std::string getFullAssetPath(const std::string& asset);
 	std::string getAssetDir();

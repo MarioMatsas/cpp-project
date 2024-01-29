@@ -76,20 +76,21 @@ void Player::update(float dt)
 	graphics::getMouseState(mouse);
 	if (mouse.button_left_pressed)
 	{
-		if (gun_selected && (quiver > 0))
+		if (gun_selected && (quiver > 0) && ((GameState::getInstance()->real_window_width / GameState::getInstance()->real_window_height) > (WINDOW_WIDTH / WINDOW_HEIGHT) ? (mouse.cur_pos_x > ((GameState::getInstance()->real_window_width - GameState::getInstance()->real_canvas_width) / 2)) && (mouse.cur_pos_x < GameState::getInstance()->real_window_width + ((GameState::getInstance()->real_window_width - GameState::getInstance()->real_canvas_width) / 2)) : (mouse.cur_pos_y > ((GameState::getInstance()->real_window_height - GameState::getInstance()->real_canvas_height) / 2)) && (mouse.cur_pos_y < GameState::getInstance()->real_window_height + ((GameState::getInstance()->real_window_height - GameState::getInstance()->real_canvas_height) / 2))))
 		{
-			// std::cout << "shoot" << std::endl;
 			Arrow *b;
-			if (mouse.cur_pos_x - m_pos_x >= 0)
+			if (((mouse.cur_pos_x - ((REAL_WW - REAL_CW) / 2)) * WINDOW_WIDTH)/REAL_CW - m_pos_x >= 0)
 			{
-				b = new Arrow(m_pos_x, m_pos_y, m_width, m_height, atan((-(mouse.cur_pos_y - m_pos_y)) / (mouse.cur_pos_x - m_pos_x)), "arrow"); // WHY DOES SGG COUNT Y BACKWARDS???
+				b = new Arrow(m_pos_x, m_pos_y, m_width, m_height, atan((-(((mouse.cur_pos_y - ((REAL_WH - REAL_CH) / 2)) * WINDOW_HEIGHT)/REAL_CH - m_pos_y)) / (((mouse.cur_pos_x - ((REAL_WW - REAL_CW) / 2)) * WINDOW_WIDTH)/REAL_CW - m_pos_x)), "arrow"); // WHY DOES SGG COUNT Y BACKWARDS???
+				std::cout << "1 " << atan((-(((mouse.cur_pos_y - ((REAL_WH - REAL_CH) / 2)) * WINDOW_HEIGHT)/REAL_CH - m_pos_y)) / (((mouse.cur_pos_x - ((REAL_WW - REAL_CW) / 2)) * WINDOW_WIDTH)/REAL_CW - m_pos_x)) << std::endl;
 			}
 			else
 			{
-				b = new Arrow(m_pos_x, m_pos_y, m_width, m_height, M_PI + atan((-(mouse.cur_pos_y - m_pos_y)) / (mouse.cur_pos_x - m_pos_x)), "arrow");
+				b = new Arrow(m_pos_x, m_pos_y, m_width, m_height, M_PI + atan((-(((mouse.cur_pos_y - ((REAL_WH - REAL_CH) / 2)) * WINDOW_HEIGHT)/REAL_CH - m_pos_y)) / (((mouse.cur_pos_x - ((REAL_WW - REAL_CW) / 2)) * WINDOW_WIDTH)/REAL_CW - m_pos_x)), "arrow");
+				std::cout << "2 " << M_PI + atan((-(((mouse.cur_pos_y - ((REAL_WH - REAL_CH) / 2)) * WINDOW_HEIGHT)/REAL_CH - m_pos_y)) / (((mouse.cur_pos_x - ((REAL_WW - REAL_CW) / 2)) * WINDOW_WIDTH)/REAL_CW - m_pos_x)) << std::endl;
 			}
-			b->setMouse_x(mouse.cur_pos_x);
-			b->setMouse_y(mouse.cur_pos_y);
+			b->setMouse_x(((mouse.cur_pos_x - ((REAL_WW - REAL_CW) / 2)) * WINDOW_WIDTH)/REAL_CW);
+			b->setMouse_y(((mouse.cur_pos_y - ((REAL_WH - REAL_CH) / 2)) * WINDOW_HEIGHT)/REAL_CH);
 			arrows.push_back(b);
 			quiver--;
 		}
@@ -284,12 +285,19 @@ void Player::debugDraw()
 	graphics::setFont(std::string(ASSET_PATH) + "JetBrainsMono-Thin.ttf");
 	char x[10];
 	char y[10];
+	char x_mouse[10];
+	char y_mouse[10];
 	sprintf(x, "%5.2f", m_pos_x);
 	sprintf(y, "%5.2f", m_pos_y);
+	graphics::getMouseState(mouse);
+	sprintf(x_mouse, "%d", ((mouse.cur_pos_x - ((REAL_WW - REAL_CW) / 2)) * WINDOW_WIDTH)/REAL_CW);
+	sprintf(y_mouse, "%d", ((mouse.cur_pos_y - ((REAL_WH - REAL_CH) / 2)) * WINDOW_HEIGHT)/REAL_CH);
 	SETCOLOR(debug_brush.fill_color, 1, 0, 0);
 	debug_brush.fill_opacity = 1.0f;
 	graphics::drawText(m_pos_x - m_width / 2, m_pos_y + m_height / 2, 16, x, debug_brush);
 	graphics::drawText(m_pos_x - m_width / 2, m_pos_y + m_height / 2 - 16, 16, y, debug_brush);
+	graphics::drawText((((mouse.cur_pos_x - ((GameState::getInstance()->real_window_width - GameState::getInstance()->real_canvas_width) / 2)) * WINDOW_WIDTH) / GameState::getInstance()->real_canvas_width), ((((mouse.cur_pos_y - ((GameState::getInstance()->real_window_height - GameState::getInstance()->real_canvas_height) / 2)) * WINDOW_HEIGHT) / GameState::getInstance()->real_canvas_height)), 16, x_mouse, debug_brush);
+	graphics::drawText((((mouse.cur_pos_x - ((GameState::getInstance()->real_window_width - GameState::getInstance()->real_canvas_width) / 2)) * WINDOW_WIDTH) / GameState::getInstance()->real_canvas_width) + 32, ((((mouse.cur_pos_y - ((GameState::getInstance()->real_window_height - GameState::getInstance()->real_canvas_height) / 2)) * WINDOW_HEIGHT) / GameState::getInstance()->real_canvas_height)), 16, y_mouse, debug_brush);
 }
 
 void Player::draw()

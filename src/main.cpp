@@ -11,6 +11,11 @@ void update(float dt)
     GameState::getInstance()->update(dt);
 }
 
+void resize(int new_w, int new_h)
+{
+    GameState::getInstance()->resize(new_w, new_h);
+}
+
 
 int main(int argc, char** argv)
 {
@@ -20,6 +25,7 @@ int main(int argc, char** argv)
 
     graphics::setDrawFunction(draw);
     graphics::setUpdateFunction(update);
+    graphics::setResizeFunction(resize);
 
     graphics::setCanvasSize(GameState::getInstance()->getCanvasWidth(), GameState::getInstance()->getCanvasHeight());
     graphics::setCanvasScaleMode(graphics::CANVAS_SCALE_FIT);

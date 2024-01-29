@@ -142,6 +142,21 @@ void GameState::update(float dt)
 	}
 }
 
+void GameState::resize(int new_w, int new_h) {
+	if ((new_w / new_h) > (WINDOW_WIDTH / WINDOW_HEIGHT)) {
+		// letterbox horizontally
+		real_canvas_height = new_h;
+		real_canvas_width = ( (new_h * WINDOW_WIDTH) / WINDOW_HEIGHT);
+	} else {
+		// letterbox vertically
+		real_canvas_width = new_w;
+		real_canvas_height = ( (new_w * WINDOW_HEIGHT) / WINDOW_WIDTH);
+	}
+
+	real_window_height = new_h;
+	real_window_width = new_w;
+}
+
 std::string GameState::getFullAssetPath(const std::string &asset)
 {
 	return m_asset_path + asset;
