@@ -1,7 +1,22 @@
 #define _USE_MATH_DEFINES
 #include <cmath>
 #include "Enemy.h"
+#if defined(WIN32) || defined(_WIN32) || defined(__WIN32__) || defined(__NT__)
+#ifdef _WIN64
 #include "sgg/graphics.h"
+#define SPRINTF sprintf
+#endif
+#elif __APPLE__
+#include <TargetConditionals.h>
+#if TARGET_OS_MAC
+#include "graphics.h"
+#define SPRINTF sprintf
+#endif
+#elif __linux__
+#include "graphics.h"
+#else
+#error "Unknown compiler"
+#endif
 #include <iostream>
 #include "Player.h"
 #include "util.h"
@@ -300,8 +315,8 @@ void Enemy::debugDraw()
 	graphics::setFont(std::string(ASSET_PATH) + "JetBrainsMono-Thin.ttf");
 	char x[10];
 	char y[10];
-	sprintf_s(x, "%5.2f", m_pos_x);
-	sprintf_s(y, "%5.2f", m_pos_y);
+	SPRINTF(x, "%5.2f", m_pos_x);
+	SPRINTF(y, "%5.2f", m_pos_y);
 	SETCOLOR(m_brush_debug.fill_color, 1, 0, 0);
 	m_brush_debug.fill_opacity = 1.0f;
 	graphics::drawText(m_pos_x - m_width / 2, m_pos_y + m_height / 2, 16, x, m_brush_debug);

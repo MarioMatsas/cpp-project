@@ -1,5 +1,20 @@
 #include "Obstacle.h"
+#if defined(WIN32) || defined(_WIN32) || defined(__WIN32__) || defined(__NT__)
+#ifdef _WIN64
 #include "sgg/graphics.h"
+#define SPRINTF sprintf
+#endif
+#elif __APPLE__
+#include <TargetConditionals.h>
+#if TARGET_OS_MAC
+#include "graphics.h"
+#define SPRINTF sprintf
+#endif
+#elif __linux__
+#include "graphics.h"
+#else
+#error "Unknown compiler"
+#endif
 #include "util.h"
 
 Obstacle::Obstacle(float x, float y, float w, float h, float r, float g, float b, float a, std::string texture, std::string name) : Box(x, y, w, h), GameObject(name, "Obstacle"), texture(texture)
@@ -29,8 +44,8 @@ void Obstacle::draw()
 		graphics::setFont(std::string(ASSET_PATH) + "JetBrainsMono-Thin.ttf");
 		char x[10];
 		char y[10];
-		sprintf_s(x, "%5.2f", m_pos_x);
-		sprintf_s(y, "%5.2f", m_pos_y);
+		SPRINTF(x, "%5.2f", m_pos_x);
+		SPRINTF(y, "%5.2f", m_pos_y);
 		SETCOLOR(m_brush_debug.fill_color, 1, 0, 0);
 		m_brush_debug.fill_opacity = 1.0f;
 		graphics::drawText(m_pos_x - m_width / 2,
