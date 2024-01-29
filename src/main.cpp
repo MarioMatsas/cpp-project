@@ -1,4 +1,4 @@
-#include "graphics.h"
+#include "sgg/graphics.h"
 #include "GameState.h"
 
 void draw()

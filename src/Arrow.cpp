@@ -1,7 +1,8 @@
+#define _USE_MATH_DEFINES
+#include <cmath>
 #include "Arrow.h"
 #include "Level.h"
 #include <iostream>
-#include <cmath>
 
 void Arrow::update(float dt)
 {
@@ -30,8 +31,8 @@ void Arrow::draw()
 	graphics::Brush br;
 	br.outline_opacity = 0.0f;
 	br.texture = std::string(ASSET_PATH) + "Arrow1.png";
-	graphics::setOrientation(theta*(180/M_PI));
-	graphics::drawRect(m_pos_x, m_pos_y, 121.0f/3, 26.0f/3, br);
+	graphics::setOrientation(theta * (180 / M_PI));
+	graphics::drawRect(m_pos_x, m_pos_y, 121.0f / 3, 26.0f / 3, br);
 	graphics::resetPose();
 }
 
@@ -128,14 +129,13 @@ bool Arrow::collision_detected(std::vector<GameObject*>& m_blocks)
 {
 	// Check for any collion with Obstacles
 	for (GameObject* s_ob : m_blocks) {
-		if (!(s_ob->m_class == "Obstacle")){
-					continue;
+		if (!(s_ob->m_class == "Obstacle")) {
+			continue;
 		}
-        Obstacle *ob= dynamic_cast<Obstacle *>(s_ob);
+		Obstacle* ob = dynamic_cast<Obstacle*>(s_ob);
 		if (intersect(*ob)) {
 			return true;
 		}
 	}
 	return false;
 }
-

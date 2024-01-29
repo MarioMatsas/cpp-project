@@ -1,9 +1,12 @@
+#define _USE_MATH_DEFINES
+#include <cmath>
 #include "Enemy.h"
-#include "graphics.h"
+#include "sgg/graphics.h"
 #include <iostream>
 #include "Player.h"
 #include "util.h"
 #include <cstdlib>
+
 /*
 Enemy::Enemy()
 {
@@ -12,7 +15,7 @@ Enemy::Enemy()
 */
 // MOUSE POSITION WHEN WINDOW SIZE CHANGES NEEDS TO BE FIXED!!!!!!!!!!!
 
-Enemy::Enemy(float x, float y, float w, float h, std::string name, DecFn func) : Box(x, y, w, h), GameObject(name, "Enemy"), movement(func)
+Enemy::Enemy(float x, float y, float w, float h, std::string name, DecFn func, bool restrict_movement) : Box(x, y, w, h), GameObject(name, "Enemy"), movement(func), restrict_movement(restrict_movement)
 {
 	sword_right = new Sword(m_pos_x + 30, m_pos_y, 25.0f, 7.0f, "right sword");
 	sword_left = new Sword(m_pos_x - 30, m_pos_y, 25.0f, 7.0f, "left sword");
@@ -87,7 +90,7 @@ void Enemy::update(float dt)
 		if (Enemy::should_I_shoot())
 		{
 			// std::cout << "shoot" << std::endl;
-			Arrow *b = new Arrow(m_pos_x, m_pos_y, m_width, m_height, atan((-(m_state->getPlayer()->m_pos_y - m_pos_y)) / (m_state->getPlayer()->m_pos_x - m_pos_x)), "arrow");
+			Arrow* b = new Arrow(m_pos_x, m_pos_y, m_width, m_height, atan((-(m_state->getPlayer()->m_pos_y - m_pos_y)) / (m_state->getPlayer()->m_pos_x - m_pos_x)), "arrow");
 
 			if (m_state->getPlayer()->m_pos_x - m_pos_x >= 0)
 			{
@@ -137,7 +140,7 @@ void Enemy::update(float dt)
 	}
 	*/
 
-	for (Arrow *arrow : arrows)
+	for (Arrow* arrow : arrows)
 	{
 		if (arrow->get_shot() == false)
 		{
@@ -162,19 +165,39 @@ void Enemy::update(float dt)
 		looking_right = true;
 		move = 1.0f;
 	}
-	m_vx = std::min<float>(m_max_velocity, m_vx + graphics::getDeltaTime() * move * m_accel_horizontal);
-	m_vx = std::max<float>(-m_max_velocity, m_vx);
+	if (restrict_movement == false) {
+		m_vx = std::min<float>(m_max_velocity, m_vx + graphics::getDeltaTime() * move * m_accel_horizontal);
+		m_vx = std::max<float>(-m_max_velocity, m_vx);
 
-	// friction
-	m_vx -= 0.2f * m_vx / (0.1f + fabs(m_vx));
+		// friction
+		m_vx -= 0.2f * m_vx / (0.1f + fabs(m_vx));
 
-	// apply static friction threshold
-	if (fabs(m_vx) < 0.01f)
-		m_vx = 0.0f;
+		// apply static friction threshold
+		if (fabs(m_vx) < 0.01f)
+			m_vx = 0.0f;
 
-	m_pos_x += m_vx * graphics::getDeltaTime() / 20.0f;
-	sword_right->m_pos_x += m_vx * graphics::getDeltaTime() / 20.0f;
-	sword_left->m_pos_x += m_vx * graphics::getDeltaTime() / 20.0f;
+		m_pos_x += m_vx * graphics::getDeltaTime() / 20.0f;
+		sword_right->m_pos_x += m_vx * graphics::getDeltaTime() / 20.0f;
+		sword_left->m_pos_x += m_vx * graphics::getDeltaTime() / 20.0f;
+
+		if (((this->*movement)().second == graphics::SCANCODE_W) && jumping == false && falling == false && !attacking)
+		{
+			velocityY = -4.0;
+			jumping = true;
+			// posy_dummy = posy;
+		}
+
+		// Apply gravity until terminal velocity is reached
+		if (velocityY < 3.5)
+			velocityY += gravity;
+		m_pos_y += velocityY * graphics::getDeltaTime() / 10.0f;
+		sword_right->m_pos_y += velocityY * graphics::getDeltaTime() / 10.0f;
+		sword_left->m_pos_y += velocityY * graphics::getDeltaTime() / 10.0f;
+
+		if (dt_sum > 600)
+			dt_sum = 0;
+	}
+	
 	/*
 	m_pos_x -= speed * graphics::getDeltaTime() / 20.0f;
 	if (looking_right) sword->m_pos_x += -2 * 30;
@@ -189,23 +212,7 @@ void Enemy::update(float dt)
 	looking_right = true;
 	sword->m_pos_x += speed * graphics::getDeltaTime() / 20.0f;
 	*/
-
-	if (((this->*movement)().second == graphics::SCANCODE_W) && jumping == false && falling == false && !attacking)
-	{
-		velocityY = -3.5;
-		jumping = true;
-		// posy_dummy = posy;
-	}
-
-	// Apply gravity until terminal velocity is reached
-	if (velocityY < 3.5)
-		velocityY += gravity;
-	m_pos_y += velocityY * graphics::getDeltaTime() / 10.0f;
-	sword_right->m_pos_y += velocityY * graphics::getDeltaTime() / 10.0f;
-	sword_left->m_pos_y += velocityY * graphics::getDeltaTime() / 10.0f;
-
-	if (dt_sum > 600)
-		dt_sum = 0;
+	
 
 	/*
 	if (jumping) {
@@ -293,8 +300,8 @@ void Enemy::debugDraw()
 	graphics::setFont(std::string(ASSET_PATH) + "JetBrainsMono-Thin.ttf");
 	char x[10];
 	char y[10];
-	sprintf(x, "%5.2f", m_pos_x);
-	sprintf(y, "%5.2f", m_pos_y);
+	sprintf_s(x, "%5.2f", m_pos_x);
+	sprintf_s(y, "%5.2f", m_pos_y);
 	SETCOLOR(m_brush_debug.fill_color, 1, 0, 0);
 	m_brush_debug.fill_opacity = 1.0f;
 	graphics::drawText(m_pos_x - m_width / 2, m_pos_y + m_height / 2, 16, x, m_brush_debug);
@@ -507,7 +514,7 @@ void Enemy::draw()
 	sword_left->draw();
 
 	// Draw arrows
-	for (Arrow *arrow : arrows)
+	for (Arrow* arrow : arrows)
 	{
 		arrow->draw();
 	}

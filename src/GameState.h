@@ -1,7 +1,7 @@
 #pragma once
 #include "Config.h"
 #include <string>
-#include "graphics.h"
+#include "sgg/graphics.h"
 
 class GameState
 {
@@ -15,10 +15,10 @@ private:
 
 	class Level* m_curr_lvl_ptr = 0;
 	class Player* m_player = 0;
-
+	int score = 0;
 	int m_curr_lvl = -1; // -1: start screen
-						 //  0: tutorial screen
-						 //  1-4: levels
+	//  0: tutorial screen
+	//  1-4: levels
 
 	graphics::MouseState mouse;
 

@@ -15,5 +15,7 @@
 #error "Unknown compiler"
 #endif
 
-#define WINDOW_WIDTH 1024 // for reference, NES Super Mario was 256 Ã— 240
+#define WINDOW_WIDTH 1024 // for reference, NES Super Mario was 256 × 240
 #define WINDOW_HEIGHT 512
+#define COIN_POINTS 200
+#define ENEMY_POINTS 500
