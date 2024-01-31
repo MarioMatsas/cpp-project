@@ -1,18 +1,5 @@
 #include "Level.h"
-#if defined(WIN32) || defined(_WIN32) || defined(__WIN32__) || defined(__NT__)
-#ifdef _WIN64
-#include "sgg/graphics.h"
-#endif
-#elif __APPLE__
-#include <TargetConditionals.h>
-#if TARGET_OS_MAC
-#include "graphics.h"
-#endif
-#elif __linux__
-#include "graphics.h"
-#else
-#error "Unknown compiler"
-#endif
+#include <sgg/graphics.h>
 #include "Enemy.h"
 #include "Player.h"
 #include "util.h"
@@ -117,6 +104,7 @@ void Level::update(float dt)
 
     if (PLAYER->health <= 0)
     {
+       
         if (graphics::getKeyState(graphics::SCANCODE_Y) && !graphics::getKeyState(graphics::SCANCODE_N))
         {
             m_state->m_curr_lvl_ptr = nullptr;
@@ -157,6 +145,21 @@ void Level::update(float dt)
 
 void Level::checkCollisions()
 {
+    // Out of bounds for Player arrows
+    // Player 
+    auto ht = PLAYER->arrows.begin();
+    while (ht != PLAYER->arrows.end())
+    {
+        if ((*ht)->m_pos_x > WINDOW_WIDTH || (*ht)->m_pos_x < 0 || (*ht)->m_pos_y> WINDOW_HEIGHT || (*ht)->m_pos_y < 0) {
+            delete* ht;
+            ht = PLAYER->arrows.erase(ht);
+        }
+        else
+        {
+            ++ht;
+        }
+    }
+
     // Arrow collisions / Out of bounds check
 
     for (auto it = m_dynamic_objects->begin(); it != m_dynamic_objects->end();
@@ -175,6 +178,7 @@ void Level::checkCollisions()
                 {
                     delete* s_it;
                     PLAYER->health--;
+                    graphics::playSound(std::string(ASSET_PATH) + std::string("player_damage_sound.wav"), 0.5f, false);
                 }
                 else { 
                     ++s_it;
@@ -191,6 +195,11 @@ void Level::checkCollisions()
                 // Remove the arrow from the list
                 delete* jt;
                 PLAYER->health--;
+                graphics::playSound(std::string(ASSET_PATH) + std::string("player_damage_sound.wav"), 0.5f, false);
+                jt = g_ob->arrows.erase(jt);
+            }
+            else if((*jt)->m_pos_x > WINDOW_WIDTH || (*jt)->m_pos_x < 0 || (*jt)->m_pos_y> WINDOW_HEIGHT || (*jt)->m_pos_y < 0){
+                delete* jt;
                 jt = g_ob->arrows.erase(jt);
             }
             else
@@ -239,6 +248,7 @@ void Level::checkCollisions()
             {
                 delete* s_it;
                 g_ob->health--;
+                graphics::playSound(std::string(ASSET_PATH) + std::string("enemy_damage_sound.wav"), 0.5f, false);
 
                 if (g_ob->health == 0) // TODO: I have a feeling this should go in update?
                 {
@@ -261,6 +271,7 @@ void Level::checkCollisions()
             {
                 delete* jt;
                 g_ob->health--;
+                graphics::playSound(std::string(ASSET_PATH) + std::string("enemy_damage_sound.wav"), 0.5f, false);
                 jt = m_state->getPlayer()->arrows.erase(jt);
 
                 if (g_ob->health == 0)

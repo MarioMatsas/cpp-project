@@ -1,17 +1,4 @@
-#if defined(WIN32) || defined(_WIN32) || defined(__WIN32__) || defined(__NT__)
-#ifdef _WIN64
 #include "sgg/graphics.h"
-#endif
-#elif __APPLE__
-#include <TargetConditionals.h>
-#if TARGET_OS_MAC
-#include "graphics.h"
-#endif
-#elif __linux__
-#include "graphics.h"
-#else
-#error "Unknown compiler"
-#endif
 #include "GameState.h"
 
 void draw()
@@ -42,7 +29,7 @@ int main(int argc, char** argv)
 
     graphics::setCanvasSize(GameState::getInstance()->getCanvasWidth(), GameState::getInstance()->getCanvasHeight());
     graphics::setCanvasScaleMode(graphics::CANVAS_SCALE_FIT);
-
+    graphics::playMusic(std::string(ASSET_PATH) + std::string("medieval_theme.wav"), 0.6f, true, 500);
     graphics::startMessageLoop();
     return 0;
 }

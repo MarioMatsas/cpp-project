@@ -1,22 +1,7 @@
 #define _USE_MATH_DEFINES
 #include <cmath>
 #include "Enemy.h"
-#if defined(WIN32) || defined(_WIN32) || defined(__WIN32__) || defined(__NT__)
-#ifdef _WIN64
 #include "sgg/graphics.h"
-#define SPRINTF sprintf
-#endif
-#elif __APPLE__
-#include <TargetConditionals.h>
-#if TARGET_OS_MAC
-#include "graphics.h"
-#define SPRINTF sprintf
-#endif
-#elif __linux__
-#include "graphics.h"
-#else
-#error "Unknown compiler"
-#endif
 #include <iostream>
 #include "Player.h"
 #include "util.h"
@@ -84,6 +69,8 @@ Enemy::~Enemy()
 
 void Enemy::update(float dt)
 {
+	std::cout << "arrows " + std::to_string(arrows.size()) << std::endl;
+	std::cout << "swords " + std::to_string(sword_hits.size()) << std::endl;
 	dt_sum += dt;
 	/*
 	for (Arrow* arrow : arrows) {
@@ -315,8 +302,8 @@ void Enemy::debugDraw()
 	graphics::setFont(std::string(ASSET_PATH) + "JetBrainsMono-Thin.ttf");
 	char x[10];
 	char y[10];
-	SPRINTF(x, "%5.2f", m_pos_x);
-	SPRINTF(y, "%5.2f", m_pos_y);
+	sprintf_s(x, "%5.2f", m_pos_x);
+	sprintf_s(y, "%5.2f", m_pos_y);
 	SETCOLOR(m_brush_debug.fill_color, 1, 0, 0);
 	m_brush_debug.fill_opacity = 1.0f;
 	graphics::drawText(m_pos_x - m_width / 2, m_pos_y + m_height / 2, 16, x, m_brush_debug);
@@ -595,6 +582,7 @@ std::pair<graphics::scancode_t, graphics::scancode_t> Enemy::dumbMovement(void)
 
 bool Enemy::should_I_shoot()
 {
+	//return false;
 	if (dt_sum < 600)
 		return false;
 	if (fabs(this->m_pos_x - PLAYER->m_pos_x) < 4 * m_width)
@@ -604,6 +592,7 @@ bool Enemy::should_I_shoot()
 
 bool Enemy::should_I_thrust()
 {
+	//return false;
 	if (dt_sum < 600)
 		return false;
 	if (fabs(this->m_pos_y - PLAYER->m_pos_y) >= m_height)

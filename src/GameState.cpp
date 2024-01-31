@@ -6,6 +6,7 @@
 #include "Obstacle.h"
 #include "Enemy.h"
 #include <chrono>
+#include "util.h"
 using namespace std::chrono_literals;
 
 GameState::GameState()
@@ -32,6 +33,7 @@ bool GameState::init()
     // Start level 1
     if (m_curr_lvl == 1)
     {
+        graphics::playMusic(std::string(ASSET_PATH) + std::string("castle_music.wav"), 0.05f, true, 1000);
         std::vector<GameObject*>* m_static_objects = new std::vector<GameObject*>();
         std::list<GameObject*>* m_dynamic_objects = new std::list<GameObject*>();
 
@@ -81,6 +83,7 @@ bool GameState::init()
         // graphics::setFont(m_asset_path + "OpenSans-Regular.ttf");
     }
     if (m_curr_lvl == 2) {
+        graphics::playMusic(std::string(ASSET_PATH) + std::string("castle_music.wav"), 0.05f, true, 1000);
         // Delete he previous level before starting anew
         //delete m_curr_lvl_ptr;
 
@@ -145,17 +148,21 @@ void GameState::draw()
     switch (m_curr_lvl)
     {
     case -1:
+        //graphics::playMusic(std::string(ASSET_PATH) + std::string("medieval_theme.wav"), 0.6f, true);
         br.texture = std::string(ASSET_PATH) + "main_menu_screen.png";
         graphics::drawRect(WINDOW_WIDTH / 2, WINDOW_HEIGHT / 2, WINDOW_WIDTH, WINDOW_HEIGHT, br);
+        //graphics::playMusic(std::string(ASSET_PATH) + std::string("medieval_theme.wav"), 0.6f, true);
         break;
 
     case 0:
         br.texture = std::string(ASSET_PATH) + "controls_screen.png";
+        //br.fill_opacity = 0.3f;
         graphics::drawRect(WINDOW_WIDTH / 2, WINDOW_HEIGHT / 2, WINDOW_WIDTH, WINDOW_HEIGHT, br);
         break;
 
     default:
         if (!m_curr_lvl_ptr) {
+            std::this_thread::sleep_for(std::chrono::duration<float, std::milli>(1000));
             init();
             return;
         }
@@ -177,7 +184,6 @@ void GameState::update(float dt)
     {
         std::this_thread::sleep_for(std::chrono::duration<float, std::milli>(sleep_time));
     }
-
     switch (m_curr_lvl)
     {
     case -1:
@@ -185,6 +191,7 @@ void GameState::update(float dt)
         if (mouse.button_left_pressed)
         {
             // Move onto the controls screen
+            //graphics::playMusic("medieval_theme.mp3", 1.0f);
             m_curr_lvl = 0;
             break;
         }
@@ -199,6 +206,7 @@ void GameState::update(float dt)
         break;
     default:
         if (!m_curr_lvl_ptr) {
+            std::this_thread::sleep_for(std::chrono::duration<float, std::milli>(1000));
             init();
             return;
         }
