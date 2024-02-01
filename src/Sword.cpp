@@ -1,6 +1,18 @@
 #include "Sword.h"
+#if defined(WIN32) || defined(_WIN32) || defined(__WIN32__) || defined(__NT__)
+#ifdef _WIN64
 #include "sgg/graphics.h"
-#include "util.h"
+#endif
+#elif __APPLE__
+#include <TargetConditionals.h>
+#if TARGET_OS_MAC
+#include "graphics.h"
+#endif
+#elif __linux__
+#include "graphics.h"
+#else
+#error "Unknown compiler"
+#endif #include "util.h" #include "util.h"
 #include <iostream>
 
 void Sword::update(float dt)
