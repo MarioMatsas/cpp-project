@@ -42,8 +42,8 @@ void Obstacle::draw()
 		graphics::setFont(std::string(ASSET_PATH) + "JetBrainsMono-Thin.ttf");
 		char x[10];
 		char y[10];
-		sprintf_s(x, "%5.2f", m_pos_x);
-		sprintf_s(y, "%5.2f", m_pos_y);
+		SPRINTF(x, "%5.2f", m_pos_x);
+		SPRINTF(y, "%5.2f", m_pos_y);
 		SETCOLOR(m_brush_debug.fill_color, 1, 0, 0);
 		m_brush_debug.fill_opacity = 1.0f;
 		graphics::drawText(m_pos_x - m_width / 2,
