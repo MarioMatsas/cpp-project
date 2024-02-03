@@ -48,7 +48,7 @@ Arrow::~Arrow()
 {
 }
 
-void Arrow::shoot()
+void Arrow::shoot(float dt)
 {
 	float direction_x = abs(mouse_x - m_pos_x);
 	float direction_y = abs(mouse_y - m_pos_y);
@@ -60,8 +60,8 @@ void Arrow::shoot()
 	direction_y = direction_y / length;
 
 	// Calculate the initial velocity components
-	initialVelocityX = direction_x * speed * (graphics::getDeltaTime() / 30.0f);
-	initialVelocityY = direction_y * speed * (graphics::getDeltaTime() / 30.0f);
+	initialVelocityX = direction_x * speed * dt / 30.0f;//(graphics::getDeltaTime() / 30.0f);
+	initialVelocityY = direction_y * speed * dt / 30.0f; // (graphics::getDeltaTime() / 30.0f);
 
 	//std::cout << initialVelocityX << std::endl;
 	//std::cout << initialVelocityY << std::endl;

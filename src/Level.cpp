@@ -18,7 +18,7 @@
 #include "util.h"
 
 Level::Level(std::vector<GameObject*>* m_static_objects,
-    std::list<GameObject*>* m_dynamic_objects, const std::string& bg, std::pair<bool, bool> conds, const std::string& name) : GameObject(name), m_static_objects(m_static_objects), m_dynamic_objects(m_dynamic_objects),coin_condition_active(conds.first), enemy_condition_active(conds.second)
+    std::list<GameObject*>* m_dynamic_objects, const std::string& bg, std::pair<bool, bool> conds, const std::string& name) : GameObject(name), m_static_objects(m_static_objects), m_dynamic_objects(m_dynamic_objects), coin_condition_active(conds.first), enemy_condition_active(conds.second)
 {
     m_brush_background.outline_opacity = 0.0f;
     m_brush_background.texture = std::string(ASSET_PATH) + bg;
@@ -106,7 +106,7 @@ void Level::draw()
         m_brush_quiver_text);
 
     // Draw the score
-    graphics::drawText(WINDOW_WIDTH/2 - 100, WINDOW_HEIGHT*0.1f, 151.0f / 3, "SCORE    "+std::to_string(m_state->score),
+    graphics::drawText(WINDOW_WIDTH / 2 - 100, WINDOW_HEIGHT * 0.1f, 151.0f / 3, "SCORE    " + std::to_string(m_state->score),
         m_brush_score_text);
 
     // draw player
@@ -122,7 +122,7 @@ void Level::update(float dt)
     }
     if (PLAYER->health <= 0)
     {
-       
+
         if (graphics::getKeyState(graphics::SCANCODE_Y) && !graphics::getKeyState(graphics::SCANCODE_N))
         {
             m_state->m_curr_lvl_ptr = nullptr;
@@ -192,19 +192,19 @@ void Level::checkCollisions()
 
         while (s_it != g_ob->sword_hits.end())
         {
-                if ((*s_it)->intersect(*PLAYER))
-                {
-                    delete* s_it;
-                    PLAYER->health--;
-                    graphics::playSound(std::string(ASSET_PATH) + std::string("player_damage_sound.wav"), 0.5f, false);
-                }
-                else { 
-                    ++s_it;
-                }
+            if ((*s_it)->intersect(*PLAYER))
+            {
+                delete* s_it;
+                PLAYER->health--;
+                graphics::playSound(std::string(ASSET_PATH) + std::string("player_damage_sound.wav"), 0.5f, false);
+            }
+            else {
+                ++s_it;
+            }
         }
 
         g_ob->sword_hits.clear();
-        
+
         auto jt = g_ob->arrows.begin();
         while (jt != g_ob->arrows.end())
         {
@@ -216,7 +216,7 @@ void Level::checkCollisions()
                 graphics::playSound(std::string(ASSET_PATH) + std::string("player_damage_sound.wav"), 0.5f, false);
                 jt = g_ob->arrows.erase(jt);
             }
-            else if((*jt)->m_pos_x > WINDOW_WIDTH || (*jt)->m_pos_x < 0 || (*jt)->m_pos_y> WINDOW_HEIGHT || (*jt)->m_pos_y < 0){
+            else if ((*jt)->m_pos_x > WINDOW_WIDTH || (*jt)->m_pos_x < 0 || (*jt)->m_pos_y> WINDOW_HEIGHT || (*jt)->m_pos_y < 0) {
                 delete* jt;
                 jt = g_ob->arrows.erase(jt);
             }
@@ -224,7 +224,7 @@ void Level::checkCollisions()
             {
                 ++jt;
             }
-        }       
+        }
     }
     /*
         for (const auto& ob : g_ob->sword_hits) {
@@ -244,7 +244,7 @@ void Level::checkCollisions()
             continue;
         if ((*it)->m_class == "Obstacle") {
             Obstacle* g_ob = dynamic_cast<Obstacle*>(*it);
-             
+
             // Simply delete the coin that the player collected
             if (m_state->getPlayer()->intersect(*g_ob)) {
                 // Increase the score
@@ -254,7 +254,7 @@ void Level::checkCollisions()
                 if (it == m_dynamic_objects->end()) break; // Avoid the extra iteration
             }
         }
-        
+
         if (!((*it)->m_class == "Enemy"))
             continue;
         Enemy* g_ob = dynamic_cast<Enemy*>(*it);
@@ -445,7 +445,7 @@ void Level::checkCollisions()
         Obstacle* ob = dynamic_cast<Obstacle*>(s_ob);
         if (m_state->getPlayer()->intersect(*ob))
         {
-            float vertCorrection = m_state->getPlayer()->intersectAbove(*ob);         
+            float vertCorrection = m_state->getPlayer()->intersectAbove(*ob);
             if (vertCorrection != 0)
             {
                 m_state->getPlayer()->m_pos_y += vertCorrection;

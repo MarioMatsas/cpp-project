@@ -32,7 +32,7 @@ void resize(int new_w, int new_h)
 
 int main(int argc, char** argv)
 {
-    graphics::createWindow(GameState::getInstance()->getCanvasWidth(), GameState::getInstance()->getCanvasHeight(), "Shadow_Wizard_Adventure");
+    graphics::createWindow(GameState::getInstance()->getCanvasWidth(), GameState::getInstance()->getCanvasHeight(), "Medieval Adventure: A Wizard's Chronicles");
 
     GameState::getInstance()->init();
 

@@ -42,7 +42,7 @@ public:
 	void init() override;
 	Arrow(float x, float y, float w, float h, float theta, std::string name);
 	~Arrow();
-	void shoot();
+	void shoot(float dt);
 	void setMouse_x(float pos_x);
 	void setMouse_y(float pos_y);
 	float get_x();

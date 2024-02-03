@@ -152,7 +152,7 @@ void Player::update(float dt)
 	{
 		if (arrow->get_shot() == false)
 		{
-			arrow->shoot();
+			arrow->shoot(dt);
 		}
 
 		arrow->update(dt);
