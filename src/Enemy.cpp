@@ -82,8 +82,7 @@ Enemy::~Enemy()
 
 void Enemy::update(float dt)
 {
-	std::cout << "arrows " + std::to_string(arrows.size()) << std::endl;
-	std::cout << "swords " + std::to_string(sword_hits.size()) << std::endl;
+	
 	dt_sum += dt;
 	/*
 	for (Arrow* arrow : arrows) {

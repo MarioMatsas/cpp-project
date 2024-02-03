@@ -321,6 +321,24 @@ void Level::checkCollisions()
         m_state->getPlayer()->m_pos_x = WINDOW_WIDTH;
         m_state->getPlayer()->initialVelocityX = 0;
     }
+    // Out of bounds for Enemies
+    for (auto it = m_dynamic_objects->begin(); it != m_dynamic_objects->end();
+        ++it)
+    {
+        if (!((*it)->isActive()))
+            continue;
+        if (!((*it)->m_class == "Enemy"))
+            continue;
+        Enemy* g_ob = dynamic_cast<Enemy*>(*it);
+        if (g_ob->m_pos_x < 0) {
+            g_ob->m_pos_x = 0;
+            g_ob->initialVelocityX = 0;
+        }
+        else if (g_ob->m_pos_x > WINDOW_WIDTH) {
+            g_ob->m_pos_x = WINDOW_WIDTH;
+            g_ob->initialVelocityX = 0;
+        }
+    }
     // Player / Enemy obstacle collisions
     for (GameObject* s_ob : *m_static_objects)
     {
