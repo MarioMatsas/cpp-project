@@ -15,18 +15,20 @@
 #else
 #error "Unknown compiler"
 #endif
+
+
 class GameState
 {
 private:
-	static GameState *m_unique_instance;
+	static GameState* m_unique_instance;
 
 	const std::string m_asset_path = "assets\\";
 
 	const float m_canvas_width = WINDOW_WIDTH;
 	const float m_canvas_height = WINDOW_HEIGHT;
 
-	class Level *m_curr_lvl_ptr = 0;
-	class Player *m_player = 0;
+	class Level* m_curr_lvl_ptr = 0;
+	class Player* m_player = 0;
 	int score = 0;
 	int m_curr_lvl = -1; // -1: start screen
 	//  0: tutorial screen
@@ -44,20 +46,20 @@ public:
 	int real_window_height = WINDOW_HEIGHT;
 
 	~GameState();
-	static GameState *getInstance();
+	static GameState* getInstance();
 
 	bool init();
 	void draw();
 	void update(float dt);
 	void resize(int new_w, int new_h);
 
-	std::string getFullAssetPath(const std::string &asset);
+	std::string getFullAssetPath(const std::string& asset);
 	std::string getAssetDir();
 
 	float getCanvasWidth() { return m_canvas_width; }
 	float getCanvasHeight() { return m_canvas_height; }
 
-	class Player *getPlayer() { return m_player; }
+	class Player* getPlayer() { return m_player; }
 
 	friend class Level;
 };

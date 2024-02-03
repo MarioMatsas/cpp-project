@@ -33,7 +33,7 @@ bool GameState::init()
     // Start level 1
     if (m_curr_lvl == 1)
     {
-        graphics::playMusic(std::string(ASSET_PATH) + std::string("castle_music.wav"), 0.05f, true, 1000);
+        
         std::vector<GameObject*>* m_static_objects = new std::vector<GameObject*>();
         std::list<GameObject*>* m_dynamic_objects = new std::list<GameObject*>();
 
@@ -73,7 +73,7 @@ bool GameState::init()
         m_dynamic_objects->push_back(new Enemy(WINDOW_WIDTH / 2 - 300, WINDOW_HEIGHT - 150,
             25, 50, "Enemy",
             &Enemy::dumbMovement, false));
-        m_player = new Player(WINDOW_WIDTH / 2, WINDOW_HEIGHT / 2, 25, 50, "Player");
+        m_player = new Player(60, WINDOW_HEIGHT - 35 / 2 - 60, 25, 50, "Player");
         m_player->init();
 
         m_curr_lvl_ptr = new Level(m_static_objects, m_dynamic_objects, "background_lvl.png", { true, false }, "1.lvl");
@@ -83,7 +83,7 @@ bool GameState::init()
         // graphics::setFont(m_asset_path + "OpenSans-Regular.ttf");
     }
     if (m_curr_lvl == 2) {
-        graphics::playMusic(std::string(ASSET_PATH) + std::string("castle_music.wav"), 0.05f, true, 1000);
+        //graphics::playMusic(std::string(ASSET_PATH) + std::string("castle_music.wav"), 0.05f, true, 1000);
         // Delete he previous level before starting anew
         //delete m_curr_lvl_ptr;
 
@@ -148,22 +148,19 @@ void GameState::draw()
     switch (m_curr_lvl)
     {
     case -1:
-        //graphics::playMusic(std::string(ASSET_PATH) + std::string("medieval_theme.wav"), 0.6f, true);
-        br.texture = std::string(ASSET_PATH) + "main_menu_screen.png";
+        br.texture = std::string(ASSET_PATH) + "main_menu.png";
         graphics::drawRect(WINDOW_WIDTH / 2, WINDOW_HEIGHT / 2, WINDOW_WIDTH, WINDOW_HEIGHT, br);
-        //graphics::playMusic(std::string(ASSET_PATH) + std::string("medieval_theme.wav"), 0.6f, true);
         break;
 
     case 0:
         br.texture = std::string(ASSET_PATH) + "controls_screen.png";
-        //br.fill_opacity = 0.3f;
         graphics::drawRect(WINDOW_WIDTH / 2, WINDOW_HEIGHT / 2, WINDOW_WIDTH, WINDOW_HEIGHT, br);
         break;
 
     default:
         if (!m_curr_lvl_ptr) {
-            std::this_thread::sleep_for(std::chrono::duration<float, std::milli>(1000));
-            init();
+            br.texture = std::string(ASSET_PATH) + "loading_screen.png";
+            graphics::drawRect(WINDOW_WIDTH / 2, WINDOW_HEIGHT / 2, WINDOW_WIDTH, WINDOW_HEIGHT, br);
             return;
         }
 
@@ -201,12 +198,13 @@ void GameState::update(float dt)
         {
             // Move onto the first level
             m_curr_lvl = 1;
-            init();
+            graphics::stopMusic(500);
+            //init();
         }
         break;
     default:
         if (!m_curr_lvl_ptr) {
-            std::this_thread::sleep_for(std::chrono::duration<float, std::milli>(1000));
+            std::this_thread::sleep_for(std::chrono::duration<float, std::milli>(1500));
             init();
             return;
         }

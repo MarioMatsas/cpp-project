@@ -2,13 +2,11 @@
 #if defined(WIN32) || defined(_WIN32) || defined(__WIN32__) || defined(__NT__)
 #ifdef _WIN64
 #include "sgg/graphics.h"
-#define SPRINTF sprintf
 #endif
 #elif __APPLE__
 #include <TargetConditionals.h>
 #if TARGET_OS_MAC
 #include "graphics.h"
-#define SPRINTF sprintf
 #endif
 #elif __linux__
 #include "graphics.h"
@@ -39,18 +37,18 @@ void Obstacle::draw()
 		SETCOLOR(m_brush_debug.fill_color, 0.1f, 1.0f, 0.1f);
 		SETCOLOR(m_brush_debug.outline_color, 0.3f, 1.0f, 0.2f);
 		graphics::drawRect(m_pos_x, m_pos_y,
-						   m_width, m_height,
-						   m_brush_debug);
+			m_width, m_height,
+			m_brush_debug);
 		graphics::setFont(std::string(ASSET_PATH) + "JetBrainsMono-Thin.ttf");
 		char x[10];
 		char y[10];
-		SPRINTF(x, "%5.2f", m_pos_x);
-		SPRINTF(y, "%5.2f", m_pos_y);
+		sprintf_s(x, "%5.2f", m_pos_x);
+		sprintf_s(y, "%5.2f", m_pos_y);
 		SETCOLOR(m_brush_debug.fill_color, 1, 0, 0);
 		m_brush_debug.fill_opacity = 1.0f;
 		graphics::drawText(m_pos_x - m_width / 2,
-						   m_pos_y + m_height / 2,
-						   16, x, m_brush_debug);
+			m_pos_y + m_height / 2,
+			16, x, m_brush_debug);
 		graphics::drawText(
 			m_pos_x - m_width / 2,
 			m_pos_y + m_height / 2 - 18, 16, y,

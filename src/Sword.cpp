@@ -12,7 +12,8 @@
 #include "graphics.h"
 #else
 #error "Unknown compiler"
-#endif #include "util.h" #include "util.h"
+#endif
+#include "util.h"
 #include <iostream>
 
 void Sword::update(float dt)

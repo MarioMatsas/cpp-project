@@ -29,7 +29,8 @@ void resize(int new_w, int new_h)
     GameState::getInstance()->resize(new_w, new_h);
 }
 
-int main(int argc, char **argv)
+
+int main(int argc, char** argv)
 {
     graphics::createWindow(GameState::getInstance()->getCanvasWidth(), GameState::getInstance()->getCanvasHeight(), "Shadow_Wizard_Adventure");
 

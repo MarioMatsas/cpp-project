@@ -1,5 +1,4 @@
 #pragma once
-
 #include "GameObject.h"
 #include "Obstacle.h"
 #include <vector>
@@ -18,7 +17,8 @@
 #include "graphics.h"
 #else
 #error "Unknown compiler"
-#endif #include "Player.h"
+#endif
+#include "Player.h"
 
 class Level : public GameObject
 {
@@ -29,14 +29,16 @@ class Level : public GameObject
 	graphics::Brush m_brush_score_text;
 	int player_score = 0;
 
-	std::vector<GameObject *> *m_static_objects;
-	std::list<GameObject *> *m_dynamic_objects;
+	std::vector<GameObject*>* m_static_objects;
+	std::list<GameObject*>* m_dynamic_objects;
 
 	// Possible conditions to advance to the next level
 	bool coin_condition_active = false;
 	bool enemy_condition_active = false;
 	bool door_condition_active = true;
+
 	bool advance = false;
+	bool first_time = true;
 	// detect collisions
 	void checkCollisions();
 	bool check_end_condition();
@@ -46,7 +48,7 @@ public:
 	void draw() override;
 	void init() override;
 
-	Level(std::vector<GameObject *> *m_static_objects,
-		  std::list<GameObject *> *m_dynamic_objects, const std::string &bg, std::pair<bool, bool> conds, const std::string &name = "Level0");
+	Level(std::vector<GameObject*>* m_static_objects,
+		std::list<GameObject*>* m_dynamic_objects, const std::string& bg, std::pair<bool, bool> conds, const std::string& name = "Level0");
 	~Level() override;
 };
