@@ -70,6 +70,7 @@ void Level::draw()
         br.texture = std::string(ASSET_PATH) + "GameOver.png";
         graphics::drawRect(WINDOW_WIDTH / 2, WINDOW_HEIGHT / 2, WINDOW_WIDTH, WINDOW_HEIGHT, br);
         graphics::playSound(std::string(ASSET_PATH) + std::string("player_damage_sound.wav"), 0.0f, false); // hack
+        graphics::stopMusic();
         return;
     }
     graphics::drawRect(WINDOW_WIDTH / 2, WINDOW_HEIGHT / 2, WINDOW_WIDTH,
