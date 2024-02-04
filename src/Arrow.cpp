@@ -8,20 +8,20 @@ void Arrow::update(float dt)
 {
 	// Depending on the positionof the players mouse, we change the position of the arrow to simulate it's firing
 	if (up_right) {
-		m_pos_y -= initialVelocityY;
-		m_pos_x += initialVelocityX;
+		m_pos_y -= initialVelocityY*dt/10;
+		m_pos_x += initialVelocityX*dt/10;
 	}
 	else if (up_left) {
-		m_pos_y -= initialVelocityY;
-		m_pos_x -= initialVelocityX;
+		m_pos_y -= initialVelocityY*dt/10;
+		m_pos_x -= initialVelocityX*dt/10;
 	}
 	else if (down_left) {
-		m_pos_y += initialVelocityY;
-		m_pos_x -= initialVelocityX;
+		m_pos_y += initialVelocityY*dt/10;
+		m_pos_x -= initialVelocityX*dt/10;
 	}
 	else if (down_right) {
-		m_pos_y += initialVelocityY;
-		m_pos_x += initialVelocityX;
+		m_pos_y += initialVelocityY*dt/10;
+		m_pos_x += initialVelocityX*dt/10;
 	}
 }
 

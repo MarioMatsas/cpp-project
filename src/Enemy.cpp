@@ -78,11 +78,11 @@ Enemy::~Enemy()
 
 	for (auto arrow : arrows)
 		delete arrow;
+	// sword hits
 }
 
 void Enemy::update(float dt)
 {
-	
 	dt_sum += dt;
 	/*
 	for (Arrow* arrow : arrows) {
@@ -180,7 +180,7 @@ void Enemy::update(float dt)
 		move = 1.0f;
 	}
 	if (restrict_movement == false) {
-		m_vx = std::min<float>(m_max_velocity, m_vx + graphics::getDeltaTime() * move * m_accel_horizontal);
+		m_vx = std::min<float>(m_max_velocity, m_vx + dt * move * m_accel_horizontal); //graphics::getDeltaTime()
 		m_vx = std::max<float>(-m_max_velocity, m_vx);
 
 		// friction
@@ -190,9 +190,9 @@ void Enemy::update(float dt)
 		if (fabs(m_vx) < 0.01f)
 			m_vx = 0.0f;
 
-		m_pos_x += m_vx * graphics::getDeltaTime() / 20.0f;
-		sword_right->m_pos_x += m_vx * graphics::getDeltaTime() / 20.0f;
-		sword_left->m_pos_x += m_vx * graphics::getDeltaTime() / 20.0f;
+		m_pos_x += m_vx * dt / 20.0f;
+		sword_right->m_pos_x += m_vx * dt / 20.0f;
+		sword_left->m_pos_x += m_vx * dt / 20.0f;
 
 		if (((this->*movement)().second == graphics::SCANCODE_W) && jumping == false && falling == false && !attacking)
 		{
@@ -204,9 +204,9 @@ void Enemy::update(float dt)
 		// Apply gravity until terminal velocity is reached
 		if (velocityY < 3.5)
 			velocityY += gravity;
-		m_pos_y += velocityY * graphics::getDeltaTime() / 10.0f;
-		sword_right->m_pos_y += velocityY * graphics::getDeltaTime() / 10.0f;
-		sword_left->m_pos_y += velocityY * graphics::getDeltaTime() / 10.0f;
+		m_pos_y += velocityY * dt / 10.0f;
+		sword_right->m_pos_y += velocityY * dt / 10.0f;
+		sword_left->m_pos_y += velocityY * dt / 10.0f;
 
 		if (dt_sum > 600)
 			dt_sum = 0;

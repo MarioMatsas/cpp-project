@@ -69,6 +69,8 @@ public:
 	float tangent = 0.0f;
 	float mouse_x = 0.0;
 	float mouse_y = 0.0;
+	float m_initial_x = 0;
+	float m_initial_y = 0;
 	//graphics::MouseState mouse;
 	bool collided = false;
 	bool shot = false;
@@ -77,6 +79,7 @@ public:
 public:
 	//Player();
 	Player(float x, float y, float w, float h, std::string name);
+	~Player();
 	void update(float dt) override;
 	void draw() override;
 	void init() override;

@@ -76,10 +76,12 @@ bool GameState::init()
         m_dynamic_objects->push_back(new Enemy(WINDOW_WIDTH / 2 + 400, WINDOW_HEIGHT / 2 - 5 - 35 / 2,
             25, 50, "Enemy",
             &Enemy::dumbMovement, false));
-        m_player = new Player(WINDOW_WIDTH / 2, WINDOW_HEIGHT / 2, 25, 50, "Player");
+        if (!m_player) {
+            m_player = new Player(60, WINDOW_HEIGHT - 35 / 2 - 60, 25, 50, "Player");
+        }
         m_player->init();
 
-        m_curr_lvl_ptr = new Level(m_static_objects, m_dynamic_objects, "background_lvl.png", { true, false }, "2.lvl");
+        m_curr_lvl_ptr = new Level(m_static_objects, m_dynamic_objects, "background_lvl.png", { false, false }, "2.lvl");
         m_curr_lvl_ptr->init();
 
     }
@@ -87,6 +89,7 @@ bool GameState::init()
     // Start level 2
     if (m_curr_lvl == 2)
     {
+        //delete m_player;
         std::vector<GameObject*>* m_static_objects = new std::vector<GameObject*>();
         std::list<GameObject*>* m_dynamic_objects = new std::list<GameObject*>();
 
@@ -122,7 +125,7 @@ bool GameState::init()
         m_dynamic_objects->push_back(new Enemy(WINDOW_WIDTH / 2 + 300, WINDOW_HEIGHT - 150,
             25, 50, "Enemy",
             &Enemy::dumbMovement, false));
-        m_player = new Player(60, WINDOW_HEIGHT - 35 / 2 - 60, 25, 50, "Player");
+        //m_player = new Player(60, WINDOW_HEIGHT - 35 / 2 - 60, 25, 50, "Player");
         m_player->init();
 
         m_curr_lvl_ptr = new Level(m_static_objects, m_dynamic_objects, "background_lvl.png", { false, true }, "3.lvl");

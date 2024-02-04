@@ -25,6 +25,7 @@ class Level : public GameObject
 	graphics::Brush m_brush_background;
 	graphics::Brush m_brush_health;
 	graphics::Brush m_brush_quiver;
+	graphics::Brush m_brush_sword;
 	graphics::Brush m_brush_quiver_text;
 	graphics::Brush m_brush_score_text;
 	int player_score = 0;

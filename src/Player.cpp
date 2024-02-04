@@ -27,10 +27,8 @@ Player::Player()
 */
 // MOUSE POSITION WHEN WINDOW SIZE CHANGES NEEDS TO BE FIXED!!!!!!!!!!!
 
-Player::Player(float x, float y, float w, float h, std::string name) : Box(x, y, w, h), GameObject(name, "Player")
+Player::Player(float x, float y, float w, float h, std::string name) : Box(x, y, w, h), GameObject(name, "Player"), m_initial_x(x),m_initial_y(y)
 {
-	sword_right = new Sword(m_pos_x + 30, m_pos_y, 25.0f, 7.0f, "right sword");
-	sword_left = new Sword(m_pos_x - 30, m_pos_y, 25.0f, 7.0f, "left sword");
 	// Movement sprites
 	sprites.push_back(std::string(ASSET_PATH) + "/" + name + "/" + "2.png");
 	sprites.push_back(std::string(ASSET_PATH) + "/" + name + "/" + "3.png");
@@ -70,8 +68,20 @@ Player::Player(float x, float y, float w, float h, std::string name) : Box(x, y,
 	jumping_sprites.push_back(std::string(ASSET_PATH) + "/" + name + "/" + "16_left.png");
 }
 
+Player::~Player()
+{
+	/*
+	delete sword_left;
+	delete sword_right;
+
+	for (auto arrow : arrows)
+		delete arrow;
+	*/
+}
+
 void Player::update(float dt)
 {
+	
 	/*
 	for (Arrow* arrow : arrows) {
 		if (arrow->get_x() > 700 || arrow->get_x() < 0 || arrow->get_y() > 450 || arrow->get_y() < 0 || arrow->collision_detected() == true) {
@@ -173,7 +183,7 @@ void Player::update(float dt)
 		looking_right = true;
 		move = 1.0f;
 	}
-	m_vx = std::min<float>(m_max_velocity, m_vx + graphics::getDeltaTime() * move * m_accel_horizontal);
+	m_vx = std::min<float>(m_max_velocity, m_vx + dt * move * m_accel_horizontal);
 	m_vx = std::max<float>(-m_max_velocity, m_vx);
 
 	// friction
@@ -183,9 +193,9 @@ void Player::update(float dt)
 	if (fabs(m_vx) < 0.01f)
 		m_vx = 0.0f;
 
-	m_pos_x += m_vx * graphics::getDeltaTime() / 20.0f;
-	sword_right->m_pos_x += m_vx * graphics::getDeltaTime() / 20.0f;
-	sword_left->m_pos_x += m_vx * graphics::getDeltaTime() / 20.0f;
+	m_pos_x += m_vx *  dt / 20.0f; // graphics::getDeltaTime()
+	sword_right->m_pos_x += m_vx * dt / 20.0f;
+	sword_left->m_pos_x += m_vx * dt / 20.0f;
 	/*
 	m_pos_x -= speed * graphics::getDeltaTime() / 20.0f;
 	if (looking_right) sword->m_pos_x += -2 * 30;
@@ -211,9 +221,9 @@ void Player::update(float dt)
 	// Apply gravity until terminal velocity is reached
 	if (velocityY < 3.5)
 		velocityY += gravity;
-	m_pos_y += velocityY * graphics::getDeltaTime() / 10.0f;
-	sword_right->m_pos_y += velocityY * graphics::getDeltaTime() / 10.0f;
-	sword_left->m_pos_y += velocityY * graphics::getDeltaTime() / 10.0f;
+	m_pos_y += velocityY * dt / 10.0f;
+	sword_right->m_pos_y += velocityY * dt / 10.0f;
+	sword_left->m_pos_y += velocityY * dt / 10.0f;
 
 	/*
 	if (jumping) {
@@ -536,6 +546,11 @@ void Player::draw()
 void Player::init()
 {
 	health = 6;
+	quiver = 50;
+	m_pos_x = m_initial_x;
+	m_pos_y = m_initial_y;
+	sword_right = new Sword(m_pos_x + 30, m_pos_y, 25.0f, 7.0f, "right sword");
+	sword_left = new Sword(m_pos_x - 30, m_pos_y, 25.0f, 7.0f, "left sword");
 }
 
 void Player::jump()

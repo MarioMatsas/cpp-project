@@ -33,6 +33,11 @@ Level::Level(std::vector<GameObject*>* m_static_objects,
     SETCOLOR(m_brush_quiver.fill_color, 1.0f, 1.0f, 1.0f)
         m_brush_quiver.texture = std::string(ASSET_PATH) + "Arrow.png";
 
+    m_brush_sword.fill_opacity = 1.0f;
+    m_brush_sword.outline_opacity = 0.0f;
+    SETCOLOR(m_brush_quiver.fill_color, 1.0f, 1.0f, 1.0f)
+        m_brush_sword.texture = std::string(ASSET_PATH) + "sword.png";
+
     SETCOLOR(m_brush_quiver_text.fill_color, 0.0f, 0.0f, 0.0f);
     SETCOLOR(m_brush_score_text.fill_color, 1.0f, 1.0f, 1.0f);
 
@@ -96,7 +101,8 @@ void Level::draw()
     graphics::drawRect(WINDOW_WIDTH / 14, WINDOW_HEIGHT / 16, 108, 34,
         m_brush_health);
 
-    // Draw the quiver counter
+    // Draw the quiver and the counter
+    m_brush_quiver.outline_opacity = 0.0f;
     graphics::drawRect(WINDOW_WIDTH * 0.9, WINDOW_HEIGHT / 16, 151.0f / 3, 151.0f / 3,
         m_brush_quiver);
 
@@ -105,9 +111,27 @@ void Level::draw()
     graphics::drawText(WINDOW_WIDTH * 0.93, WINDOW_HEIGHT / 16 + 151.0f / 9, 151.0f / 3, std::to_string(PLAYER->quiver),
         m_brush_quiver_text);
 
+    // Draw quiver and sword for selection outlining
+    // Depending on the weapon sleected, the icon gets outlined
+    if (PLAYER->gun_selected && PLAYER->quiver > 0) {
+        m_brush_quiver.outline_opacity = 1.0f;
+        m_brush_sword.outline_opacity = 0.0f;
+    }
+    else {
+        m_brush_quiver.outline_opacity = 0.0f;
+        m_brush_sword.outline_opacity = 1.0f;
+    }
+    graphics::drawRect(WINDOW_WIDTH / 2 + 160, WINDOW_HEIGHT / 16, 151.0f / 3, 151.0f / 3,
+        m_brush_quiver);
+    graphics::drawRect(WINDOW_WIDTH / 2 + 220, WINDOW_HEIGHT / 16, 151.0f / 3, 151.0f / 3,
+        m_brush_sword);
+
     // Draw the score
-    graphics::drawText(WINDOW_WIDTH / 2 - 100, WINDOW_HEIGHT * 0.1f, 151.0f / 3, "SCORE    " + std::to_string(m_state->score),
+    //WINDOW_WIDTH / 2 - 100, WINDOW_HEIGHT * 0.1f, 151.0f / 3 middle
+    graphics::drawText(WINDOW_WIDTH / 2 - 225, WINDOW_HEIGHT * 0.1f, 151.0f / 3, "SCORE    " + std::to_string(m_state->score),
         m_brush_score_text);
+
+    
 
     // draw player
     if (m_state->getPlayer()->isActive())
@@ -147,6 +171,22 @@ void Level::update(float dt)
     checkCollisions();
 
     if (advance == true) {
+        auto ht = PLAYER->arrows.begin();
+        while (ht != PLAYER->arrows.end())
+        {
+            delete* ht;
+            ht = PLAYER->arrows.erase(ht);
+        }
+
+        auto s_it = PLAYER->sword_hits.begin();
+        while (s_it != PLAYER->sword_hits.end())
+        {
+            delete* s_it;
+            s_it = PLAYER->sword_hits.erase(s_it);
+        }
+
+        if (PLAYER->sword_right) delete PLAYER->sword_right;
+        if (PLAYER->sword_left) delete PLAYER->sword_left;
         m_state->m_curr_lvl += 1;
         m_state->m_curr_lvl_ptr = nullptr;
         delete this;
@@ -189,7 +229,6 @@ void Level::checkCollisions()
             continue;
         Enemy* g_ob = dynamic_cast<Enemy*>(*it);
         auto s_it = g_ob->sword_hits.begin();
-
         while (s_it != g_ob->sword_hits.end())
         {
             if ((*s_it)->intersect(*PLAYER))
@@ -202,9 +241,18 @@ void Level::checkCollisions()
                 ++s_it;
             }
         }
-
+        std::cout << "Enemy size" << g_ob->sword_hits.size() << std::endl;
+        // PROB NEEDS CHANGING
         g_ob->sword_hits.clear();
-
+        // Delete swords
+        /*
+        auto j_it = g_ob->sword_hits.begin();
+        while (j_it != g_ob->sword_hits.end())
+        {
+            delete* j_it;
+            j_it = g_ob->sword_hits.erase(j_it);
+        }
+        */
         auto jt = g_ob->arrows.begin();
         while (jt != g_ob->arrows.end())
         {
@@ -309,8 +357,18 @@ void Level::checkCollisions()
         if (it == m_dynamic_objects->end()) break; // Avoid the extra iteration
 
     }
-
+    std::cout << "Player size" << PLAYER->sword_hits.size() << std::endl;
+    // PROB NEEDS CHANGING
     PLAYER->sword_hits.clear();
+    //Delete Player swords
+    /*
+    auto s_it = PLAYER->sword_hits.begin();
+    while (s_it != PLAYER->sword_hits.end())
+    {
+        delete* s_it;
+        s_it = PLAYER->sword_hits.erase(s_it);
+    }
+    */
 
     // Out of bounds for Player 
     if (m_state->getPlayer()->m_pos_x < 0) {
