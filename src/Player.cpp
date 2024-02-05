@@ -79,6 +79,11 @@ Player::~Player()
 	*/
 }
 
+void Player::setPos(int x, int y) {
+	this->m_pos_x = x;
+	this->m_pos_y = y;
+}
+
 void Player::update(float dt)
 {
 	
@@ -108,12 +113,10 @@ void Player::update(float dt)
 			if (((mouse.cur_pos_x - ((REAL_WW - REAL_CW) / 2)) * WINDOW_WIDTH) / REAL_CW - m_pos_x >= 0)
 			{
 				b = new Arrow(m_pos_x, m_pos_y, m_width, m_height, atan((-(((mouse.cur_pos_y - ((REAL_WH - REAL_CH) / 2)) * WINDOW_HEIGHT) / REAL_CH - m_pos_y)) / (((mouse.cur_pos_x - ((REAL_WW - REAL_CW) / 2)) * WINDOW_WIDTH) / REAL_CW - m_pos_x)), "arrow"); // WHY DOES SGG COUNT Y BACKWARDS???
-				std::cout << "1 " << atan((-(((mouse.cur_pos_y - ((REAL_WH - REAL_CH) / 2)) * WINDOW_HEIGHT) / REAL_CH - m_pos_y)) / (((mouse.cur_pos_x - ((REAL_WW - REAL_CW) / 2)) * WINDOW_WIDTH) / REAL_CW - m_pos_x)) << std::endl;
 			}
 			else
 			{
 				b = new Arrow(m_pos_x, m_pos_y, m_width, m_height, M_PI + atan((-(((mouse.cur_pos_y - ((REAL_WH - REAL_CH) / 2)) * WINDOW_HEIGHT) / REAL_CH - m_pos_y)) / (((mouse.cur_pos_x - ((REAL_WW - REAL_CW) / 2)) * WINDOW_WIDTH) / REAL_CW - m_pos_x)), "arrow");
-				std::cout << "2 " << M_PI + atan((-(((mouse.cur_pos_y - ((REAL_WH - REAL_CH) / 2)) * WINDOW_HEIGHT) / REAL_CH - m_pos_y)) / (((mouse.cur_pos_x - ((REAL_WW - REAL_CW) / 2)) * WINDOW_WIDTH) / REAL_CW - m_pos_x)) << std::endl;
 			}
 			b->setMouse_x(((mouse.cur_pos_x - ((REAL_WW - REAL_CW) / 2)) * WINDOW_WIDTH) / REAL_CW);
 			b->setMouse_y(((mouse.cur_pos_y - ((REAL_WH - REAL_CH) / 2)) * WINDOW_HEIGHT) / REAL_CH);

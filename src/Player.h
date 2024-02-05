@@ -80,6 +80,7 @@ public:
 	//Player();
 	Player(float x, float y, float w, float h, std::string name);
 	~Player();
+	void setPos(int x, int y);
 	void update(float dt) override;
 	void draw() override;
 	void init() override;

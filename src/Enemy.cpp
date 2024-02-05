@@ -75,6 +75,7 @@ Enemy::~Enemy()
 {
 	delete sword_left;
 	delete sword_right;
+	sword_hits.clear();
 
 	for (auto arrow : arrows)
 		delete arrow;

@@ -241,8 +241,6 @@ void Level::checkCollisions()
                 ++s_it;
             }
         }
-        std::cout << "Enemy size" << g_ob->sword_hits.size() << std::endl;
-        // PROB NEEDS CHANGING
         g_ob->sword_hits.clear();
         // Delete swords
         /*
@@ -357,9 +355,15 @@ void Level::checkCollisions()
         if (it == m_dynamic_objects->end()) break; // Avoid the extra iteration
 
     }
-    std::cout << "Player size" << PLAYER->sword_hits.size() << std::endl;
-    // PROB NEEDS CHANGING
+    // Box* ptr = nullptr;
+    // if (PLAYER->sword_hits.size() > 0) {
+    //     ptr = PLAYER->sword_hits[0];
+    // }
     PLAYER->sword_hits.clear();
+    // if (ptr != nullptr)
+    //     std::cout << ptr->m_pos_x << std::endl;
+    // these crash, so memory really is freed!
+
     //Delete Player swords
     /*
     auto s_it = PLAYER->sword_hits.begin();
