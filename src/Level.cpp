@@ -311,6 +311,7 @@ void Level::checkCollisions()
             if ((*s_it)->intersect(*g_ob))
             {
                 delete* s_it;
+                ++s_it;
                 g_ob->health--;
                 graphics::playSound(std::string(ASSET_PATH) + std::string("enemy_damage_sound.wav"), 0.5f, false);
 
