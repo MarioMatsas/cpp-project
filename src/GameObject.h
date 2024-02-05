@@ -11,6 +11,7 @@ protected:
 	int m_id = 0;
 	bool m_active = true;
 	graphics::Brush br; // TODO: continue
+	
 
 public:
 	GameObject(const std::string& m_name = "", const std::string& m_class = "GameObject");

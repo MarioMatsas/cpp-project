@@ -128,14 +128,15 @@ bool GameState::init()
         //m_player = new Player(60, WINDOW_HEIGHT - 35 / 2 - 60, 25, 50, "Player");
         m_player->init();
 
-        m_curr_lvl_ptr = new Level(m_static_objects, m_dynamic_objects, "background_lvl.png", { false, true }, "3.lvl");
+        m_curr_lvl_ptr = new Level(m_static_objects, m_dynamic_objects, "background_lvl.png", { false, false }, "3.lvl");
         m_curr_lvl_ptr->init();
 
     }
-    
+    // THE LAST LEVEL NEEDS TO DELETE THE PLAYER BEFORE MOVING TO THE END SCREEN
     if (m_curr_lvl == 3) {
         // Print a gameover screen, and send user back to main menu
-        graphics::stopMessageLoop();
+        //graphics::stopMessageLoop();
+
     }
     // Start level 3
     // Start level 4
@@ -157,7 +158,11 @@ void GameState::draw()
         br.texture = std::string(ASSET_PATH) + "controls_screen.png";
         graphics::drawRect(WINDOW_WIDTH / 2, WINDOW_HEIGHT / 2, WINDOW_WIDTH, WINDOW_HEIGHT, br);
         break;
-
+    // Needs to be case 5
+    case 3:
+        br.texture = std::string(ASSET_PATH) + "end_screen.png";
+        graphics::drawRect(WINDOW_WIDTH / 2, WINDOW_HEIGHT / 2, WINDOW_WIDTH, WINDOW_HEIGHT, br);
+        break;
     default:
         if (!m_curr_lvl_ptr) {
             br.texture = std::string(ASSET_PATH) + "loading_screen.png";
@@ -185,11 +190,16 @@ void GameState::update(float dt)
     switch (m_curr_lvl)
     {
     case -1:
+        if (first_time_start) {
+            score = 0; // Make sure to reset the score
+            graphics::playMusic(std::string(ASSET_PATH) + std::string("medieval_theme.wav"), 0.6f, true, 500);
+            first_time_end = true;
+            first_time_start = false; 
+        }
         graphics::getMouseState(mouse);
         if (mouse.button_left_pressed)
         {
             // Move onto the controls screen
-            //graphics::playMusic("medieval_theme.mp3", 1.0f);
             m_curr_lvl = 0;
             break;
         }
@@ -200,7 +210,21 @@ void GameState::update(float dt)
             // Move onto the first level
             m_curr_lvl = 1;
             graphics::stopMusic(500);
-            //init();
+        }
+        break;
+    // Needs to be 5
+    case 3:
+        if (first_time_end) {
+            graphics::playMusic(std::string(ASSET_PATH) + std::string("ending_theme.wav"), 0.5f, true, 1000);
+            first_time_end = false;
+            first_time_start = true;
+        }
+        graphics::getMouseState(mouse);
+        if (mouse.button_left_pressed)
+        {
+            // Go to main screen
+            m_curr_lvl = -1;
+            graphics::stopMusic(500);
         }
         break;
     default:

@@ -79,7 +79,7 @@ Enemy::~Enemy()
 	auto s_it = this->sword_hits.begin();
 	while (s_it != this->sword_hits.end())
 	{
-		delete *s_it;
+		delete* s_it;
 		this->sword_hits.pop_front();
 		s_it = this->sword_hits.begin();
 	}
@@ -113,7 +113,7 @@ void Enemy::update(float dt)
 		if (Enemy::should_I_shoot())
 		{
 			// std::cout << "shoot" << std::endl;
-			Arrow *b = new Arrow(m_pos_x, m_pos_y, m_width, m_height, atan((-(m_state->getPlayer()->m_pos_y - m_pos_y)) / (m_state->getPlayer()->m_pos_x - m_pos_x)), "arrow");
+			Arrow* b = new Arrow(m_pos_x, m_pos_y, m_width, m_height, atan((-(m_state->getPlayer()->m_pos_y - m_pos_y)) / (m_state->getPlayer()->m_pos_x - m_pos_x)), "arrow");
 
 			if (m_state->getPlayer()->m_pos_x - m_pos_x >= 0)
 			{
@@ -163,7 +163,7 @@ void Enemy::update(float dt)
 	}
 	*/
 
-	for (Arrow *arrow : arrows)
+	for (Arrow* arrow : arrows)
 	{
 		if (arrow->get_shot() == false)
 		{
@@ -334,9 +334,9 @@ void Enemy::debugDraw()
 void Enemy::draw()
 {
 	// Draw Enemy
-	m_brush.fill_color[0] = 1.0f;
+	m_brush.fill_color[0] = 0.5f;
 	m_brush.fill_color[1] = 1.0f;
-	m_brush.fill_color[2] = 1.0f;
+	m_brush.fill_color[2] = 0.5f;
 	m_brush.fill_opacity = 1.0f;
 	m_brush.outline_opacity = 0.0f;
 
@@ -537,7 +537,7 @@ void Enemy::draw()
 	sword_left->draw();
 
 	// Draw arrows
-	for (Arrow *arrow : arrows)
+	for (Arrow* arrow : arrows)
 	{
 		arrow->draw();
 	}
@@ -603,7 +603,7 @@ std::pair<graphics::scancode_t, graphics::scancode_t> Enemy::dumbMovement(void)
 
 bool Enemy::should_I_shoot()
 {
-	// return false;
+	//return false;
 	if (dt_sum < 600)
 		return false;
 	if (fabs(this->m_pos_x - PLAYER->m_pos_x) < 4 * m_width)
@@ -613,7 +613,7 @@ bool Enemy::should_I_shoot()
 
 bool Enemy::should_I_thrust()
 {
-	// return false;
+	//return false;
 	if (dt_sum < 600)
 		return false;
 	if (fabs(this->m_pos_y - PLAYER->m_pos_y) >= m_height)

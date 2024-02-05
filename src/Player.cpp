@@ -27,7 +27,7 @@ Player::Player()
 */
 // MOUSE POSITION WHEN WINDOW SIZE CHANGES NEEDS TO BE FIXED!!!!!!!!!!!
 
-Player::Player(float x, float y, float w, float h, std::string name) : Box(x, y, w, h), GameObject(name, "Player"), m_initial_x(x),m_initial_y(y)
+Player::Player(float x, float y, float w, float h, std::string name) : Box(x, y, w, h), GameObject(name, "Player"), m_initial_x(x), m_initial_y(y)
 {
 	// Movement sprites
 	sprites.push_back(std::string(ASSET_PATH) + "/" + name + "/" + "2.png");
@@ -70,14 +70,20 @@ Player::Player(float x, float y, float w, float h, std::string name) : Box(x, y,
 
 Player::~Player()
 {
-	// the OS takes care of that for us
-	/*
 	delete sword_left;
 	delete sword_right;
 
+	auto s_it = this->sword_hits.begin();
+	while (s_it != this->sword_hits.end())
+	{
+		delete* s_it;
+		this->sword_hits.pop_front();
+		s_it = this->sword_hits.begin();
+	}
+	sword_hits.clear();
+
 	for (auto arrow : arrows)
 		delete arrow;
-	*/
 }
 
 void Player::setPos(int x, int y) {
@@ -87,7 +93,7 @@ void Player::setPos(int x, int y) {
 
 void Player::update(float dt)
 {
-	
+
 	/*
 	for (Arrow* arrow : arrows) {
 		if (arrow->get_x() > 700 || arrow->get_x() < 0 || arrow->get_y() > 450 || arrow->get_y() < 0 || arrow->collision_detected() == true) {
@@ -197,7 +203,7 @@ void Player::update(float dt)
 	if (fabs(m_vx) < 0.01f)
 		m_vx = 0.0f;
 
-	m_pos_x += m_vx *  dt / 20.0f; // graphics::getDeltaTime()
+	m_pos_x += m_vx * dt / 20.0f; // graphics::getDeltaTime()
 	sword_right->m_pos_x += m_vx * dt / 20.0f;
 	sword_left->m_pos_x += m_vx * dt / 20.0f;
 	/*

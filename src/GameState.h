@@ -33,7 +33,9 @@ private:
 	int m_curr_lvl = -1; // -1: start screen
 	//  0: tutorial screen
 	//  1-4: levels
-
+	//  5: end screen
+	bool first_time_start = true;
+	bool first_time_end = true;
 	graphics::MouseState mouse;
 
 	GameState();
