@@ -75,6 +75,14 @@ Enemy::~Enemy()
 {
 	delete sword_left;
 	delete sword_right;
+
+	auto s_it = this->sword_hits.begin();
+	while (s_it != this->sword_hits.end())
+	{
+		delete *s_it;
+		this->sword_hits.pop_front();
+		s_it = this->sword_hits.begin();
+	}
 	sword_hits.clear();
 
 	for (auto arrow : arrows)
@@ -105,7 +113,7 @@ void Enemy::update(float dt)
 		if (Enemy::should_I_shoot())
 		{
 			// std::cout << "shoot" << std::endl;
-			Arrow* b = new Arrow(m_pos_x, m_pos_y, m_width, m_height, atan((-(m_state->getPlayer()->m_pos_y - m_pos_y)) / (m_state->getPlayer()->m_pos_x - m_pos_x)), "arrow");
+			Arrow *b = new Arrow(m_pos_x, m_pos_y, m_width, m_height, atan((-(m_state->getPlayer()->m_pos_y - m_pos_y)) / (m_state->getPlayer()->m_pos_x - m_pos_x)), "arrow");
 
 			if (m_state->getPlayer()->m_pos_x - m_pos_x >= 0)
 			{
@@ -155,7 +163,7 @@ void Enemy::update(float dt)
 	}
 	*/
 
-	for (Arrow* arrow : arrows)
+	for (Arrow *arrow : arrows)
 	{
 		if (arrow->get_shot() == false)
 		{
@@ -180,8 +188,9 @@ void Enemy::update(float dt)
 		looking_right = true;
 		move = 1.0f;
 	}
-	if (restrict_movement == false) {
-		m_vx = std::min<float>(m_max_velocity, m_vx + dt * move * m_accel_horizontal); //graphics::getDeltaTime()
+	if (restrict_movement == false)
+	{
+		m_vx = std::min<float>(m_max_velocity, m_vx + dt * move * m_accel_horizontal); // graphics::getDeltaTime()
 		m_vx = std::max<float>(-m_max_velocity, m_vx);
 
 		// friction
@@ -212,7 +221,7 @@ void Enemy::update(float dt)
 		if (dt_sum > 600)
 			dt_sum = 0;
 	}
-	
+
 	/*
 	m_pos_x -= speed * graphics::getDeltaTime() / 20.0f;
 	if (looking_right) sword->m_pos_x += -2 * 30;
@@ -227,7 +236,6 @@ void Enemy::update(float dt)
 	looking_right = true;
 	sword->m_pos_x += speed * graphics::getDeltaTime() / 20.0f;
 	*/
-	
 
 	/*
 	if (jumping) {
@@ -529,7 +537,7 @@ void Enemy::draw()
 	sword_left->draw();
 
 	// Draw arrows
-	for (Arrow* arrow : arrows)
+	for (Arrow *arrow : arrows)
 	{
 		arrow->draw();
 	}
@@ -595,7 +603,7 @@ std::pair<graphics::scancode_t, graphics::scancode_t> Enemy::dumbMovement(void)
 
 bool Enemy::should_I_shoot()
 {
-	//return false;
+	// return false;
 	if (dt_sum < 600)
 		return false;
 	if (fabs(this->m_pos_x - PLAYER->m_pos_x) < 4 * m_width)
@@ -605,7 +613,7 @@ bool Enemy::should_I_shoot()
 
 bool Enemy::should_I_thrust()
 {
-	//return false;
+	// return false;
 	if (dt_sum < 600)
 		return false;
 	if (fabs(this->m_pos_y - PLAYER->m_pos_y) >= m_height)

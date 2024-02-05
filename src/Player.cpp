@@ -70,6 +70,7 @@ Player::Player(float x, float y, float w, float h, std::string name) : Box(x, y,
 
 Player::~Player()
 {
+	// the OS takes care of that for us
 	/*
 	delete sword_left;
 	delete sword_right;

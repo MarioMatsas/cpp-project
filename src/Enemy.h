@@ -53,7 +53,7 @@ public:
 	double velocityY = 0;		// Vertical velocity
 	const double gravity = 0.1; // Gravity strength
 	std::list<Arrow*> arrows;
-	std::vector<Box*> sword_hits;
+	std::list<Box*> sword_hits;
 	typedef std::pair<graphics::scancode_t, graphics::scancode_t>(Enemy::* DecFn)();
 	DecFn movement;
 	bool jumping = false;
