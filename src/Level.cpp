@@ -28,6 +28,11 @@ Level::Level(std::vector<GameObject*>* m_static_objects,
     SETCOLOR(m_brush_health.fill_color, 1.0f, 1.0f, 1.0f)
         m_brush_health.texture = std::string(ASSET_PATH) + "Hearts/6.png";
 
+    m_brush_score.fill_opacity = 1.0f;
+    m_brush_score.outline_opacity = 0.0f;
+    SETCOLOR(m_brush_score.fill_color, 1.0f, 1.0f, 1.0f)
+        m_brush_score.texture = std::string(ASSET_PATH) + "coin_asset.png";
+
     m_brush_quiver.fill_opacity = 1.0f;
     m_brush_quiver.outline_opacity = 0.0f;
     SETCOLOR(m_brush_quiver.fill_color, 1.0f, 1.0f, 1.0f)
@@ -110,27 +115,26 @@ void Level::draw()
     graphics::drawText(WINDOW_WIDTH * 0.93, WINDOW_HEIGHT / 16 + 151.0f / 9, 151.0f / 3, std::to_string(PLAYER->quiver),
         m_brush_quiver_text);
 
-    // Draw quiver and sword for selection outlining
-    // Depending on the weapon sleected, the icon gets outlined
-    if (PLAYER->gun_selected && PLAYER->quiver > 0)
-    {
-        m_brush_quiver.outline_opacity = 1.0f;
-        m_brush_sword.outline_opacity = 0.0f;
-    }
-    else
-    {
-        m_brush_quiver.outline_opacity = 0.0f;
-        m_brush_sword.outline_opacity = 1.0f;
-    }
-    graphics::drawRect(WINDOW_WIDTH / 2 + 160, WINDOW_HEIGHT / 16, 151.0f / 3, 151.0f / 3,
+    // Draw quiver or sword showing selection
+    // Depending on the weapon sleected, the icon is shown
+    if (PLAYER->gun_selected && PLAYER->quiver > 0) {
+        graphics::drawRect(WINDOW_WIDTH/1.2, WINDOW_HEIGHT / 16, 151.0f / 3, 151.0f / 3,
         m_brush_quiver);
-    graphics::drawRect(WINDOW_WIDTH / 2 + 220, WINDOW_HEIGHT / 16, 151.0f / 3, 151.0f / 3,
+    } else {
+        graphics::drawRect(WINDOW_WIDTH/1.2, WINDOW_HEIGHT / 16, 151.0f / 3, 151.0f / 3,
         m_brush_sword);
+    }
+
 
     // Draw the score
     // WINDOW_WIDTH / 2 - 100, WINDOW_HEIGHT * 0.1f, 151.0f / 3 middle
-    graphics::drawText(WINDOW_WIDTH / 2 - 225, WINDOW_HEIGHT * 0.1f, 151.0f / 3, "SCORE    " + std::to_string(m_state->score),
+    graphics::setFont(std::string(ASSET_PATH) + "din1451alt.ttf");
+
+    graphics::drawText(WINDOW_WIDTH / 5.5, WINDOW_HEIGHT / 10.25, 151.0f / 3, std::to_string(m_state->score),
         m_brush_score_text);
+
+    graphics::drawRect(WINDOW_WIDTH / 6.5, WINDOW_HEIGHT / 16, 151.0f / 3, 151.0f / 3,
+        m_brush_score);
 
     // draw player
     if (m_state->getPlayer()->isActive())
