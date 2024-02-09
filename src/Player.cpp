@@ -426,7 +426,7 @@ void Player::init()
 	// Initialize all the needed values per level
 	m_active = true;
 	health = 6;
-	quiver = 50;
+	quiver = 20;
 	m_pos_x = m_initial_x;
 	m_pos_y = m_initial_y;
 	sword_right = new Sword(m_pos_x + 30, m_pos_y, 25.0f, 7.0f, "right sword");
