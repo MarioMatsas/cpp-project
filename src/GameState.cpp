@@ -118,7 +118,7 @@ bool GameState::init()
             &Enemy::dumbMovement, false));
         m_player->init();
 
-        m_curr_lvl_ptr = new Level(m_static_objects, m_dynamic_objects, "background_lvl.png", { false, false }, "2.lvl");
+        m_curr_lvl_ptr = new Level(m_static_objects, m_dynamic_objects, "background_lvl.png", { true, false }, "2.lvl");
         m_curr_lvl_ptr->init();
     }
 
@@ -162,7 +162,7 @@ bool GameState::init()
             &Enemy::dumbMovement, false));
         m_player->init();
 
-        m_curr_lvl_ptr = new Level(m_static_objects, m_dynamic_objects, "background_lvl.png", { false, false }, "3.lvl");
+        m_curr_lvl_ptr = new Level(m_static_objects, m_dynamic_objects, "background_lvl.png", { false, true }, "3.lvl");
         m_curr_lvl_ptr->init();
     }
 
