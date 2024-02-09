@@ -555,6 +555,7 @@ void Player::draw()
 
 void Player::init()
 {
+	m_active = true;
 	health = 6;
 	quiver = 50;
 	m_pos_x = m_initial_x;

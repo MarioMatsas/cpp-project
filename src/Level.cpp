@@ -246,7 +246,8 @@ void Level::checkCollisions()
                 delete* s_it;
                 s_it = g_ob->sword_hits.erase(s_it);
                 PLAYER->health--;
-                graphics::playSound(std::string(ASSET_PATH) + std::string("player_damage_sound.wav"), 0.5f, false);
+                if (PLAYER->isActive())
+                    graphics::playSound(std::string(ASSET_PATH) + std::string("player_damage_sound.wav"), 0.5f, false);
             }
             else
             {
@@ -278,7 +279,8 @@ void Level::checkCollisions()
                 // Remove the arrow from the list
                 delete* jt;
                 PLAYER->health--;
-                graphics::playSound(std::string(ASSET_PATH) + std::string("player_damage_sound.wav"), 0.5f, false);
+                if (PLAYER->isActive())
+                    graphics::playSound(std::string(ASSET_PATH) + std::string("player_damage_sound.wav"), 0.5f, false);
                 jt = g_ob->arrows.erase(jt);
             }
             else if ((*jt)->m_pos_x > WINDOW_WIDTH || (*jt)->m_pos_x < 0 || (*jt)->m_pos_y > WINDOW_HEIGHT || (*jt)->m_pos_y < 0)
@@ -336,7 +338,8 @@ void Level::checkCollisions()
                 delete* s_it;
                 s_it = PLAYER->sword_hits.erase(s_it);
                 g_ob->health--;
-                graphics::playSound(std::string(ASSET_PATH) + std::string("enemy_damage_sound.wav"), 0.5f, false);
+                if (PLAYER->isActive())
+                    graphics::playSound(std::string(ASSET_PATH) + std::string("enemy_damage_sound.wav"), 0.5f, false);
 
                 if (g_ob->health == 0) // TODO: I have a feeling this should go in update?
                 {
@@ -360,7 +363,8 @@ void Level::checkCollisions()
             {
                 delete* jt;
                 g_ob->health--;
-                graphics::playSound(std::string(ASSET_PATH) + std::string("enemy_damage_sound.wav"), 0.5f, false);
+                if (PLAYER->isActive())
+                    graphics::playSound(std::string(ASSET_PATH) + std::string("enemy_damage_sound.wav"), 0.5f, false);
                 jt = m_state->getPlayer()->arrows.erase(jt);
 
                 if (g_ob->health == 0)
@@ -433,7 +437,8 @@ void Level::checkCollisions()
             if (cond && (ob->m_name == "Door" || m_state->m_curr_lvl == 4))
             {
                 graphics::stopMusic(200);
-                graphics::playSound(std::string(ASSET_PATH) + std::string("door_sound.wav"), 0.5f, false);
+                if (PLAYER->isActive() && m_state->m_curr_lvl != 4)
+                    graphics::playSound(std::string(ASSET_PATH) + std::string("door_sound.wav"), 0.5f, false);
                 advance = true;
                 return;
             }

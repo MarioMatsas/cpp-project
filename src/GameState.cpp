@@ -213,7 +213,6 @@ bool GameState::init()
         m_curr_lvl_ptr = new Level(m_static_objects, m_dynamic_objects, "StarryNight.png", {true, true}, "4.lvl");
         m_curr_lvl_ptr->init();
 
-        // graphics::stopMessageLoop();
     }
 
     return true;
@@ -241,6 +240,8 @@ void GameState::draw()
     default:
         if (!m_curr_lvl_ptr)
         {
+            if (m_player != nullptr)
+                m_player->setActive(false);
             br.texture = std::string(ASSET_PATH) + "loading_screen.png";
             graphics::drawRect(WINDOW_WIDTH / 2, WINDOW_HEIGHT / 2, WINDOW_WIDTH, WINDOW_HEIGHT, br);
             return;
