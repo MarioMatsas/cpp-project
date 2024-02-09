@@ -43,7 +43,7 @@ Level::Level(std::vector<GameObject*>* m_static_objects,
     SETCOLOR(m_brush_quiver.fill_color, 1.0f, 1.0f, 1.0f)
         m_brush_sword.texture = std::string(ASSET_PATH) + "sword.png";
 
-    SETCOLOR(m_brush_quiver_text.fill_color, 0.0f, 0.0f, 0.0f);
+    SETCOLOR(m_brush_quiver_text.fill_color, 1.0f, 1.0f, 1.0f);
     SETCOLOR(m_brush_score_text.fill_color, 1.0f, 1.0f, 1.0f);
 
     for (auto& p_go : *m_dynamic_objects)
