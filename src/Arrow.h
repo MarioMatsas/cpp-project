@@ -20,7 +20,6 @@
 
 
 class Arrow : public GameObject, public Box {
-	//std::vector<Obstacle*>& obstaclesList;
 	float length = 0.0;
 	float initialVelocityX = 0.0f;
 	float initialVelocityY = 0.0f;
@@ -49,5 +48,4 @@ public:
 	float get_y();
 	void set_shot(bool s);
 	bool get_shot();
-	bool collision_detected(std::vector<GameObject*>& obstaclesList);
 };

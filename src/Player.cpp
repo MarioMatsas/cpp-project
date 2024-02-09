@@ -19,14 +19,6 @@
 #include <cstdio>
 #include <iostream>
 
-/*
-Player::Player()
-{
-
-}
-*/
-// MOUSE POSITION WHEN WINDOW SIZE CHANGES NEEDS TO BE FIXED!!!!!!!!!!!
-
 Player::Player(float x, float y, float w, float h, std::string name) : Box(x, y, w, h), GameObject(name, "Player"), m_initial_x(x), m_initial_y(y)
 {
 	// Movement sprites
@@ -93,28 +85,12 @@ void Player::setPos(int x, int y) {
 
 void Player::update(float dt)
 {
-
-	/*
-	for (Arrow* arrow : arrows) {
-		if (arrow->get_x() > 700 || arrow->get_x() < 0 || arrow->get_y() > 450 || arrow->get_y() < 0 || arrow->collision_detected() == true) {
-			std::cout << "deleted" << std::endl;
-			// Remove the arrow from the active arrows vector
-			auto it = std::find(arrows.begin(), arrows.end(), arrow);
-			arrows.erase(it);
-			// Delete it and release the heap space
-			//delete arrow;
-			//arrow = nullptr;
-		}
-
-	}
-	*/
-
 	graphics::getMouseState(mouse);
 	if (mouse.button_left_pressed)
 	{
 		if (gun_selected && (quiver > 0) && ((GameState::getInstance()->real_window_width / GameState::getInstance()->real_window_height) > (WINDOW_WIDTH / WINDOW_HEIGHT) ? (mouse.cur_pos_x > ((GameState::getInstance()->real_window_width - GameState::getInstance()->real_canvas_width) / 2)) && (mouse.cur_pos_x < GameState::getInstance()->real_window_width + ((GameState::getInstance()->real_window_width - GameState::getInstance()->real_canvas_width) / 2)) : (mouse.cur_pos_y > ((GameState::getInstance()->real_window_height - GameState::getInstance()->real_canvas_height) / 2)) && (mouse.cur_pos_y < GameState::getInstance()->real_window_height + ((GameState::getInstance()->real_window_height - GameState::getInstance()->real_canvas_height) / 2))))
 		{
-			// Play the sound
+			// Play the sound and add the arrow to the list
 			graphics::playSound(std::string(ASSET_PATH) + std::string("bow_sound.wav"), 0.8f, false);
 			Arrow* b;
 			if (((mouse.cur_pos_x - ((REAL_WW - REAL_CW) / 2)) * WINDOW_WIDTH) / REAL_CW - m_pos_x >= 0)
@@ -132,6 +108,7 @@ void Player::update(float dt)
 		}
 		else
 		{
+			// Play the sound and add the sword to the list
 			graphics::playSound(std::string(ASSET_PATH) + std::string("sword_sound.wav"), 0.7f, false);
 			if (looking_right)
 			{
@@ -150,23 +127,8 @@ void Player::update(float dt)
 		// Invert the boolean values
 		sword_selected = !sword_selected;
 		gun_selected = !gun_selected;
-		/*
-		if (sword_selected)
-			std::cout << "sword" << std::endl;
-		else
-			std::cout << "gun" << std::endl;
-		*/
-	}
-	/*
-	if (graphics::getKeyState(graphics::SCANCODE_Q)) {
-		// Invert the boolean values
-		sword_selected = !sword_selected;
-		gun_selected = !gun_selected;
-		//if (sword_selected) std::cout << "sword" << std::endl;
-		//else std::cout << "gun" << std::endl;
 
 	}
-	*/
 
 	for (Arrow* arrow : arrows)
 	{
@@ -203,23 +165,9 @@ void Player::update(float dt)
 	if (fabs(m_vx) < 0.01f)
 		m_vx = 0.0f;
 
-	m_pos_x += m_vx * dt / 20.0f; // graphics::getDeltaTime()
+	m_pos_x += m_vx * dt / 20.0f; 
 	sword_right->m_pos_x += m_vx * dt / 20.0f;
 	sword_left->m_pos_x += m_vx * dt / 20.0f;
-	/*
-	m_pos_x -= speed * graphics::getDeltaTime() / 20.0f;
-	if (looking_right) sword->m_pos_x += -2 * 30;
-	looking_left = true;
-	looking_right = false;
-	sword->m_pos_x -= speed * graphics::getDeltaTime() / 20.0f;
-	*/
-	/*
-	m_pos_x += speed * graphics::getDeltaTime() / 20.0f;
-	if (looking_left) sword->m_pos_x += 2 * 30;
-	looking_left = false;
-	looking_right = true;
-	sword->m_pos_x += speed * graphics::getDeltaTime() / 20.0f;
-	*/
 
 	if (graphics::getKeyState(graphics::SCANCODE_W) && jumping == false && falling == false && !attacking)
 	{
@@ -235,79 +183,6 @@ void Player::update(float dt)
 	sword_right->m_pos_y += velocityY * dt / 10.0f;
 	sword_left->m_pos_y += velocityY * dt / 10.0f;
 
-	/*
-	if (jumping) {
-		if (velocityY < 3.5) velocityY += gravity;
-		m_pos_y += velocityY;
-
-		if (m_pos_y >= WINDOW_HEIGHT / 2) jumping = false;
-		//posy -= up_velocity * graphics::getDeltaTime() / 7.0f;
-		//up_velocity -= gravity;
-		//std::cout << up_velocity << std::endl;
-		//if (up_velocity <= -speed){
-		//	jumping = false;
-		//	up_velocity = speed;
-		//}
-	}
-	*/
-	/*
-	// Check if the player collides with any of the Obstacles and perform needed changes in position
-	for (Obstacle* ob : obstaclesList) {
-		if (intersect(*ob)) {
-			float belowCorrection = intersectDown(*ob);
-			if (belowCorrection != 0 && jumping == true && velocityY <= 0) {
-				//std::cout << "belowCorrection: "<<belowCorrection << std::endl;
-				m_pos_y -= belowCorrection;
-				sword->m_pos_y -= belowCorrection;
-				velocityY = 0;
-			}
-		}
-	}
-	for (Obstacle* ob : obstaclesList) {
-		if (intersect(*ob)) {
-			float vertCorrection = intersectAbove(*ob);
-			if (vertCorrection != 0) {
-				m_pos_y += vertCorrection;
-				sword->m_pos_y += vertCorrection;
-				velocityY = 0;
-				jumping = false;
-			}
-
-		}
-	}
-	for (Obstacle* ob : obstaclesList) {
-		if (intersect(*ob)) {
-			float horizCorrection = intersectSideways(*ob);
-			if (horizCorrection != 0 && prevPosX != m_pos_x) {
-				m_pos_x += horizCorrection;
-				sword->m_pos_x += horizCorrection;
-			}
-		}
-	}
-	*/
-
-	/*
-	if ((posx > posx_ - width / 2 && posx < posx_ + width / 2) && (posy > posy_ - height / 2 && posy < posy_ + height / 2)) {
-		if (jumping == true && up_velocity >= 0) {
-			up_velocity = 0;
-			posy += 1;
-		}
-		else if (jumping == true && up_velocity < 0) {
-			jumping = false;
-			falling = false;
-			up_velocity = speed;
-		}
-		else if (posy < posy_) {
-			falling = false;
-		}
-	}
-	else {
-		falling = true;
-	}
-	if (falling && !shot) {
-		posy += gravity * graphics::getDeltaTime() / 3.0f;
-	}
-	*/
 }
 
 void Player::debugDraw()
@@ -493,7 +368,7 @@ void Player::draw()
 				}
 				else
 				{
-					sprite = ((int)fmod(100.0f - m_pos_x * 9.0f, sprites.size()) + 7) % 4; // what the fuck are you talking about Jesse
+					sprite = ((int)fmod(100.0f - m_pos_x * 9.0f, sprites.size()) + 7) % 4;
 
 					br.texture = sprites[sprite];
 
@@ -522,7 +397,6 @@ void Player::draw()
 				else
 				{
 					sprite = ((int)fmod(100.0f - m_pos_x * 9.0f, sprites.size()) + 7) % 4 + 4;
-					// std::cout << sprite << std::endl;
 					br.texture = sprites[sprite];
 
 					previous_sprite = sprite;
@@ -531,12 +405,6 @@ void Player::draw()
 			}
 		}
 	}
-	// int sprite = ((int)fmod(100.0f - m_pos_x * 9.0f, sprites.size()) + 9)%5;
-	// std::cout << sprite << std::endl;
-
-	// if he is facing to the left
-	// 25.0f, 50.0f
-
 	graphics::drawRect(m_pos_x, m_pos_y, 25.0f, 50.0f, br);
 
 	// Draw Sword
@@ -555,6 +423,7 @@ void Player::draw()
 
 void Player::init()
 {
+	// Initialize all the needed values per level
 	m_active = true;
 	health = 6;
 	quiver = 50;

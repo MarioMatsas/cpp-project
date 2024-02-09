@@ -27,14 +27,13 @@ class Level : public GameObject
 	graphics::Brush m_brush_quiver;
 	graphics::Brush m_brush_sword;
 	graphics::Brush m_brush_quiver_text;
-	graphics::Brush m_brush_score;
 	graphics::Brush m_brush_score_text;
 	int player_score = 0;
-
+	bool end_load = false;
 	std::vector<GameObject*>* m_static_objects;
 	std::list<GameObject*>* m_dynamic_objects;
 
-	// Possible conditions to advance to the next level
+	// Possible conditions to advance to the next level, with a slight exception when it comes to the final level
 	bool coin_condition_active = false;
 	bool enemy_condition_active = false;
 	bool door_condition_active = true;

@@ -48,18 +48,17 @@ public:
 	bool looking_left = false;
 	bool sword_selected = false;
 	bool gun_selected = true;
-	Sword *sword_right;
-	Sword *sword_left;
+	Sword* sword_right;
+	Sword* sword_left;
 	double velocityY = 0;		// Vertical velocity
 	const double gravity = 0.1; // Gravity strength
-	std::list<Arrow *> arrows;
-	std::list<Box *> sword_hits;
-	typedef std::pair<graphics::scancode_t, graphics::scancode_t> (Enemy::*DecFn)();
+	std::list<Arrow*> arrows;
+	std::list<Box*> sword_hits;
+	typedef std::pair<graphics::scancode_t, graphics::scancode_t>(Enemy::* DecFn)();
 	DecFn movement;
 	bool jumping = false;
 	bool falling = false;
 	float speed = 4.0f;
-	// const Game& game;
 	float length = 0.0;
 	float initialVelocityX = 0.0f;
 	float initialVelocityY = 0.0f;
