@@ -48,13 +48,13 @@ public:
 	bool looking_left = false;
 	bool sword_selected = false;
 	bool gun_selected = true;
-	Sword* sword_right;
-	Sword* sword_left;
+	Sword *sword_right;
+	Sword *sword_left;
 	double velocityY = 0;		// Vertical velocity
 	const double gravity = 0.1; // Gravity strength
-	std::list<Arrow*> arrows;
-	std::list<Box*> sword_hits;
-	typedef std::pair<graphics::scancode_t, graphics::scancode_t>(Enemy::* DecFn)();
+	std::list<Arrow *> arrows;
+	std::list<Box *> sword_hits;
+	typedef std::pair<graphics::scancode_t, graphics::scancode_t> (Enemy::*DecFn)();
 	DecFn movement;
 	bool jumping = false;
 	bool falling = false;
@@ -75,6 +75,8 @@ public:
 	// Enemy();
 	Enemy(float x, float y, float w, float h, std::string name, DecFn func, bool restrict_movement);
 	std::pair<graphics::scancode_t, graphics::scancode_t> dumbMovement(void);
+	std::pair<graphics::scancode_t, graphics::scancode_t> noMovement(void);
+
 	~Enemy();
 	bool should_I_shoot();
 	bool should_I_thrust();

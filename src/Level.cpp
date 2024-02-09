@@ -200,10 +200,9 @@ void Level::update(float dt)
         m_state->m_curr_lvl += 1;
         m_state->m_curr_lvl_ptr = nullptr;
         delete this;
+        advance = false;
         return;
     }
-    // TODO: add a check here for reaching some milestone to switch levels.
-    // in that case, I think just incrementing m_curr_lvl will be enough!
 
     m_brush_health.texture = std::string(ASSET_PATH) + "Hearts/" +
         std::to_string(PLAYER->health) + ".png";
@@ -427,15 +426,14 @@ void Level::checkCollisions()
         if (!(s_ob->m_class == "Obstacle"))
             continue;
         Obstacle* ob = dynamic_cast<Obstacle*>(s_ob);
-        if (m_state->getPlayer()->intersect(*ob))
+        if (m_state->getPlayer()->intersect(*ob) || m_state->m_curr_lvl == 4)
         {
             // Check if the conditions have been met
             bool cond = check_end_condition();
-            if (cond && ob->m_name == "Door")
+            if (cond && (ob->m_name == "Door" || m_state->m_curr_lvl == 4))
             {
                 graphics::stopMusic(200);
                 graphics::playSound(std::string(ASSET_PATH) + std::string("door_sound.wav"), 0.5f, false);
-                std::cout << "Hooray you advance!";
                 advance = true;
                 return;
             }

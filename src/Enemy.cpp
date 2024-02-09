@@ -554,6 +554,12 @@ void Enemy::jump()
 {
 }
 
+std::pair<graphics::scancode_t, graphics::scancode_t> Enemy::noMovement(void)
+{
+	return std::pair<graphics::scancode_t, graphics::scancode_t> {graphics::SCANCODE_Q, graphics::SCANCODE_Q};
+}
+
+
 std::pair<graphics::scancode_t, graphics::scancode_t> Enemy::dumbMovement(void)
 {
 	std::pair<graphics::scancode_t, graphics::scancode_t> decision;
