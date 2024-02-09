@@ -45,10 +45,9 @@ public:
 	Sword* sword_right;
 	Sword* sword_left;
 	graphics::MouseState mouse;
-	//std::vector<Obstacle*>& obstaclesList;
 	double velocityY = 0; // Vertical velocity
 	const double gravity = 0.1; // Gravity strength
-	int quiver = 50; // amount of arrows available to shoot, 0 <= quiver <= 24
+	int quiver = 15; // amount of arrows available to shoot, 0 <= quiver <= 24
 	// should only be reset when restarting a level, not between levels
 	// we are not going to limit the enemies likewise, to make it harder
 	// (gta also does this I'm pretty sure)
@@ -58,7 +57,6 @@ public:
 	bool falling = false;
 	float speed = 4.0f;
 	int health = 6; // 0 to 6
-	//const Game& game;
 	float length = 0.0;
 	float initialVelocityX = 0.0f;
 	float initialVelocityY = 0.0f;
@@ -67,8 +65,6 @@ public:
 	bool down_right = false;
 	bool down_left = false;
 	float tangent = 0.0f;
-	float mouse_x = 0.0;
-	float mouse_y = 0.0;
 	float m_initial_x = 0;
 	float m_initial_y = 0;
 	//graphics::MouseState mouse;

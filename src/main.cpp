@@ -42,7 +42,6 @@ int main(int argc, char** argv)
 
     graphics::setCanvasSize(GameState::getInstance()->getCanvasWidth(), GameState::getInstance()->getCanvasHeight());
     graphics::setCanvasScaleMode(graphics::CANVAS_SCALE_FIT);
-    //graphics::playMusic(std::string(ASSET_PATH) + std::string("medieval_theme.wav"), 0.6f, true, 500);
     graphics::startMessageLoop();
     return 0;
 }

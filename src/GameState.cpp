@@ -19,7 +19,7 @@ GameState::~GameState()
         delete m_curr_lvl_ptr;
 }
 
-GameState *GameState::getInstance()
+GameState* GameState::getInstance()
 {
     if (!m_unique_instance)
     {
@@ -33,8 +33,8 @@ bool GameState::init()
     // Start level 1
     if (m_curr_lvl == 1)
     {
-        std::vector<GameObject *> *m_static_objects = new std::vector<GameObject *>();
-        std::list<GameObject *> *m_dynamic_objects = new std::list<GameObject *>();
+        std::vector<GameObject*>* m_static_objects = new std::vector<GameObject*>();
+        std::list<GameObject*>* m_dynamic_objects = new std::list<GameObject*>();
 
         // Statics
         m_static_objects->push_back(
@@ -57,23 +57,23 @@ bool GameState::init()
             new Obstacle(737, 285, 20, 20, 1.0f, 1.0f, 1.0f, 0.0f, "coin_asset.png", "Coin2"));
 
         m_dynamic_objects->push_back(new Enemy(512, 180,
-                                               25, 50, "Enemy",
-                                               &Enemy::noMovement, false));
+            25, 50, "Enemy",
+            &Enemy::noMovement, false));
         if (!m_player)
         {
             m_player = new Player(60, WINDOW_HEIGHT - 35 / 2 - 60, 25, 50, "Player");
         }
         m_player->init();
 
-        m_curr_lvl_ptr = new Level(m_static_objects, m_dynamic_objects, "nature.png", {false, false}, "1.lvl");
+        m_curr_lvl_ptr = new Level(m_static_objects, m_dynamic_objects, "nature.png", { false, false }, "1.lvl");
         m_curr_lvl_ptr->init();
     }
 
     // Start level 2
     if (m_curr_lvl == 2)
     {
-        std::vector<GameObject *> *m_static_objects = new std::vector<GameObject *>();
-        std::list<GameObject *> *m_dynamic_objects = new std::list<GameObject *>();
+        std::vector<GameObject*>* m_static_objects = new std::vector<GameObject*>();
+        std::list<GameObject*>* m_dynamic_objects = new std::list<GameObject*>();
 
         // Statics
         m_static_objects->push_back(
@@ -111,22 +111,22 @@ bool GameState::init()
         m_dynamic_objects->push_back(
             new Obstacle(WINDOW_WIDTH / 2 - 200, WINDOW_HEIGHT / 2 + 50 - 35, 20, 20, 1.0f, 1.0f, 1.0f, 0.0f, "coin_asset.png", "Coin"));
         m_dynamic_objects->push_back(new Enemy(WINDOW_WIDTH / 2 - 400, WINDOW_HEIGHT / 2 - 5 - 35 / 2,
-                                               25, 50, "Enemy",
-                                               &Enemy::dumbMovement, false));
+            25, 50, "Enemy",
+            &Enemy::dumbMovement, false));
         m_dynamic_objects->push_back(new Enemy(WINDOW_WIDTH / 2 + 400, WINDOW_HEIGHT / 2 - 5 - 35 / 2,
-                                               25, 50, "Enemy",
-                                               &Enemy::dumbMovement, false));
+            25, 50, "Enemy",
+            &Enemy::dumbMovement, false));
         m_player->init();
 
-        m_curr_lvl_ptr = new Level(m_static_objects, m_dynamic_objects, "background_lvl.png", {false, false}, "2.lvl");
+        m_curr_lvl_ptr = new Level(m_static_objects, m_dynamic_objects, "background_lvl.png", { false, false }, "2.lvl");
         m_curr_lvl_ptr->init();
     }
 
     // Start level 3
     if (m_curr_lvl == 3)
     {
-        std::vector<GameObject *> *m_static_objects = new std::vector<GameObject *>();
-        std::list<GameObject *> *m_dynamic_objects = new std::list<GameObject *>();
+        std::vector<GameObject*>* m_static_objects = new std::vector<GameObject*>();
+        std::list<GameObject*>* m_dynamic_objects = new std::list<GameObject*>();
 
         // Statics
         m_static_objects->push_back(
@@ -152,24 +152,26 @@ bool GameState::init()
         m_dynamic_objects->push_back(
             new Obstacle(WINDOW_WIDTH / 2, WINDOW_HEIGHT / 2 - 35, 20, 20, 1.0f, 1.0f, 1.0f, 0.0f, "coin_asset.png", "Coin"));
         m_dynamic_objects->push_back(new Enemy(WINDOW_WIDTH / 2 + 200, WINDOW_HEIGHT / 4 + 30 - 35 / 2,
-                                               25, 50, "Enemy",
-                                               &Enemy::dumbMovement, false));
+            25, 50, "Enemy",
+            &Enemy::dumbMovement, false));
         m_dynamic_objects->push_back(new Enemy(WINDOW_WIDTH / 2 - 200, WINDOW_HEIGHT / 4 + 30 - 35 / 2,
-                                               25, 50, "Enemy",
-                                               &Enemy::dumbMovement, false));
+            25, 50, "Enemy",
+            &Enemy::dumbMovement, false));
         m_dynamic_objects->push_back(new Enemy(WINDOW_WIDTH / 2 + 300, WINDOW_HEIGHT - 150,
-                                               25, 50, "Enemy",
-                                               &Enemy::dumbMovement, false));
+            25, 50, "Enemy",
+            &Enemy::dumbMovement, false));
         m_player->init();
 
-        m_curr_lvl_ptr = new Level(m_static_objects, m_dynamic_objects, "background_lvl.png", {false, false}, "3.lvl");
+        m_curr_lvl_ptr = new Level(m_static_objects, m_dynamic_objects, "background_lvl.png", { false, false }, "3.lvl");
         m_curr_lvl_ptr->init();
     }
+
+    // Start level 4
     if (m_curr_lvl == 4)
     {
 
-        std::vector<GameObject *> *m_static_objects = new std::vector<GameObject *>();
-        std::list<GameObject *> *m_dynamic_objects = new std::list<GameObject *>();
+        std::vector<GameObject*>* m_static_objects = new std::vector<GameObject*>();
+        std::list<GameObject*>* m_dynamic_objects = new std::list<GameObject*>();
 
         // Statics
         m_static_objects->push_back(
@@ -200,17 +202,17 @@ bool GameState::init()
             new Obstacle(212, 90, 20, 20, 1.0f, 1.0f, 1.0f, 0.0f, "coin_asset.png", "Coin3"));
 
         m_dynamic_objects->push_back(new Enemy(WINDOW_WIDTH / 2, 190,
-                                               25, 50, "Enemy",
-                                               &Enemy::dumbMovement, false));
+            25, 50, "Enemy",
+            &Enemy::dumbMovement, false));
         m_dynamic_objects->push_back(new Enemy(860, 90,
-                                               25, 50, "Enemy",
-                                               &Enemy::dumbMovement, false));
+            25, 50, "Enemy",
+            &Enemy::dumbMovement, false));
         m_dynamic_objects->push_back(new Enemy(200, 90,
-                                               25, 50, "Enemy",
-                                               &Enemy::dumbMovement, false));
+            25, 50, "Enemy",
+            &Enemy::dumbMovement, false));
         m_player->init();
 
-        m_curr_lvl_ptr = new Level(m_static_objects, m_dynamic_objects, "StarryNight.png", {true, true}, "4.lvl");
+        m_curr_lvl_ptr = new Level(m_static_objects, m_dynamic_objects, "StarryNight.png", { true, true }, "4.lvl");
         m_curr_lvl_ptr->init();
 
     }
@@ -232,7 +234,6 @@ void GameState::draw()
         br.texture = std::string(ASSET_PATH) + "controls_screen.png";
         graphics::drawRect(WINDOW_WIDTH / 2, WINDOW_HEIGHT / 2, WINDOW_WIDTH, WINDOW_HEIGHT, br);
         break;
-    // Needs to be case 5
     case 5:
         br.texture = std::string(ASSET_PATH) + "end_screen.png";
         graphics::drawRect(WINDOW_WIDTH / 2, WINDOW_HEIGHT / 2, WINDOW_WIDTH, WINDOW_HEIGHT, br);
@@ -307,6 +308,7 @@ void GameState::update(float dt)
     default:
         if (!m_curr_lvl_ptr)
         {
+            // Go to the next level
             std::this_thread::sleep_for(std::chrono::duration<float, std::milli>(1500));
             init();
             return;
@@ -338,7 +340,7 @@ void GameState::resize(int new_w, int new_h)
     real_window_width = new_w;
 }
 
-std::string GameState::getFullAssetPath(const std::string &asset)
+std::string GameState::getFullAssetPath(const std::string& asset)
 {
     return m_asset_path + asset;
 }
@@ -348,4 +350,4 @@ std::string GameState::getAssetDir()
     return m_asset_path;
 }
 
-GameState *GameState::m_unique_instance = nullptr;
+GameState* GameState::m_unique_instance = nullptr;

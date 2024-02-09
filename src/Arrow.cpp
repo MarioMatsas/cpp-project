@@ -6,7 +6,7 @@
 
 void Arrow::update(float dt)
 {
-	// Depending on the positionof the players mouse, we change the position of the arrow to simulate it's firing
+	// Depending on the position of the player's mouse, we change the position of the arrow to simulate it's firing
 	if (up_right) {
 		m_pos_y -= initialVelocityY*dt/10;
 		m_pos_x += initialVelocityX*dt/10;
@@ -27,7 +27,7 @@ void Arrow::update(float dt)
 
 void Arrow::draw()
 {
-	//std::cout << " drawn " << std::endl;
+	// Draw the arrow and set its orientation dependign on where the player is shooting
 	graphics::Brush br;
 	br.outline_opacity = 0.0f;
 	br.texture = std::string(ASSET_PATH) + "Arrow1.png";
@@ -60,11 +60,8 @@ void Arrow::shoot(float dt)
 	direction_y = direction_y / length;
 
 	// Calculate the initial velocity components
-	initialVelocityX = direction_x * speed * dt / 30.0f;//(graphics::getDeltaTime() / 30.0f);
-	initialVelocityY = direction_y * speed * dt / 30.0f; // (graphics::getDeltaTime() / 30.0f);
-
-	//std::cout << initialVelocityX << std::endl;
-	//std::cout << initialVelocityY << std::endl;
+	initialVelocityX = direction_x * speed * dt / 30.0f;
+	initialVelocityY = direction_y * speed * dt / 30.0f; 
 
 	tangent = abs(mouse_y - m_pos_y) / abs(mouse_x - m_pos_x); \
 
@@ -123,19 +120,4 @@ void Arrow::set_shot(bool s)
 bool Arrow::get_shot()
 {
 	return shot;
-}
-
-bool Arrow::collision_detected(std::vector<GameObject*>& m_blocks)
-{
-	// Check for any collion with Obstacles
-	for (GameObject* s_ob : m_blocks) {
-		if (!(s_ob->m_class == "Obstacle")) {
-			continue;
-		}
-		Obstacle* ob = dynamic_cast<Obstacle*>(s_ob);
-		if (intersect(*ob)) {
-			return true;
-		}
-	}
-	return false;
 }

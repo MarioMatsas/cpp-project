@@ -19,7 +19,6 @@
 #endif
 
 class Sword : public GameObject, public Box {
-	//std::vector<Obstacle*>& obstaclesList;
 public:
 	void update(float dt) override;
 	void draw() override;

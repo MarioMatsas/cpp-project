@@ -20,55 +20,47 @@
 #include "util.h"
 #include <cstdlib>
 
-/*
-Enemy::Enemy()
-{
-
-}
-*/
-// MOUSE POSITION WHEN WINDOW SIZE CHANGES NEEDS TO BE FIXED!!!!!!!!!!!
-
 Enemy::Enemy(float x, float y, float w, float h, std::string name, DecFn func, bool restrict_movement) : Box(x, y, w, h), GameObject(name, "Enemy"), movement(func), restrict_movement(restrict_movement)
 {
 	sword_right = new Sword(m_pos_x + 30, m_pos_y, 25.0f, 7.0f, "right sword");
 	sword_left = new Sword(m_pos_x - 30, m_pos_y, 25.0f, 7.0f, "left sword");
 	// Movement sprites
-	sprites.push_back(std::string(ASSET_PATH) + "/Player/2.png");
-	sprites.push_back(std::string(ASSET_PATH) + "/Player/3.png");
-	sprites.push_back(std::string(ASSET_PATH) + "/Player/4.png");
-	sprites.push_back(std::string(ASSET_PATH) + "/Player/5.png");
-	sprites.push_back(std::string(ASSET_PATH) + "/Player/2_left.png");
-	sprites.push_back(std::string(ASSET_PATH) + "/Player/3_left.png");
-	sprites.push_back(std::string(ASSET_PATH) + "/Player/4_left.png");
-	sprites.push_back(std::string(ASSET_PATH) + "/Player/5_left.png");
+	sprites.push_back(std::string(ASSET_PATH) + "/" + name + "/" + "2.png");
+	sprites.push_back(std::string(ASSET_PATH) + "/" + name + "/" + "3.png");
+	sprites.push_back(std::string(ASSET_PATH) + "/" + name + "/" + "4.png");
+	sprites.push_back(std::string(ASSET_PATH) + "/" + name + "/" + "5.png");
+	sprites.push_back(std::string(ASSET_PATH) + "/" + name + "/" + "2_left.png");
+	sprites.push_back(std::string(ASSET_PATH) + "/" + name + "/" + "3_left.png");
+	sprites.push_back(std::string(ASSET_PATH) + "/" + name + "/" + "4_left.png");
+	sprites.push_back(std::string(ASSET_PATH) + "/" + name + "/" + "5_left.png");
 
 	// Standing sprites
-	standing_sprites.push_back(std::string(ASSET_PATH) + "/Player/6.png");
-	standing_sprites.push_back(std::string(ASSET_PATH) + "/Player/6_left.png");
+	standing_sprites.push_back(std::string(ASSET_PATH) + "/" + name + "/" + "6.png");
+	standing_sprites.push_back(std::string(ASSET_PATH) + "/" + name + "/" + "6_left.png");
 
 	// Attack sprites
-	attack_sprites.push_back(std::string(ASSET_PATH) + "/Player/7.png");
-	attack_sprites.push_back(std::string(ASSET_PATH) + "/Player/8.png");
-	attack_sprites.push_back(std::string(ASSET_PATH) + "/Player/9.png");
-	attack_sprites.push_back(std::string(ASSET_PATH) + "/Player/10.png");
-	attack_sprites.push_back(std::string(ASSET_PATH) + "/Player/11.png");
-	attack_sprites.push_back(std::string(ASSET_PATH) + "/Player/12.png");
-	attack_sprites.push_back(std::string(ASSET_PATH) + "/Player/13.png");
-	attack_sprites.push_back(std::string(ASSET_PATH) + "/Player/14.png");
-	attack_sprites.push_back(std::string(ASSET_PATH) + "/Player/7_left.png");
-	attack_sprites.push_back(std::string(ASSET_PATH) + "/Player/8_left.png");
-	attack_sprites.push_back(std::string(ASSET_PATH) + "/Player/9_left.png");
-	attack_sprites.push_back(std::string(ASSET_PATH) + "/Player/10_left.png");
-	attack_sprites.push_back(std::string(ASSET_PATH) + "/Player/11_left.png");
-	attack_sprites.push_back(std::string(ASSET_PATH) + "/Player/12_left.png");
-	attack_sprites.push_back(std::string(ASSET_PATH) + "/Player/13_left.png");
-	attack_sprites.push_back(std::string(ASSET_PATH) + "/Player/14_left.png");
+	attack_sprites.push_back(std::string(ASSET_PATH) + "/" + name + "/" + "7.png");
+	attack_sprites.push_back(std::string(ASSET_PATH) + "/" + name + "/" + "8.png");
+	attack_sprites.push_back(std::string(ASSET_PATH) + "/" + name + "/" + "9.png");
+	attack_sprites.push_back(std::string(ASSET_PATH) + "/" + name + "/" + "10.png");
+	attack_sprites.push_back(std::string(ASSET_PATH) + "/" + name + "/" + "11.png");
+	attack_sprites.push_back(std::string(ASSET_PATH) + "/" + name + "/" + "12.png");
+	attack_sprites.push_back(std::string(ASSET_PATH) + "/" + name + "/" + "13.png");
+	attack_sprites.push_back(std::string(ASSET_PATH) + "/" + name + "/" + "14.png");
+	attack_sprites.push_back(std::string(ASSET_PATH) + "/" + name + "/" + "7_left.png");
+	attack_sprites.push_back(std::string(ASSET_PATH) + "/" + name + "/" + "8_left.png");
+	attack_sprites.push_back(std::string(ASSET_PATH) + "/" + name + "/" + "9_left.png");
+	attack_sprites.push_back(std::string(ASSET_PATH) + "/" + name + "/" + "10_left.png");
+	attack_sprites.push_back(std::string(ASSET_PATH) + "/" + name + "/" + "11_left.png");
+	attack_sprites.push_back(std::string(ASSET_PATH) + "/" + name + "/" + "12_left.png");
+	attack_sprites.push_back(std::string(ASSET_PATH) + "/" + name + "/" + "13_left.png");
+	attack_sprites.push_back(std::string(ASSET_PATH) + "/" + name + "/" + "14_left.png");
 
 	// Jumping sprites
-	jumping_sprites.push_back(std::string(ASSET_PATH) + "/Player/15.png");
-	jumping_sprites.push_back(std::string(ASSET_PATH) + "/Player/16.png");
-	jumping_sprites.push_back(std::string(ASSET_PATH) + "/Player/15_left.png");
-	jumping_sprites.push_back(std::string(ASSET_PATH) + "/Player/16_left.png");
+	jumping_sprites.push_back(std::string(ASSET_PATH) + "/" + name + "/" + "15.png");
+	jumping_sprites.push_back(std::string(ASSET_PATH) + "/" + name + "/" + "16.png");
+	jumping_sprites.push_back(std::string(ASSET_PATH) + "/" + name + "/" + "15_left.png");
+	jumping_sprites.push_back(std::string(ASSET_PATH) + "/" + name + "/" + "16_left.png");
 }
 
 Enemy::~Enemy()
@@ -87,32 +79,17 @@ Enemy::~Enemy()
 
 	for (auto arrow : arrows)
 		delete arrow;
-	// sword hits
 }
 
 void Enemy::update(float dt)
 {
 	dt_sum += dt;
-	/*
-	for (Arrow* arrow : arrows) {
-		if (arrow->get_x() > 700 || arrow->get_x() < 0 || arrow->get_y() > 450 || arrow->get_y() < 0 || arrow->collision_detected() == true) {
-			std::cout << "deleted" << std::endl;
-			// Remove the arrow from the active arrows vector
-			auto it = std::find(arrows.begin(), arrows.end(), arrow);
-			arrows.erase(it);
-			// Delete it and release the heap space
-			//delete arrow;
-			//arrow = nullptr;
-		}
-
-	}
-	*/
 
 	if ((std::rand() < (RAND_MAX * 0.2)))
 	{
 		if (Enemy::should_I_shoot())
 		{
-			// std::cout << "shoot" << std::endl;
+			// Create the arrow and add it to the arrow list
 			Arrow* b = new Arrow(m_pos_x, m_pos_y, m_width, m_height, atan((-(m_state->getPlayer()->m_pos_y - m_pos_y)) / (m_state->getPlayer()->m_pos_x - m_pos_x)), "arrow");
 
 			if (m_state->getPlayer()->m_pos_x - m_pos_x >= 0)
@@ -152,17 +129,6 @@ void Enemy::update(float dt)
 		}
 	}
 
-	/*
-	if (graphics::getKeyState(graphics::SCANCODE_Q)) {
-		// Invert the boolean values
-		sword_selected = !sword_selected;
-		gun_selected = !gun_selected;
-		//if (sword_selected) std::cout << "sword" << std::endl;
-		//else std::cout << "gun" << std::endl;
-
-	}
-	*/
-
 	for (Arrow* arrow : arrows)
 	{
 		if (arrow->get_shot() == false)
@@ -190,7 +156,7 @@ void Enemy::update(float dt)
 	}
 	if (restrict_movement == false)
 	{
-		m_vx = std::min<float>(m_max_velocity, m_vx + dt * move * m_accel_horizontal); // graphics::getDeltaTime()
+		m_vx = std::min<float>(m_max_velocity, m_vx + dt * move * m_accel_horizontal); 
 		m_vx = std::max<float>(-m_max_velocity, m_vx);
 
 		// friction
@@ -208,7 +174,6 @@ void Enemy::update(float dt)
 		{
 			velocityY = -4.0;
 			jumping = true;
-			// posy_dummy = posy;
 		}
 
 		// Apply gravity until terminal velocity is reached
@@ -221,95 +186,6 @@ void Enemy::update(float dt)
 		if (dt_sum > 600)
 			dt_sum = 0;
 	}
-
-	/*
-	m_pos_x -= speed * graphics::getDeltaTime() / 20.0f;
-	if (looking_right) sword->m_pos_x += -2 * 30;
-	looking_left = true;
-	looking_right = false;
-	sword->m_pos_x -= speed * graphics::getDeltaTime() / 20.0f;
-	*/
-	/*
-	m_pos_x += speed * graphics::getDeltaTime() / 20.0f;
-	if (looking_left) sword->m_pos_x += 2 * 30;
-	looking_left = false;
-	looking_right = true;
-	sword->m_pos_x += speed * graphics::getDeltaTime() / 20.0f;
-	*/
-
-	/*
-	if (jumping) {
-		if (velocityY < 3.5) velocityY += gravity;
-		m_pos_y += velocityY;
-
-		if (m_pos_y >= WINDOW_HEIGHT / 2) jumping = false;
-		//posy -= up_velocity * graphics::getDeltaTime() / 7.0f;
-		//up_velocity -= gravity;
-		//std::cout << up_velocity << std::endl;
-		//if (up_velocity <= -speed){
-		//	jumping = false;
-		//	up_velocity = speed;
-		//}
-	}
-	*/
-	/*
-	// Check if the Enemy collides with any of the Obstacles and perform needed changes in position
-	for (Obstacle* ob : obstaclesList) {
-		if (intersect(*ob)) {
-			float belowCorrection = intersectDown(*ob);
-			if (belowCorrection != 0 && jumping == true && velocityY <= 0) {
-				//std::cout << "belowCorrection: "<<belowCorrection << std::endl;
-				m_pos_y -= belowCorrection;
-				sword->m_pos_y -= belowCorrection;
-				velocityY = 0;
-			}
-		}
-	}
-	for (Obstacle* ob : obstaclesList) {
-		if (intersect(*ob)) {
-			float vertCorrection = intersectAbove(*ob);
-			if (vertCorrection != 0) {
-				m_pos_y += vertCorrection;
-				sword->m_pos_y += vertCorrection;
-				velocityY = 0;
-				jumping = false;
-			}
-
-		}
-	}
-	for (Obstacle* ob : obstaclesList) {
-		if (intersect(*ob)) {
-			float horizCorrection = intersectSideways(*ob);
-			if (horizCorrection != 0 && prevPosX != m_pos_x) {
-				m_pos_x += horizCorrection;
-				sword->m_pos_x += horizCorrection;
-			}
-		}
-	}
-	*/
-
-	/*
-	if ((posx > posx_ - width / 2 && posx < posx_ + width / 2) && (posy > posy_ - height / 2 && posy < posy_ + height / 2)) {
-		if (jumping == true && up_velocity >= 0) {
-			up_velocity = 0;
-			posy += 1;
-		}
-		else if (jumping == true && up_velocity < 0) {
-			jumping = false;
-			falling = false;
-			up_velocity = speed;
-		}
-		else if (posy < posy_) {
-			falling = false;
-		}
-	}
-	else {
-		falling = true;
-	}
-	if (falling && !shot) {
-		posy += gravity * graphics::getDeltaTime() / 3.0f;
-	}
-	*/
 }
 
 void Enemy::debugDraw()
@@ -484,8 +360,6 @@ void Enemy::draw()
 				}
 				else
 				{
-					sprite = ((int)fmod(100.0f - m_pos_x * 9.0f, sprites.size()) + 7) % 4;
-					// std::cout << sprite << std::endl;
 
 					m_brush.texture = sprites[sprite];
 
@@ -514,7 +388,6 @@ void Enemy::draw()
 				else
 				{
 					sprite = ((int)fmod(100.0f - m_pos_x * 9.0f, sprites.size()) + 7) % 4 + 4;
-					// std::cout << sprite << std::endl;
 
 					m_brush.texture = sprites[sprite];
 
@@ -524,11 +397,6 @@ void Enemy::draw()
 			}
 		}
 	}
-	// int sprite = ((int)fmod(100.0f - m_pos_x * 9.0f, sprites.size()) + 9)%5;
-	// std::cout << sprite << std::endl;
-
-	// if he is facing to the left
-	// 25.0f, 50.0f
 
 	graphics::drawRect(m_pos_x, m_pos_y, 25.0f, 50.0f, m_brush);
 
@@ -607,9 +475,9 @@ std::pair<graphics::scancode_t, graphics::scancode_t> Enemy::dumbMovement(void)
 	return decision;
 }
 
+// Simple calculation used to see if the enemy should attack or not (either by shooting or thrusting)
 bool Enemy::should_I_shoot()
 {
-	//return false;
 	if (dt_sum < 600)
 		return false;
 	if (fabs(this->m_pos_x - PLAYER->m_pos_x) < 4 * m_width)
@@ -619,7 +487,7 @@ bool Enemy::should_I_shoot()
 
 bool Enemy::should_I_thrust()
 {
-	//return false;
+
 	if (dt_sum < 600)
 		return false;
 	if (fabs(this->m_pos_y - PLAYER->m_pos_y) >= m_height)

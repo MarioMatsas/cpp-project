@@ -20,6 +20,7 @@
 Level::Level(std::vector<GameObject*>* m_static_objects,
     std::list<GameObject*>* m_dynamic_objects, const std::string& bg, std::pair<bool, bool> conds, const std::string& name) : GameObject(name), m_static_objects(m_static_objects), m_dynamic_objects(m_dynamic_objects), coin_condition_active(conds.first), enemy_condition_active(conds.second)
 {
+    // Initialing all the brushes and setting all their needed parameters to fit our needs
     m_brush_background.outline_opacity = 0.0f;
     m_brush_background.texture = std::string(ASSET_PATH) + bg;
 
@@ -27,11 +28,6 @@ Level::Level(std::vector<GameObject*>* m_static_objects,
     m_brush_health.outline_opacity = 0.0f;
     SETCOLOR(m_brush_health.fill_color, 1.0f, 1.0f, 1.0f)
         m_brush_health.texture = std::string(ASSET_PATH) + "Hearts/6.png";
-
-    m_brush_score.fill_opacity = 1.0f;
-    m_brush_score.outline_opacity = 0.0f;
-    SETCOLOR(m_brush_score.fill_color, 1.0f, 1.0f, 1.0f)
-        m_brush_score.texture = std::string(ASSET_PATH) + "coin_asset.png";
 
     m_brush_quiver.fill_opacity = 1.0f;
     m_brush_quiver.outline_opacity = 0.0f;
@@ -46,6 +42,7 @@ Level::Level(std::vector<GameObject*>* m_static_objects,
     SETCOLOR(m_brush_quiver_text.fill_color, 0.0f, 0.0f, 0.0f);
     SETCOLOR(m_brush_score_text.fill_color, 1.0f, 1.0f, 1.0f);
 
+    // Initialize all the objects in the dynamic list
     for (auto& p_go : *m_dynamic_objects)
         p_go->init();
 }
@@ -60,6 +57,7 @@ Level::~Level()
 
 void Level::init()
 {
+    // Initializing all the dynamic and static objects
     for (auto& p_go : *m_static_objects)
     {
         if (p_go)
@@ -74,6 +72,7 @@ void Level::init()
 }
 void Level::draw()
 {
+    // If the player dies draw the option screen
     if (PLAYER->health <= 0)
     {
         graphics::Brush br;
@@ -83,8 +82,11 @@ void Level::draw()
         graphics::stopMusic();
         return;
     }
+    // Draw background
     graphics::drawRect(WINDOW_WIDTH / 2, WINDOW_HEIGHT / 2, WINDOW_WIDTH,
         WINDOW_HEIGHT, m_brush_background);
+
+    // Draw statics and dynamics
     for (int i = 0; i < m_static_objects->size(); i++)
     {
         if ((*m_static_objects)[i]->m_class == "Obstacle")
@@ -115,26 +117,27 @@ void Level::draw()
     graphics::drawText(WINDOW_WIDTH * 0.93, WINDOW_HEIGHT / 16 + 151.0f / 9, 151.0f / 3, std::to_string(PLAYER->quiver),
         m_brush_quiver_text);
 
-    // Draw quiver or sword showing selection
-    // Depending on the weapon sleected, the icon is shown
-    if (PLAYER->gun_selected && PLAYER->quiver > 0) {
-        graphics::drawRect(WINDOW_WIDTH/1.2, WINDOW_HEIGHT / 16, 151.0f / 3, 151.0f / 3,
-        m_brush_quiver);
-    } else {
-        graphics::drawRect(WINDOW_WIDTH/1.2, WINDOW_HEIGHT / 16, 151.0f / 3, 151.0f / 3,
-        m_brush_sword);
+    // Draw quiver and sword for selection outlining
+    // Depending on the weapon sleected, the icon gets outlined
+    if (PLAYER->gun_selected && PLAYER->quiver > 0)
+    {
+        m_brush_quiver.outline_opacity = 1.0f;
+        m_brush_sword.outline_opacity = 0.0f;
     }
-
+    else
+    {
+        m_brush_quiver.outline_opacity = 0.0f;
+        m_brush_sword.outline_opacity = 1.0f;
+    }
+    graphics::drawRect(WINDOW_WIDTH / 2 + 160, WINDOW_HEIGHT / 16, 151.0f / 3, 151.0f / 3,
+        m_brush_quiver);
+    graphics::drawRect(WINDOW_WIDTH / 2 + 220, WINDOW_HEIGHT / 16, 151.0f / 3, 151.0f / 3,
+        m_brush_sword);
 
     // Draw the score
     // WINDOW_WIDTH / 2 - 100, WINDOW_HEIGHT * 0.1f, 151.0f / 3 middle
-    graphics::setFont(std::string(ASSET_PATH) + "din1451alt.ttf");
-
-    graphics::drawText(WINDOW_WIDTH / 5.5, WINDOW_HEIGHT / 10.25, 151.0f / 3, std::to_string(m_state->score),
+    graphics::drawText(WINDOW_WIDTH / 2 - 225, WINDOW_HEIGHT * 0.1f, 151.0f / 3, "SCORE    " + std::to_string(m_state->score),
         m_brush_score_text);
-
-    graphics::drawRect(WINDOW_WIDTH / 6.5, WINDOW_HEIGHT / 16, 151.0f / 3, 151.0f / 3,
-        m_brush_score);
 
     // draw player
     if (m_state->getPlayer()->isActive())
@@ -143,11 +146,13 @@ void Level::draw()
 
 void Level::update(float dt)
 {
+    // Check to start playing the music
     if (first_time)
     {
         graphics::playMusic(std::string(ASSET_PATH) + std::string("castle_music.wav"), 0.05f, true, 1000);
         first_time = false;
     }
+    // If the player dies give the user the option to retry or restart the game
     if (PLAYER->health <= 0)
     {
 
@@ -170,6 +175,7 @@ void Level::update(float dt)
         }
     }
 
+    // Update all dynamic objects and the player as long as they are active
     if (m_state->getPlayer()->isActive())
         m_state->getPlayer()->update(dt);
 
@@ -178,9 +184,11 @@ void Level::update(float dt)
         if (g_ob->isActive())
             g_ob->update(dt);
     }
-   
+
+    // Check the collisions
     checkCollisions();
 
+    // Check if the player can advance and if so make the needed deletions
     if (advance == true)
     {
         auto ht = PLAYER->arrows.begin();
@@ -232,7 +240,7 @@ void Level::checkCollisions()
         }
     }
 
-    // Arrow collisions / Out of bounds check
+    // Check if the enemy has hit the player and make all the needing changes after the fact
 
     for (auto it = m_dynamic_objects->begin(); it != m_dynamic_objects->end();
         ++it)
@@ -266,15 +274,6 @@ void Level::checkCollisions()
             s_it = g_ob->sword_hits.begin();
         }
         g_ob->sword_hits.clear();
-        // Delete swords
-        /*
-        auto j_it = g_ob->sword_hits.begin();
-        while (j_it != g_ob->sword_hits.end())
-        {
-            delete* j_it;
-            j_it = g_ob->sword_hits.erase(j_it);
-        }
-        */
         auto jt = g_ob->arrows.begin();
         while (jt != g_ob->arrows.end())
         {
@@ -298,17 +297,9 @@ void Level::checkCollisions()
             }
         }
     }
-    /*
-        for (const auto& ob : g_ob->sword_hits) {
-            if ((ob)->intersect(*PLAYER)) {
-                PLAYER->health--;
-            }
-        }
-        for (const auto& ob : g_ob->sword_hits) {
-            delete ob;
-        }
-        std::cout << "size: " << g_ob->sword_hits.size() << std::endl;
-        */
+
+
+    // Check if the player has collected a coin
     for (auto it = m_dynamic_objects->begin(); it != m_dynamic_objects->end();
         it++)
     {
@@ -329,7 +320,7 @@ void Level::checkCollisions()
                     break; // Avoid the extra iteration
             }
         }
-
+    // Check if the player has hit an enemy
         if (!((*it)->m_class == "Enemy"))
             continue;
         Enemy* g_ob = dynamic_cast<Enemy*>(*it);
@@ -345,7 +336,7 @@ void Level::checkCollisions()
                 if (PLAYER->isActive())
                     graphics::playSound(std::string(ASSET_PATH) + std::string("enemy_damage_sound.wav"), 0.5f, false);
 
-                if (g_ob->health == 0) // TODO: I have a feeling this should go in update?
+                if (g_ob->health == 0)
                 {
                     // Increase the score
                     m_state->score += ENEMY_POINTS;
@@ -363,7 +354,7 @@ void Level::checkCollisions()
         auto jt = m_state->getPlayer()->arrows.begin();
         while (jt != m_state->getPlayer()->arrows.end())
         {
-            if ((*jt)->intersect(*g_ob)) // this isn't working well diagonally, like, at all
+            if ((*jt)->intersect(*g_ob))
             {
                 delete* jt;
                 g_ob->health--;
@@ -388,6 +379,7 @@ void Level::checkCollisions()
         if (it == m_dynamic_objects->end())
             break; // Avoid the extra iteration
     }
+    // Delete player sword hits
     auto s_it = PLAYER->sword_hits.begin();
     while (s_it != PLAYER->sword_hits.end())
     {
@@ -408,6 +400,7 @@ void Level::checkCollisions()
         m_state->getPlayer()->m_pos_x = WINDOW_WIDTH;
         m_state->getPlayer()->initialVelocityX = 0;
     }
+
     // Out of bounds for Enemies
     for (auto it = m_dynamic_objects->begin(); it != m_dynamic_objects->end();
         ++it)
@@ -428,6 +421,7 @@ void Level::checkCollisions()
             g_ob->initialVelocityX = 0;
         }
     }
+
     // Player / Enemy obstacle collisions
     for (GameObject* s_ob : *m_static_objects)
     {
@@ -451,8 +445,6 @@ void Level::checkCollisions()
             if (belowCorrection != 0 && m_state->getPlayer()->jumping == true &&
                 m_state->getPlayer()->velocityY <= 0)
             {
-                // std::cout << "belowCorrection: "<<belowCorrection <<
-                // std::endl;
                 m_state->getPlayer()->m_pos_y -= belowCorrection;
                 m_state->getPlayer()->sword_right->m_pos_y -= belowCorrection;
                 m_state->getPlayer()->sword_left->m_pos_y -= belowCorrection;
@@ -473,37 +465,11 @@ void Level::checkCollisions()
                 if (belowCorrection != 0 && g_ob->jumping == true &&
                     g_ob->velocityY <= 0)
                 {
-                    // std::cout << "belowCorrection: "<<belowCorrection <<
-                    // std::endl;
                     g_ob->m_pos_y -= belowCorrection;
                     g_ob->sword_right->m_pos_y -= belowCorrection;
                     g_ob->sword_left->m_pos_y -= belowCorrection;
                     g_ob->velocityY = 0;
                 }
-            }
-        }
-    }
-
-    // Player <-> Enemy collisions (we move Enemy)
-    // we are ignoring Enemy <-> Enemy collisions since they're on the same
-    // "team"
-    for (auto it = m_dynamic_objects->begin(); it != m_dynamic_objects->end();
-        ++it)
-    {
-        if (!((*it)->isActive()))
-            continue;
-        if (!((*it)->m_class == "Enemy"))
-            continue;
-        Enemy* g_ob = dynamic_cast<Enemy*>(*it);
-        if (g_ob->intersect(*m_state->getPlayer()))
-        {
-            float horizCorrection =
-                g_ob->intersectSideways(*m_state->getPlayer());
-            if (horizCorrection != 0)
-            {
-                g_ob->m_pos_x += horizCorrection;
-                g_ob->sword_right->m_pos_x += horizCorrection;
-                g_ob->sword_left->m_pos_x += horizCorrection;
             }
         }
     }
@@ -583,38 +549,30 @@ void Level::checkCollisions()
             }
         }
     }
-    /*
-    for (auto& block : m_static_objects)
+
+    // Player <-> Enemy collisions (we move Enemy)
+    // we are ignoring Enemy <-> Enemy collisions since they're on the same
+    // "team"
+    for (auto it = m_dynamic_objects->begin(); it != m_dynamic_objects->end();
+        ++it)
     {
-            float offset = 0.0f;
-            if (offset = m_state->getPlayer()->intersectDown(*block))
+        if (!((*it)->isActive()))
+            continue;
+        if (!((*it)->m_class == "Enemy"))
+            continue;
+        Enemy* g_ob = dynamic_cast<Enemy*>(*it);
+        if (g_ob->intersect(*m_state->getPlayer()))
+        {
+            float horizCorrection =
+                g_ob->intersectSideways(*m_state->getPlayer());
+            if (horizCorrection != 0)
             {
-                    m_state->getPlayer()->m_pos_y += offset;
-
-                    // add sound event
-                    if (m_state->getPlayer()->velocityY > 1.0f)
-                            graphics::playSound(m_state->getFullAssetPath("Metal2.wav"),
-    1.0f);
-
-                    m_state->getPlayer()->velocityY = 0.0f;
-
-                    break;
+                g_ob->m_pos_x += horizCorrection;
+                g_ob->sword_right->m_pos_x += horizCorrection;
+                g_ob->sword_left->m_pos_x += horizCorrection;
             }
+        }
     }
-
-    for (auto& block : m_static_objects)
-    {
-            float offset = 0.0f;
-            if (offset = m_state->getPlayer()->intersectSideways(*block))
-            {
-                    m_state->getPlayer()->m_pos_x += offset;
-
-                    m_state->getPlayer()->m_vx = 0.0f;
-                    break;
-            }
-
-    }
-    */
 }
 
 // See if the conditions to advance to the next level have been met
