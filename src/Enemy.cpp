@@ -25,42 +25,42 @@ Enemy::Enemy(float x, float y, float w, float h, std::string name, DecFn func, b
 	sword_right = new Sword(m_pos_x + 30, m_pos_y, 25.0f, 7.0f, "right sword");
 	sword_left = new Sword(m_pos_x - 30, m_pos_y, 25.0f, 7.0f, "left sword");
 	// Movement sprites
-	sprites.push_back(std::string(ASSET_PATH) + "/" + name + "/" + "2.png");
-	sprites.push_back(std::string(ASSET_PATH) + "/" + name + "/" + "3.png");
-	sprites.push_back(std::string(ASSET_PATH) + "/" + name + "/" + "4.png");
-	sprites.push_back(std::string(ASSET_PATH) + "/" + name + "/" + "5.png");
-	sprites.push_back(std::string(ASSET_PATH) + "/" + name + "/" + "2_left.png");
-	sprites.push_back(std::string(ASSET_PATH) + "/" + name + "/" + "3_left.png");
-	sprites.push_back(std::string(ASSET_PATH) + "/" + name + "/" + "4_left.png");
-	sprites.push_back(std::string(ASSET_PATH) + "/" + name + "/" + "5_left.png");
+	sprites.push_back(std::string(ASSET_PATH) + "/Player/2.png");
+	sprites.push_back(std::string(ASSET_PATH) + "/Player/3.png");
+	sprites.push_back(std::string(ASSET_PATH) + "/Player/4.png");
+	sprites.push_back(std::string(ASSET_PATH) + "/Player/5.png");
+	sprites.push_back(std::string(ASSET_PATH) + "/Player/2_left.png");
+	sprites.push_back(std::string(ASSET_PATH) + "/Player/3_left.png");
+	sprites.push_back(std::string(ASSET_PATH) + "/Player/4_left.png");
+	sprites.push_back(std::string(ASSET_PATH) + "/Player/5_left.png");
 
 	// Standing sprites
-	standing_sprites.push_back(std::string(ASSET_PATH) + "/" + name + "/" + "6.png");
-	standing_sprites.push_back(std::string(ASSET_PATH) + "/" + name + "/" + "6_left.png");
+	standing_sprites.push_back(std::string(ASSET_PATH) + "/Player/6.png");
+	standing_sprites.push_back(std::string(ASSET_PATH) + "/Player/6_left.png");
 
 	// Attack sprites
-	attack_sprites.push_back(std::string(ASSET_PATH) + "/" + name + "/" + "7.png");
-	attack_sprites.push_back(std::string(ASSET_PATH) + "/" + name + "/" + "8.png");
-	attack_sprites.push_back(std::string(ASSET_PATH) + "/" + name + "/" + "9.png");
-	attack_sprites.push_back(std::string(ASSET_PATH) + "/" + name + "/" + "10.png");
-	attack_sprites.push_back(std::string(ASSET_PATH) + "/" + name + "/" + "11.png");
-	attack_sprites.push_back(std::string(ASSET_PATH) + "/" + name + "/" + "12.png");
-	attack_sprites.push_back(std::string(ASSET_PATH) + "/" + name + "/" + "13.png");
-	attack_sprites.push_back(std::string(ASSET_PATH) + "/" + name + "/" + "14.png");
-	attack_sprites.push_back(std::string(ASSET_PATH) + "/" + name + "/" + "7_left.png");
-	attack_sprites.push_back(std::string(ASSET_PATH) + "/" + name + "/" + "8_left.png");
-	attack_sprites.push_back(std::string(ASSET_PATH) + "/" + name + "/" + "9_left.png");
-	attack_sprites.push_back(std::string(ASSET_PATH) + "/" + name + "/" + "10_left.png");
-	attack_sprites.push_back(std::string(ASSET_PATH) + "/" + name + "/" + "11_left.png");
-	attack_sprites.push_back(std::string(ASSET_PATH) + "/" + name + "/" + "12_left.png");
-	attack_sprites.push_back(std::string(ASSET_PATH) + "/" + name + "/" + "13_left.png");
-	attack_sprites.push_back(std::string(ASSET_PATH) + "/" + name + "/" + "14_left.png");
+	attack_sprites.push_back(std::string(ASSET_PATH) + "/Player/7.png");
+	attack_sprites.push_back(std::string(ASSET_PATH) + "/Player/8.png");
+	attack_sprites.push_back(std::string(ASSET_PATH) + "/Player/9.png");
+	attack_sprites.push_back(std::string(ASSET_PATH) + "/Player/10.png");
+	attack_sprites.push_back(std::string(ASSET_PATH) + "/Player/11.png");
+	attack_sprites.push_back(std::string(ASSET_PATH) + "/Player/12.png");
+	attack_sprites.push_back(std::string(ASSET_PATH) + "/Player/13.png");
+	attack_sprites.push_back(std::string(ASSET_PATH) + "/Player/14.png");
+	attack_sprites.push_back(std::string(ASSET_PATH) + "/Player/7_left.png");
+	attack_sprites.push_back(std::string(ASSET_PATH) + "/Player/8_left.png");
+	attack_sprites.push_back(std::string(ASSET_PATH) + "/Player/9_left.png");
+	attack_sprites.push_back(std::string(ASSET_PATH) + "/Player/10_left.png");
+	attack_sprites.push_back(std::string(ASSET_PATH) + "/Player/11_left.png");
+	attack_sprites.push_back(std::string(ASSET_PATH) + "/Player/12_left.png");
+	attack_sprites.push_back(std::string(ASSET_PATH) + "/Player/13_left.png");
+	attack_sprites.push_back(std::string(ASSET_PATH) + "/Player/14_left.png");
 
 	// Jumping sprites
-	jumping_sprites.push_back(std::string(ASSET_PATH) + "/" + name + "/" + "15.png");
-	jumping_sprites.push_back(std::string(ASSET_PATH) + "/" + name + "/" + "16.png");
-	jumping_sprites.push_back(std::string(ASSET_PATH) + "/" + name + "/" + "15_left.png");
-	jumping_sprites.push_back(std::string(ASSET_PATH) + "/" + name + "/" + "16_left.png");
+	jumping_sprites.push_back(std::string(ASSET_PATH) + "/Player/15.png");
+	jumping_sprites.push_back(std::string(ASSET_PATH) + "/Player/16.png");
+	jumping_sprites.push_back(std::string(ASSET_PATH) + "/Player/15_left.png");
+	jumping_sprites.push_back(std::string(ASSET_PATH) + "/Player/16_left.png");
 }
 
 Enemy::~Enemy()
